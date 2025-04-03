@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "CharmeleonGUI/1.0.0": {
+        "dependencies": {
+          "RtDeviceDriver": "1.0.0"
+        },
+        "runtime": {
+          "CharmeleonGUI.dll": {}
+        }
+      },
+      "RtDeviceDriver/1.0.0": {
+        "runtime": {
+          "RtDeviceDriver.dll": {
+            "assemblyVersion": "1.0.9224.29025",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CharmeleonGUI/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RtDeviceDriver/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

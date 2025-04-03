@@ -1,0 +1,22 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly RtDeviceDriver, Version=1.0.*, Culture=Invariant Language (Invariant Country): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Class RtDeviceDriver.RefaDriver: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Int32 NrOfChannels : Public
+    UInt32 SampleRateInHz IsLong : Public
+    UInt32 SignalBufferSizeInSamples IsLong : Public
+    Boolean Started : Public
+  Methods:
+    Initialize(): PrivateScope, Public, HideBySig
+    InitiateImpedanceDataMode(): PrivateScope, Public, HideBySig
+    GetImpedances(): PrivateScope, Public, HideBySig

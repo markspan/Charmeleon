@@ -1,0 +1,105 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0-windows7.0": {
+      "RtDeviceDriver/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/RtDeviceDriver.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/RtDeviceDriver.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "RtDeviceDriver/1.0.0": {
+      "type": "project",
+      "path": "../RtDeviceDriver/RtDeviceDriver.vcxproj",
+      "msbuildProject": "../RtDeviceDriver/RtDeviceDriver.vcxproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0-windows7.0": [
+      "RtDeviceDriver >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\P154492\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\CharmeleonGUI.csproj",
+      "projectName": "CharmeleonGUI",
+      "projectPath": "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\CharmeleonGUI.csproj",
+      "packagesPath": "C:\\Users\\P154492\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\P154492\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0-windows"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0-windows7.0": {
+          "targetAlias": "net8.0-windows",
+          "projectReferences": {
+            "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\RtDeviceDriver\\RtDeviceDriver.vcxproj": {
+              "projectPath": "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\RtDeviceDriver\\RtDeviceDriver.vcxproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.200"
+    },
+    "frameworks": {
+      "net8.0-windows7.0": {
+        "targetAlias": "net8.0-windows",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          },
+          "Microsoft.WindowsDesktop.App.WindowsForms": {
+            "privateAssets": "none"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}
