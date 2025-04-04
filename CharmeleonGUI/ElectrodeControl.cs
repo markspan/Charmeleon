@@ -9,12 +9,16 @@ namespace CharmeleonGUI
     {
         private bool isActive = true;
         private bool editState = false;
+        public static bool viewHWChannel = false;
         private int value = 0;
         private string labelText = "Label";
-        private int hardwareChannel = 0;
+        public int hardwareChannel = 0;
         private int maxChannel = 255;
-        private TextBox editBox;
-        private static readonly Color[] ColorMap = File.Exists("heat.map") ? LoadColorMapFromFile("heat.map") : GenerateColorMap();
+        private TextBox? editBox = null;
+        public static Color[] ColorMap = File.Exists("Resources/heat.map") ? LoadColorMapFromFile("Resources/heat.map") : GenerateColorMap();
+
+        private static ElectrodeControl? currentlyEditing = null;
+        private static TextBox? activeEditBox = null;
 
         public ElectrodeControl()
         {
@@ -96,12 +100,66 @@ namespace CharmeleonGUI
 
         private void ShowEditBox()
         {
-            if (!editState) return;
-            editBox.Text = HardwareChannel.ToString();
-            editBox.Bounds = new Rectangle(0, Width - 5, Width, 20);
-            editBox.Visible = true;
-            editBox.Focus();
+            // Close previous one if it exists
+            if (currentlyEditing != null && currentlyEditing != this)
+            {
+                currentlyEditing.HideEditBox();
+            }
+
+            // Also remove any lingering edit box
+            if (activeEditBox != null)
+            {
+                activeEditBox.Parent?.Controls.Remove(activeEditBox);
+                activeEditBox = null;
+            }
+
+            TextBox textBox = new TextBox
+            {
+                Text = HardwareChannel.ToString(),
+                Bounds = new Rectangle(0, Width - 5, Width, 20),
+                TextAlign = HorizontalAlignment.Center,
+                MaxLength = 3
+            };
+
+            textBox.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    if (int.TryParse(textBox.Text, out int newValue))
+                    {
+                        HardwareChannel = Math.Max(0, Math.Min(MaxChannel, newValue));
+                    }
+
+                    Controls.Remove(textBox);
+                    editState = false;
+                    currentlyEditing = null;
+                    activeEditBox = null;
+                    Invalidate();
+                }
+            };
+
+            Controls.Add(textBox);
+            textBox.Focus();
+
+            editState = true;
+            currentlyEditing = this;
+            activeEditBox = textBox;
         }
+
+        private void HideEditBox()
+        {
+            if (activeEditBox != null)
+            {
+                Controls.Remove(activeEditBox);
+                activeEditBox = null;
+            }
+
+            editState = false;
+            currentlyEditing = null;
+            Invalidate();
+        }
+
+
 
         private void SaveHardwareChannel()
         {
@@ -139,9 +197,11 @@ namespace CharmeleonGUI
             DrawText(g, displayText, Font, ForeColor, circleRect, ContentAlignment.MiddleCenter);
 
             // Bottom Label
-            if (!editState)
+            if (!editState && !viewHWChannel)
                 DrawText(g, LabelText, Font, ForeColor, new Rectangle(0, Width - 5, Width, 20), ContentAlignment.MiddleCenter);
             else if (!editBox.Visible)
+                DrawText(g, HardwareChannel.ToString(), Font, ForeColor, new Rectangle(0, Width - 5, Width, 20), ContentAlignment.MiddleCenter);
+            else
                 DrawText(g, HardwareChannel.ToString(), Font, ForeColor, new Rectangle(0, Width - 5, Width, 20), ContentAlignment.MiddleCenter);
         }
 
@@ -172,7 +232,8 @@ namespace CharmeleonGUI
         private static Color[] GenerateColorMap()
         {
             Color[] colors = new Color[256];
-            for (int i = 0; i < 256; i++)
+            colors[0] = Color.FromArgb(0, 1, 255 - 1, 0);
+            for (int i = 1; i < 256; i++)
             {
                 colors[i] = Color.FromArgb(255, i, 255 - i, 0);
             }
@@ -187,13 +248,20 @@ namespace CharmeleonGUI
             for (int i = 0; i < Math.Min(lines.Length, 256); i++)
             {
                 string[] parts = lines[i].Split(',');
-                if (parts.Length == 4 && int.TryParse(parts[1], out int r) &&
-                    int.TryParse(parts[2], out int g) && int.TryParse(parts[3], out int b))
+                if (parts.Length == 3 && int.TryParse(parts[0], out int r) &&
+                    int.TryParse(parts[1], out int g) && int.TryParse(parts[2], out int b))
                 {
                     colors[i] = Color.FromArgb(255, r, g, b);
                 }
             }
             return colors;
         }
+    }
+    public class ElectrodeControlData
+    {  // This class is used to store the data for each electrode to make this serializeable.
+        public bool IsActive { get; set; }
+        public int Value { get; set; }
+        public required string LabelText { get; set; }
+        public int HardwareChannel { get; set; }
     }
 }

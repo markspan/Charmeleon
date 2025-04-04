@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainGUI));
             statusStrip1 = new StatusStrip();
             menuStrip1 = new MenuStrip();
@@ -36,7 +37,12 @@
             saveMontageToolStripMenuItem = new ToolStripMenuItem();
             exceptionsToolStripMenuItem = new ToolStripMenuItem();
             viewChannelsToolStripMenuItem = new ToolStripMenuItem();
+            RefreshTimer = new System.Windows.Forms.Timer(components);
+            pictureBox1 = new PictureBox();
+            aboutToolStripMenuItem = new ToolStripMenuItem();
+            aboutCharmeleonToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // statusStrip1
@@ -49,7 +55,7 @@
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { setupToolStripMenuItem, exceptionsToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { setupToolStripMenuItem, exceptionsToolStripMenuItem, aboutToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1125, 24);
@@ -68,12 +74,14 @@
             openMontageToolStripMenuItem.Name = "openMontageToolStripMenuItem";
             openMontageToolStripMenuItem.Size = new Size(154, 22);
             openMontageToolStripMenuItem.Text = "Open Montage";
+            openMontageToolStripMenuItem.Click += openMontageToolStripMenuItem_Click;
             // 
             // saveMontageToolStripMenuItem
             // 
             saveMontageToolStripMenuItem.Name = "saveMontageToolStripMenuItem";
             saveMontageToolStripMenuItem.Size = new Size(154, 22);
             saveMontageToolStripMenuItem.Text = "Save Montage";
+            saveMontageToolStripMenuItem.Click += saveMontageToolStripMenuItem_Click;
             // 
             // exceptionsToolStripMenuItem
             // 
@@ -85,14 +93,42 @@
             // viewChannelsToolStripMenuItem
             // 
             viewChannelsToolStripMenuItem.Name = "viewChannelsToolStripMenuItem";
-            viewChannelsToolStripMenuItem.Size = new Size(151, 22);
+            viewChannelsToolStripMenuItem.Size = new Size(180, 22);
             viewChannelsToolStripMenuItem.Text = "View Channels";
+            viewChannelsToolStripMenuItem.Click += viewChannelsToolStripMenuItem_Click;
+            // 
+            // RefreshTimer
+            // 
+            RefreshTimer.Interval = 300;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Location = new Point(980, 231);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(95, 261);
+            pictureBox1.TabIndex = 3;
+            pictureBox1.TabStop = false;
+            // 
+            // aboutToolStripMenuItem
+            // 
+            aboutToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutCharmeleonToolStripMenuItem });
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new Size(52, 20);
+            aboutToolStripMenuItem.Text = "About";
+            // 
+            // aboutCharmeleonToolStripMenuItem
+            // 
+            aboutCharmeleonToolStripMenuItem.Name = "aboutCharmeleonToolStripMenuItem";
+            aboutCharmeleonToolStripMenuItem.Size = new Size(180, 22);
+            aboutCharmeleonToolStripMenuItem.Text = "About Charmeleon";
+            aboutCharmeleonToolStripMenuItem.Click += aboutCharmeleonToolStripMenuItem_Click;
             // 
             // MainGUI
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1125, 830);
+            Controls.Add(pictureBox1);
             Controls.Add(statusStrip1);
             Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -101,6 +137,7 @@
             Text = "Charmeleon";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -113,5 +150,9 @@
         private ToolStripMenuItem saveMontageToolStripMenuItem;
         private ToolStripMenuItem exceptionsToolStripMenuItem;
         private ToolStripMenuItem viewChannelsToolStripMenuItem;
+        private System.Windows.Forms.Timer RefreshTimer;
+        private PictureBox pictureBox1;
+        private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripMenuItem aboutCharmeleonToolStripMenuItem;
     }
 }

@@ -11,12 +11,27 @@ Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c5619
 	hash=None, flags=None
 Class RtDeviceDriver.RefaDriver: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Fields:
-    Int32 NrOfChannels : Public
-    UInt32 SampleRateInHz IsLong : Public
-    UInt32 SignalBufferSizeInSamples IsLong : Public
-    Boolean Started : Public
+  Properties:
+    Void* Handle 'get set' : 
+    Boolean Started 'get set' : 
+    UInt32 SignalBufferSizeInSamples 'get set' IsLong : 
+    UInt32 SampleRateInHz 'get set' IsLong : 
+    Int32 NrOfChannels 'get set' : 
+    HINSTANCE__* LibHandle 'get set' : 
   Methods:
+    get_LibHandle(): PrivateScope, Public, HideBySig, SpecialName
+    set_LibHandle(HINSTANCE__*): PrivateScope, Public, HideBySig, SpecialName
+    get_NrOfChannels(): PrivateScope, Public, HideBySig, SpecialName
+    set_NrOfChannels(Int32): PrivateScope, Public, HideBySig, SpecialName
+    get_SampleRateInHz(): PrivateScope, Public, HideBySig, SpecialName
+    set_SampleRateInHz(UInt32 IsLong): PrivateScope, Public, HideBySig, SpecialName
+    get_SignalBufferSizeInSamples(): PrivateScope, Public, HideBySig, SpecialName
+    set_SignalBufferSizeInSamples(UInt32 IsLong): PrivateScope, Public, HideBySig, SpecialName
+    get_Started(): PrivateScope, Public, HideBySig, SpecialName
+    set_Started(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig, SpecialName
+    get_Handle(): PrivateScope, Public, HideBySig, SpecialName
+    set_Handle(Void*): PrivateScope, Public, HideBySig, SpecialName
+    fileExists(Char*): PrivateScope, Public, HideBySig
     Initialize(): PrivateScope, Public, HideBySig
     InitiateImpedanceDataMode(): PrivateScope, Public, HideBySig
-    GetImpedances(): PrivateScope, Public, HideBySig
+    getImpedances(): PrivateScope, Public, HideBySig

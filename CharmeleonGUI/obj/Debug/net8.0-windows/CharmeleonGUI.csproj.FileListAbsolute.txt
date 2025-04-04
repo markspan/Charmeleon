@@ -40,3 +40,10 @@ C:\Users\P154492\Documents\GitHub\Charmeleon\CharmeleonGUI\obj\Debug\net8.0-wind
 C:\Users\P154492\Documents\GitHub\Charmeleon\CharmeleonGUI\obj\Debug\net8.0-windows\CharmeleonGUI.pdb
 C:\Users\P154492\Documents\GitHub\Charmeleon\CharmeleonGUI\obj\Debug\net8.0-windows\CharmeleonGUI.genruntimeconfig.cache
 C:\Users\P154492\Documents\GitHub\Charmeleon\CharmeleonGUI\obj\Debug\net8.0-windows\ref\CharmeleonGUI.dll
+C:\Users\P154492\Documents\GitHub\Charmeleon\CharmeleonGUI\obj\Debug\net8.0-windows\CharmeleonGUI.sourcelink.json
+C:\Users\P154492\Documents\GitHub\Charmeleon\CharmeleonGUI\bin\Debug\net8.0-windows\Resources\heat.map
+C:\Users\P154492\Documents\GitHub\Charmeleon\CharmeleonGUI\obj\Debug\net8.0-windows\CharmeleonGUI.aboutForm.resources
+C:\Users\P154492\Documents\GitHub\Charmeleon\CharmeleonGUI\obj\Debug\net8.0-windows\CharmeleonGUI.Properties.Resources.resources
+C:\Users\P154492\Documents\GitHub\Charmeleon\CharmeleonGUI\bin\Debug\net8.0-windows\Resources\DefaultMontage.json
+C:\Users\P154492\Documents\GitHub\Charmeleon\CharmeleonGUI\bin\Debug\net8.0-windows\Resources\WaveGuard CW1308 1st Connector.json
+C:\Users\P154492\Documents\GitHub\Charmeleon\CharmeleonGUI\bin\Debug\net8.0-windows\Resources\WaveGuard CW1308.json

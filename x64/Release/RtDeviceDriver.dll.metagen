@@ -1,0 +1,37 @@
+ImageRuntimeVersion: v4.0.30319
+Assembly RtDeviceDriver, Version=1.0.*, Culture=Invariant Language (Invariant Country): 
+	hash=SHA1, flags=PublicKey
+Assembly mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089: 
+	hash=None, flags=None
+Class RtDeviceDriver.RefaDriver: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
+    Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Properties:
+    Void* Handle 'get set' : 
+    Boolean Started 'get set' : 
+    UInt32 SignalBufferSizeInSamples 'get set' IsLong : 
+    UInt32 SampleRateInHz 'get set' IsLong : 
+    Int32 NrOfChannels 'get set' : 
+    HINSTANCE__* LibHandle 'get set' : 
+  Methods:
+    get_LibHandle(): PrivateScope, Public, HideBySig, SpecialName
+    set_LibHandle(HINSTANCE__*): PrivateScope, Public, HideBySig, SpecialName
+    get_NrOfChannels(): PrivateScope, Public, HideBySig, SpecialName
+    set_NrOfChannels(Int32): PrivateScope, Public, HideBySig, SpecialName
+    get_SampleRateInHz(): PrivateScope, Public, HideBySig, SpecialName
+    set_SampleRateInHz(UInt32 IsLong): PrivateScope, Public, HideBySig, SpecialName
+    get_SignalBufferSizeInSamples(): PrivateScope, Public, HideBySig, SpecialName
+    set_SignalBufferSizeInSamples(UInt32 IsLong): PrivateScope, Public, HideBySig, SpecialName
+    get_Started(): PrivateScope, Public, HideBySig, SpecialName
+    set_Started(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig, SpecialName
+    get_Handle(): PrivateScope, Public, HideBySig, SpecialName
+    set_Handle(Void*): PrivateScope, Public, HideBySig, SpecialName
+    fileExists(Char*): PrivateScope, Public, HideBySig
+    Initialize(): PrivateScope, Public, HideBySig
+    InitiateImpedanceDataMode(): PrivateScope, Public, HideBySig
+    getImpedances(): PrivateScope, Public, HideBySig

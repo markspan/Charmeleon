@@ -1,0 +1,488 @@
+{
+  "Left": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "Left",
+    "HardwareChannel": 73
+  },
+  "Right": {
+    "IsActive": false,
+    "Value": 0,
+    "LabelText": "Right",
+    "HardwareChannel": 75
+  },
+  "Top": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "Top",
+    "HardwareChannel": 72
+  },
+  "Bottom": {
+    "IsActive": false,
+    "Value": 1,
+    "LabelText": "Bottom",
+    "HardwareChannel": 74
+  },
+  "Nz": {
+    "IsActive": false,
+    "Value": 0,
+    "LabelText": "Nz",
+    "HardwareChannel": 0
+  },
+  "FPz": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "FPz",
+    "HardwareChannel": 2
+  },
+  "AFz": {
+    "IsActive": false,
+    "Value": 6,
+    "LabelText": "AFz",
+    "HardwareChannel": 50
+  },
+  "Fz": {
+    "IsActive": true,
+    "Value": 4,
+    "LabelText": "Fz",
+    "HardwareChannel": 6
+  },
+  "FCz": {
+    "IsActive": false,
+    "Value": 255,
+    "LabelText": "FCz",
+    "HardwareChannel": 42
+  },
+  "Cz": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "Cz",
+    "HardwareChannel": 16
+  },
+  "CPz": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "CPz",
+    "HardwareChannel": 49
+  },
+  "Pz": {
+    "IsActive": true,
+    "Value": 4,
+    "LabelText": "Pz",
+    "HardwareChannel": 26
+  },
+  "POz": {
+    "IsActive": true,
+    "Value": 6,
+    "LabelText": "POz",
+    "HardwareChannel": 29
+  },
+  "Oz": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "Oz",
+    "HardwareChannel": 31
+  },
+  "Iz": {
+    "IsActive": false,
+    "Value": 4,
+    "LabelText": "Iz",
+    "HardwareChannel": 68
+  },
+  "T7": {
+    "IsActive": true,
+    "Value": 6,
+    "LabelText": "T7",
+    "HardwareChannel": 14
+  },
+  "C5": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "C5",
+    "HardwareChannel": 44
+  },
+  "C3": {
+    "IsActive": true,
+    "Value": 6,
+    "LabelText": "C3",
+    "HardwareChannel": 15
+  },
+  "C1": {
+    "IsActive": false,
+    "Value": 6,
+    "LabelText": "C1",
+    "HardwareChannel": 45
+  },
+  "C2": {
+    "IsActive": false,
+    "Value": 6,
+    "LabelText": "C2",
+    "HardwareChannel": 46
+  },
+  "C4": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "C4",
+    "HardwareChannel": 17
+  },
+  "C6": {
+    "IsActive": false,
+    "Value": 6,
+    "LabelText": "C6",
+    "HardwareChannel": 47
+  },
+  "T8": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "T8",
+    "HardwareChannel": 18
+  },
+  "A2": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "A2",
+    "HardwareChannel": 19
+  },
+  "A1": {
+    "IsActive": true,
+    "Value": 8,
+    "LabelText": "A1",
+    "HardwareChannel": 13
+  },
+  "F9": {
+    "IsActive": false,
+    "Value": 0,
+    "LabelText": "F9",
+    "HardwareChannel": 0
+  },
+  "FT9": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "FT9",
+    "HardwareChannel": 70
+  },
+  "TP9": {
+    "IsActive": false,
+    "Value": 0,
+    "LabelText": "TP9",
+    "HardwareChannel": 0
+  },
+  "P9": {
+    "IsActive": false,
+    "Value": 69,
+    "LabelText": "P9",
+    "HardwareChannel": 55
+  },
+  "F10": {
+    "IsActive": false,
+    "Value": 0,
+    "LabelText": "F10",
+    "HardwareChannel": 0
+  },
+  "FT10": {
+    "IsActive": false,
+    "Value": 6,
+    "LabelText": "FT10",
+    "HardwareChannel": 71
+  },
+  "TP10": {
+    "IsActive": false,
+    "Value": 0,
+    "LabelText": "TP10",
+    "HardwareChannel": 0
+  },
+  "P10": {
+    "IsActive": false,
+    "Value": 6,
+    "LabelText": "P10",
+    "HardwareChannel": 58
+  },
+  "Fp1": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "Fp1",
+    "HardwareChannel": 10
+  },
+  "AF7": {
+    "IsActive": false,
+    "Value": 0,
+    "LabelText": "AF7",
+    "HardwareChannel": 33
+  },
+  "F7": {
+    "IsActive": true,
+    "Value": 6,
+    "LabelText": "F7",
+    "HardwareChannel": 4
+  },
+  "FT7": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "FT7",
+    "HardwareChannel": 59
+  },
+  "Fp2": {
+    "IsActive": true,
+    "Value": 6,
+    "LabelText": "Fp2",
+    "HardwareChannel": 3
+  },
+  "AF8": {
+    "IsActive": false,
+    "Value": 255,
+    "LabelText": "AF8",
+    "HardwareChannel": 36
+  },
+  "F8": {
+    "IsActive": true,
+    "Value": 6,
+    "LabelText": "F8",
+    "HardwareChannel": 8
+  },
+  "FT8": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "FT8",
+    "HardwareChannel": 60
+  },
+  "O1": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "O1",
+    "HardwareChannel": 30
+  },
+  "PO7": {
+    "IsActive": false,
+    "Value": 6,
+    "LabelText": "PO7",
+    "HardwareChannel": 63
+  },
+  "P7": {
+    "IsActive": true,
+    "Value": 6,
+    "LabelText": "P7",
+    "HardwareChannel": 24
+  },
+  "TP7": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "TP7",
+    "HardwareChannel": 61
+  },
+  "O2": {
+    "IsActive": true,
+    "Value": 1,
+    "LabelText": "O2",
+    "HardwareChannel": 32
+  },
+  "PO8": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "PO8",
+    "HardwareChannel": 64
+  },
+  "P8": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "P8",
+    "HardwareChannel": 28
+  },
+  "TP8": {
+    "IsActive": false,
+    "Value": 7,
+    "LabelText": "TP8",
+    "HardwareChannel": 62
+  },
+  "AF4": {
+    "IsActive": false,
+    "Value": 0,
+    "LabelText": "AF4",
+    "HardwareChannel": 35
+  },
+  "F6": {
+    "IsActive": false,
+    "Value": 255,
+    "LabelText": "F6",
+    "HardwareChannel": 40
+  },
+  "F4": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "F4",
+    "HardwareChannel": 7
+  },
+  "F2": {
+    "IsActive": false,
+    "Value": 0,
+    "LabelText": "F2",
+    "HardwareChannel": 39
+  },
+  "AF3": {
+    "IsActive": false,
+    "Value": 255,
+    "LabelText": "AF3",
+    "HardwareChannel": 34
+  },
+  "F5": {
+    "IsActive": false,
+    "Value": 0,
+    "LabelText": "F5",
+    "HardwareChannel": 37
+  },
+  "F3": {
+    "IsActive": true,
+    "Value": 6,
+    "LabelText": "F3",
+    "HardwareChannel": 5
+  },
+  "F1": {
+    "IsActive": false,
+    "Value": 255,
+    "LabelText": "F1",
+    "HardwareChannel": 38
+  },
+  "PO4": {
+    "IsActive": false,
+    "Value": 29,
+    "LabelText": "PO4",
+    "HardwareChannel": 57
+  },
+  "P6": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "P6",
+    "HardwareChannel": 54
+  },
+  "P4": {
+    "IsActive": true,
+    "Value": 6,
+    "LabelText": "P4",
+    "HardwareChannel": 27
+  },
+  "P2": {
+    "IsActive": false,
+    "Value": 6,
+    "LabelText": "P2",
+    "HardwareChannel": 53
+  },
+  "PO3": {
+    "IsActive": false,
+    "Value": 203,
+    "LabelText": "PO3",
+    "HardwareChannel": 56
+  },
+  "P5": {
+    "IsActive": false,
+    "Value": 14,
+    "LabelText": "P5",
+    "HardwareChannel": 51
+  },
+  "P3": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "P3",
+    "HardwareChannel": 25
+  },
+  "P1": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "P1",
+    "HardwareChannel": 52
+  },
+  "FC5": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "FC5",
+    "HardwareChannel": 9
+  },
+  "FC3": {
+    "IsActive": false,
+    "Value": 0,
+    "LabelText": "FC3",
+    "HardwareChannel": 41
+  },
+  "FC1": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "FC1",
+    "HardwareChannel": 10
+  },
+  "CP5": {
+    "IsActive": true,
+    "Value": 6,
+    "LabelText": "CP5",
+    "HardwareChannel": 20
+  },
+  "CP3": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "CP3",
+    "HardwareChannel": 48
+  },
+  "CP1": {
+    "IsActive": true,
+    "Value": 6,
+    "LabelText": "CP1",
+    "HardwareChannel": 21
+  },
+  "FC6": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "FC6",
+    "HardwareChannel": 12
+  },
+  "FC4": {
+    "IsActive": false,
+    "Value": 6,
+    "LabelText": "FC4",
+    "HardwareChannel": 43
+  },
+  "FC2": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "FC2",
+    "HardwareChannel": 11
+  },
+  "CP6": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "CP6",
+    "HardwareChannel": 23
+  },
+  "CP4": {
+    "IsActive": false,
+    "Value": 6,
+    "LabelText": "CP4",
+    "HardwareChannel": 50
+  },
+  "CP2": {
+    "IsActive": true,
+    "Value": 5,
+    "LabelText": "CP2",
+    "HardwareChannel": 22
+  },
+  "PO9": {
+    "IsActive": false,
+    "Value": 5,
+    "LabelText": "PO9",
+    "HardwareChannel": 65
+  },
+  "PO10": {
+    "IsActive": false,
+    "Value": 6,
+    "LabelText": "PO10",
+    "HardwareChannel": 66
+  },
+  "I1": {
+    "IsActive": false,
+    "Value": 6,
+    "LabelText": "I1",
+    "HardwareChannel": 67
+  },
+  "I2": {
+    "IsActive": false,
+    "Value": 4,
+    "LabelText": "I2",
+    "HardwareChannel": 68
+  }
+}
