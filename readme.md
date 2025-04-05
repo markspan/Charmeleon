@@ -52,7 +52,7 @@ Once built, run the `CharmeleonGUI.exe` from the output directory.
 
 - **Montage files**: Define the layout of electrodes and their labels.
 
-If you have a specific montage you'd like to use, you can create it manually.
+If you have a specific montage you'd like to use, you can create it manually using this program. 
 
 ## Troubleshooting
 
