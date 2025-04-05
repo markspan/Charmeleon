@@ -51,25 +51,20 @@ Once built, run the `CharmeleonGUI.exe` from the output directory.
 
 ## Configuration
 
-Charmeleon supports easy configuration through external files (to be documented if applicable):
-
 - **Montage files**: Define the layout of electrodes and their labels.
-- **Settings files**: Allow users to predefine amplifier settings, visual layout, or impedance thresholds.
 
-If you have a specific montage you'd like to use, you can either create it manually or use the template provided in the `/config` directory (if available).
+If you have a specific montage you'd like to use, you can create it manually.
 
 ## Troubleshooting
 
 - **No data or missing electrodes?** Make sure the amplifier is connected and recognized by the TMSi software stack.
 - **Impedance values not showing?** Confirm the montage file matches the connected cap layout.
-- **Crashes on startup?** Try running the app as Administrator and ensure all required DLLs from the TMSi SDK are present in the executable directory.
+- **Crashes on startup?** Try running the app as Administrator and ensure all required DLLs from the TMSi SDK are present in the executable directory. 
 
 ## Future Work
 
-- Live data logging of impedance changes over time
-- Support for additional TMSi devices (SAGA, Porti)
 - Dark mode / UI themes
-- Auto-detection of montages from config
+
 
 ## Contributing
 
@@ -77,5 +72,5 @@ Currently, this project is in active development. Contributions, feature request
 
 ## License
 
-*Specify your license here, e.g., MIT, GPL, etc.*
+Free to use, falls under GNU-GPLv2
 
