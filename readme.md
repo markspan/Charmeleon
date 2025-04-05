@@ -18,7 +18,6 @@
 ## Use Cases
 
 - Pre-session impedance checks in EEG experiments.
-- Monitoring electrode contact quality during long-term EEG recordings.
 - Flexible adaptation to research protocols involving different cap layouts or montages.
 
 ## Installation
