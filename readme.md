@@ -60,9 +60,7 @@ If you have a specific montage you'd like to use, you can create it manually usi
 - **Impedance values not showing?** Confirm the montage file matches the connected cap layout.
 - **Crashes on startup?** Try running the app as Administrator and ensure all required DLLs from the TMSi SDK are present in the executable directory. 
 
-## Future Work
-
-- Dark mode / UI themes
+- Dark mode
 
 
 ## Contributing
