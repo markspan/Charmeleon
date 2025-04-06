@@ -15,7 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RtDeviceDriver\RtDeviceDriver.vcxproj" />
+    <ProjectReference Include="..\RtDeviceDriver\RtDeviceDriver.vcxproj">
+      <Private>True</Private>
+      <CopyLocalSatelliteAssemblies>True</CopyLocalSatelliteAssemblies>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
