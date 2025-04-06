@@ -1,6 +1,7 @@
 /.vs
-/.vs
-/.vs/CharmeleonGUI
 *.pdb
 /CharmeleonGUI/obj
 /.vs
+/CharmeleonGUI/bin
+/RtDeviceDriver/x64
+/x64

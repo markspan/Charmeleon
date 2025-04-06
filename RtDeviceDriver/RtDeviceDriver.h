@@ -194,7 +194,7 @@ namespace RtDeviceDriver {
 			}
 			catch (AccessViolationException^ e)
 			{
-				ErrorCode = fpGetErrorCode(Handle);
+				//ErrorCode = fpGetErrorCode(Handle);
 				throw gcnew Exception("TMSi Library wont Initialize...");
 			}
 			if (Handle)
@@ -203,7 +203,7 @@ namespace RtDeviceDriver {
 			}
 			else
 			{
-				ErrorCode = fpGetErrorCode(Handle);
+				//ErrorCode = fpGetErrorCode(Handle);
 				throw gcnew Exception("TMSi found no Device...");
 			}
 

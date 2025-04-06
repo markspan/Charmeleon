@@ -91,8 +91,23 @@ namespace CharmeleonGUI
             applyMontage(LoadElectrodeData("Resources/DefaultMontage.json"));
 
             // Initialize the Refa amplifier
-            InitializeAmplifier();
-
+            try
+            {
+                InitializeAmplifier();
+            }
+            catch (SocketException)
+            {
+                MessageBox.Show("Could not connect to the Refa amplifier. Please check the connection.");
+                return;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error initializing amplifier: {ex.Message}");
+                // It posts the Application.Exit() call to the message queue, ensuring it
+                // runs after the form is actually shown — avoiding the disposed-before-run issue.
+                this.Load += (s, e) => this.BeginInvoke(new Action(() => Application.Exit()));
+                return;
+            }
             // Go into the main loop: do that in the timer.
             this.RefreshTimer = new System.Windows.Forms.Timer();
             this.RefreshTimer.Tick += Redraw_Callback;
