@@ -37,10 +37,11 @@
             saveMontageToolStripMenuItem = new ToolStripMenuItem();
             exceptionsToolStripMenuItem = new ToolStripMenuItem();
             viewChannelsToolStripMenuItem = new ToolStripMenuItem();
-            RefreshTimer = new System.Windows.Forms.Timer(components);
-            pictureBox1 = new PictureBox();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             aboutCharmeleonToolStripMenuItem = new ToolStripMenuItem();
+            RefreshTimer = new System.Windows.Forms.Timer(components);
+            pictureBox1 = new PictureBox();
+            toggleThemeToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -49,7 +50,7 @@
             // 
             statusStrip1.Location = new Point(0, 808);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(1125, 22);
+            statusStrip1.Size = new Size(1016, 22);
             statusStrip1.TabIndex = 1;
             statusStrip1.Text = "statusStrip1";
             // 
@@ -58,7 +59,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { setupToolStripMenuItem, exceptionsToolStripMenuItem, aboutToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1125, 24);
+            menuStrip1.Size = new Size(1016, 24);
             menuStrip1.TabIndex = 2;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -85,9 +86,9 @@
             // 
             // exceptionsToolStripMenuItem
             // 
-            exceptionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { viewChannelsToolStripMenuItem });
+            exceptionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { viewChannelsToolStripMenuItem, toggleThemeToolStripMenuItem });
             exceptionsToolStripMenuItem.Name = "exceptionsToolStripMenuItem";
-            exceptionsToolStripMenuItem.Size = new Size(76, 20);
+            exceptionsToolStripMenuItem.Size = new Size(75, 20);
             exceptionsToolStripMenuItem.Text = "Exceptions";
             // 
             // viewChannelsToolStripMenuItem
@@ -96,18 +97,6 @@
             viewChannelsToolStripMenuItem.Size = new Size(180, 22);
             viewChannelsToolStripMenuItem.Text = "View Channels";
             viewChannelsToolStripMenuItem.Click += viewChannelsToolStripMenuItem_Click;
-            // 
-            // RefreshTimer
-            // 
-            RefreshTimer.Interval = 300;
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.Location = new Point(980, 231);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(95, 261);
-            pictureBox1.TabIndex = 3;
-            pictureBox1.TabStop = false;
             // 
             // aboutToolStripMenuItem
             // 
@@ -119,15 +108,34 @@
             // aboutCharmeleonToolStripMenuItem
             // 
             aboutCharmeleonToolStripMenuItem.Name = "aboutCharmeleonToolStripMenuItem";
-            aboutCharmeleonToolStripMenuItem.Size = new Size(180, 22);
+            aboutCharmeleonToolStripMenuItem.Size = new Size(175, 22);
             aboutCharmeleonToolStripMenuItem.Text = "About Charmeleon";
             aboutCharmeleonToolStripMenuItem.Click += aboutCharmeleonToolStripMenuItem_Click;
+            // 
+            // RefreshTimer
+            // 
+            RefreshTimer.Interval = 300;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Location = new Point(879, 50);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(50, 512);
+            pictureBox1.TabIndex = 3;
+            pictureBox1.TabStop = false;
+            // 
+            // toggleThemeToolStripMenuItem
+            // 
+            toggleThemeToolStripMenuItem.Name = "toggleThemeToolStripMenuItem";
+            toggleThemeToolStripMenuItem.Size = new Size(180, 22);
+            toggleThemeToolStripMenuItem.Text = "Toggle Theme";
+            toggleThemeToolStripMenuItem.Click += toggleThemeToolStripMenuItem_Click;
             // 
             // MainGUI
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1125, 830);
+            ClientSize = new Size(1016, 830);
             Controls.Add(pictureBox1);
             Controls.Add(statusStrip1);
             Controls.Add(menuStrip1);
@@ -154,5 +162,6 @@
         private PictureBox pictureBox1;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem aboutCharmeleonToolStripMenuItem;
+        private ToolStripMenuItem toggleThemeToolStripMenuItem;
     }
 }

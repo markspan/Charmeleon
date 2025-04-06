@@ -71,7 +71,7 @@ namespace CharmeleonGUI
             this.formHeight = this.ClientSize.Height;
             this.formWidth = this.ClientSize.Width;
             this.fullRadius = (int)(this.formHeight * 0.43);
-            this.centerX = formWidth / 2;
+            this.centerX = formHeight / 2;
             this.centerY = formHeight / 2;
 
             // Set initial positions for the auxiliary channels
@@ -136,33 +136,26 @@ namespace CharmeleonGUI
         private void DrawColorMapBox(Color[] colorMap)
         {
             // Create a new Bitmap that is 100 pixels wide and 256 pixels tall
-            int width = 150;
-            int height = 256;
+            int width = 100;
+            int height = 512;
             pictureBox1.Size = new Size(width, height);
-            pictureBox1.Location = new Point((int)(this.formWidth * .85), (int)(this.formHeight * .2));
 
             Bitmap bmp = new Bitmap(width, height);
 
             // Use Graphics to draw on the bitmap
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                int[] b = { 2, 5, 10, 20, 50, 100, 200, 256 };
+                g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+
                 for (int y = 0; y < 256; y++)
                 {
                     using (Pen pen = new Pen(colorMap[y]))
                     {
-                        g.DrawLine(pen, 0, y, 100, y);
-                    }
-                    if (Array.Exists(b, value => value == y))
-                    {
-                        using (Brush brush = new SolidBrush(SystemColors.ControlText)) // standard label text color
-                        {
-                            g.DrawString(y.ToString(), new Font("Segoe UI", 8), brush, 105, y);
-                        }
+                        g.DrawLine(pen, 0, 1 + (y * 2), 50, 1 + (y * 2));
+                        g.DrawLine(pen, 0, y * 2, 50, y * 2);
                     }
                 }
             }
-
             // Assign the generated bitmap to a PictureBox or any other control
             pictureBox1.Image = bmp;
         }
@@ -249,12 +242,53 @@ namespace CharmeleonGUI
 
             Graphics g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            Pen innercirclePen = new Pen(Color.Gray, 1); // Blue color, 2px width
+            innercirclePen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
 
             // Draw the outer circle to represent the electrode array
             g.DrawEllipse(Pens.Black, this.centerX - this.fullRadius, this.centerY - this.fullRadius, this.fullRadius * 2, this.fullRadius * 2);
+            int circleRadiusn = (this.fullRadius * 4) / 5;
+            g.DrawEllipse(innercirclePen, this.centerX - circleRadiusn, this.centerY - circleRadiusn, 2 * circleRadiusn, 2 * circleRadiusn);
+            circleRadiusn = (this.fullRadius * 3) / 5;
+            g.DrawEllipse(innercirclePen, this.centerX - circleRadiusn, this.centerY - circleRadiusn, 2 * circleRadiusn, 2 * circleRadiusn);
+            circleRadiusn = (this.fullRadius * 2) / 5;
+            g.DrawEllipse(innercirclePen, this.centerX - circleRadiusn, this.centerY - circleRadiusn, 2 * circleRadiusn, 2 * circleRadiusn);
+            circleRadiusn = this.fullRadius / 5;
+            g.DrawEllipse(innercirclePen, this.centerX - circleRadiusn, this.centerY - circleRadiusn, 2 * circleRadiusn, 2 * circleRadiusn);
 
-            // Draw center circle for the Cz electrode
-            g.FillEllipse(Brushes.Black, this.centerX - 5, this.centerY - 5, 10, 10);
+            // Draw the cross (dotted grey lines)
+            Pen dottedPen = new Pen(Color.Gray)
+            {
+                DashStyle = System.Drawing.Drawing2D.DashStyle.Dot
+            };
+
+            // Horizontal line (centered at the form)
+            g.DrawLine(dottedPen, 0, this.centerY, (int)(formHeight * 1.125), this.centerY);
+            // Vertical line (centered at the form)
+            g.DrawLine(dottedPen, this.centerX, 0, this.centerX, formHeight);
+
+            // Ears:
+            Point L = this.electrodes["A1"].Location;
+            Point R = this.electrodes["A2"].Location;
+            int RadX = this.fullRadius / 14;
+            int RadY = this.fullRadius / 7;
+
+            g.DrawEllipse(Pens.Black, L.X - 20, L.Y - 20, 2 * RadX, 2 * RadY);
+            g.DrawEllipse(Pens.Black, R.X + 18, R.Y - 20, 2 * RadX, 2 * RadY);
+
+            int[] LabelList = { 2, 5, 10, 20, 50, 100, 200, 256 };
+            Point P = this.pictureBox1.Location;
+
+            foreach (int y in LabelList)
+            {
+                using (Brush brush = new SolidBrush(SystemColors.ControlText)) // standard label text color
+                {
+                    StringFormat format = new StringFormat();
+                    format.Alignment = StringAlignment.Far; // Right align
+                    g.DrawString(y.ToString(), new Font("Segoe UI", 8, FontStyle.Regular), brush, P.X - 5, P.Y + (y * 2), format);
+                }
+            }
+
         }
 
         /// <summary>
@@ -290,7 +324,7 @@ namespace CharmeleonGUI
                 if (matches.Length > 0 && matches[0] is ElectrodeControl control)
                 {
                     control.IsActive = data.IsActive;
-                    control.Value = data.Value;
+                    // control.Value = data.Value;
                     control.LabelText = data.LabelText;
                     control.HardwareChannel = data.HardwareChannel;
                 }
@@ -334,7 +368,7 @@ namespace CharmeleonGUI
                kv => new ElectrodeControlData
                {
                    IsActive = kv.Value.IsActive,
-                   Value = kv.Value.Value,
+                   //Value = kv.Value.Value,
                    LabelText = kv.Value.LabelText,
                    HardwareChannel = kv.Value.HardwareChannel
                }
@@ -357,6 +391,7 @@ namespace CharmeleonGUI
         {
             viewChannelNumbers = !viewChannelNumbers;
             ElectrodeControl.viewHWChannel = viewChannelNumbers;
+            this.Invalidate();
         }
 
         private void aboutCharmeleonToolStripMenuItem_Click(object sender, EventArgs e)
@@ -366,5 +401,38 @@ namespace CharmeleonGUI
                 about.ShowDialog();
             }
         }
+
+        private void toggleThemeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleTheme(this);
+        }
+
+        bool isDark = false;
+
+        void ToggleTheme(Control root)
+        {
+            isDark = !isDark;
+            ApplyTheme(root, isDark);
+        }
+
+        void ApplyTheme(Control control, bool dark)
+        {
+            if (dark)
+            {
+                control.BackColor = Color.FromArgb(60, 60, 60); // Dark background
+                control.ForeColor = Color.White;
+            }
+            else
+            {
+                control.BackColor = SystemColors.Control; // Default light bg
+                control.ForeColor = SystemColors.ControlText;
+            }
+
+            foreach (Control child in control.Controls)
+            {
+                ApplyTheme(child, dark);
+            }
+        }
+
     }
 }

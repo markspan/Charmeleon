@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CharmeleonGUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5f1ce36a3dd482707ab4a386430b170a8f9b13f5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae5f460784d4fdc7ea3977f4285b47492c42e3ff")]
 [assembly: System.Reflection.AssemblyProductAttribute("CharmeleonGUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CharmeleonGUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

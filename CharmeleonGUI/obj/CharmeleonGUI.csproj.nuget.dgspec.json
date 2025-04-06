@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\CharmeleonGUI.csproj": {}
+    "C:\\Users\\mmspa\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\CharmeleonGUI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\CharmeleonGUI.csproj": {
+    "C:\\Users\\mmspa\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\CharmeleonGUI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\CharmeleonGUI.csproj",
+        "projectUniqueName": "C:\\Users\\mmspa\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\CharmeleonGUI.csproj",
         "projectName": "CharmeleonGUI",
-        "projectPath": "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\CharmeleonGUI.csproj",
-        "packagesPath": "C:\\Users\\P154492\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\obj\\",
+        "projectPath": "C:\\Users\\mmspa\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\CharmeleonGUI.csproj",
+        "packagesPath": "C:\\Users\\mmspa\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mmspa\\Documents\\GitHub\\Charmeleon\\CharmeleonGUI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\P154492\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mmspa\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -33,8 +33,8 @@
           "net8.0-windows7.0": {
             "targetAlias": "net8.0-windows",
             "projectReferences": {
-              "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\RtDeviceDriver\\RtDeviceDriver.vcxproj": {
-                "projectPath": "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\RtDeviceDriver\\RtDeviceDriver.vcxproj"
+              "C:\\Users\\mmspa\\Documents\\GitHub\\Charmeleon\\RtDeviceDriver\\RtDeviceDriver.vcxproj": {
+                "projectPath": "C:\\Users\\mmspa\\Documents\\GitHub\\Charmeleon\\RtDeviceDriver\\RtDeviceDriver.vcxproj"
               }
             }
           }
@@ -77,11 +77,11 @@
         }
       }
     },
-    "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\RtDeviceDriver\\RtDeviceDriver.vcxproj": {
+    "C:\\Users\\mmspa\\Documents\\GitHub\\Charmeleon\\RtDeviceDriver\\RtDeviceDriver.vcxproj": {
       "restore": {
-        "projectUniqueName": "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\RtDeviceDriver\\RtDeviceDriver.vcxproj",
+        "projectUniqueName": "C:\\Users\\mmspa\\Documents\\GitHub\\Charmeleon\\RtDeviceDriver\\RtDeviceDriver.vcxproj",
         "projectName": "RtDeviceDriver",
-        "projectPath": "C:\\Users\\P154492\\Documents\\GitHub\\Charmeleon\\RtDeviceDriver\\RtDeviceDriver.vcxproj",
+        "projectPath": "C:\\Users\\mmspa\\Documents\\GitHub\\Charmeleon\\RtDeviceDriver\\RtDeviceDriver.vcxproj",
         "UsingMicrosoftNETSdk": false,
         "frameworks": {
           "native": {

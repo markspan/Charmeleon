@@ -260,7 +260,7 @@ namespace CharmeleonGUI
     public class ElectrodeControlData
     {  // This class is used to store the data for each electrode to make this serializeable.
         public bool IsActive { get; set; }
-        public int Value { get; set; }
+        //public int Value { get; set; }
         public required string LabelText { get; set; }
         public int HardwareChannel { get; set; }
     }

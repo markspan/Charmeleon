@@ -39,25 +39,25 @@
             pictureBox1.Image = Properties.Resources.Charmeleon;
             pictureBox1.Location = new Point(12, 12);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(278, 293);
+            pictureBox1.Size = new Size(263, 190);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
             // richTextBox1
             // 
-            richTextBox1.Location = new Point(370, 122);
+            richTextBox1.Location = new Point(307, 44);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.Size = new Size(371, 122);
             richTextBox1.TabIndex = 1;
-            richTextBox1.Text = "Charmeleon (II)\n\nImpedance checking program\n\n(c) 2025 University of Groningen\nWritten by M.M. Span";
+            richTextBox1.Text = "Charmeleon (II)\n\nImpedance checking program\nFor use with TMSi Refa Amplifiers\n\n(c) 2025 University of Groningen\nWritten by M.M. Span";
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Showcard Gothic", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(370, 69);
+            label1.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(307, 12);
             label1.Name = "label1";
-            label1.Size = new Size(169, 30);
+            label1.Size = new Size(145, 29);
             label1.TabIndex = 2;
             label1.Text = "Charmeleon";
             // 
@@ -65,12 +65,12 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(750, 318);
+            ClientSize = new Size(691, 214);
             Controls.Add(label1);
             Controls.Add(richTextBox1);
             Controls.Add(pictureBox1);
             Name = "aboutForm";
-            Text = "aboutForm";
+            Text = "About Charmeleon";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
