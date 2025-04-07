@@ -1,7 +1,5 @@
-using System.Drawing.Imaging;
 using System.Net.Sockets;
 using System.Text.Json;
-using System.Timers;
 
 namespace CharmeleonGUI
 {
@@ -94,6 +92,7 @@ namespace CharmeleonGUI
             try
             {
                 InitializeAmplifier();
+                ElectrodeControl.maxChannel = Amplifier.NrOfChannels;
             }
             catch (SocketException)
             {
@@ -115,7 +114,7 @@ namespace CharmeleonGUI
         }
 
         /// <summary>
-        /// 
+        /// redraws the electrodes with the new impedance information.
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
@@ -326,7 +325,12 @@ namespace CharmeleonGUI
             AddElectrodes();
             this.Invalidate();
         }
-
+        /// <summary>
+        /// applyMontage: applies the new montage to the view. 
+        /// </summary>
+        /// <param name="loadedData">Dictionary containing the relevant data per electrode. Typically read from a JSON file
+        /// Main data are the hardwarechannel and the text useed as label. Also the activation is saves/loaded.
+        /// </param>
         private void applyMontage(Dictionary<string, ElectrodeControlData> loadedData)
         {
             foreach (var kvp in loadedData)
@@ -338,17 +342,25 @@ namespace CharmeleonGUI
                 Control[] matches = this.Controls.Find(name, true);
                 if (matches.Length > 0 && matches[0] is ElectrodeControl control)
                 {
-                    control.IsActive = data.IsActive;
-                    // control.Value = data.Value;
                     control.LabelText = data.LabelText;
                     control.HardwareChannel = data.HardwareChannel;
+                    if (control.HardwareChannel > ElectrodeControl.maxChannel) control.IsActive = false;
+                    else control.IsActive = data.IsActive;
                 }
             }
         }
+        /// <summary>
+        /// openMontageToolStripMenuItem_Click 
+        /// opens a filemanager to select a JSON file with the montage data, then applies it to the setup.
+        /// </summary>
         private void openMontageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             applyMontage(LoadElectrodeData(""));
         }
+        /// <summary>
+        /// LoadElectrodeData 
+        /// opens a filemanager to select a JSON file with the montage data.
+        /// </summary>
         public Dictionary<string, ElectrodeControlData> LoadElectrodeData(string fileName)
         {
             if (fileName == "")
@@ -374,7 +386,10 @@ namespace CharmeleonGUI
                 return new Dictionary<string, ElectrodeControlData>();
             }
         }
-
+        /// <summary>
+        /// saveMontageToolStripMenuItem_Click
+        /// opens a filemanager to select a JSON file to save the current montage to.
+        /// </summary>
         private void saveMontageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Save controls
@@ -401,22 +416,33 @@ namespace CharmeleonGUI
                 File.WriteAllText(dialog.FileName, json);
             }
         }
-
+        /// <summary>
+        /// viewChannelsToolStripMenuItem_Click
+        /// Changes the view from showing the electrode label to showing the hardware channel.
+        /// </summary>
         private void viewChannelsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             viewChannelNumbers = !viewChannelNumbers;
             ElectrodeControl.viewHWChannel = viewChannelNumbers;
             this.Invalidate();
         }
-
+        /// <summary>
+        /// aboutCharmeleonToolStripMenuItem_Click
+        /// Shows the aboutbox.
+        /// </summary>
         private void aboutCharmeleonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (aboutForm about = new aboutForm())
             {
+                ApplyTheme(about, isDark);
                 about.ShowDialog();
             }
         }
 
+        /// <summary>
+        /// toggleThemeToolStripMenuItem_Click
+        /// Toggles the UI theme from dark to light and vice versa. Menu ite callback that only calls the function.
+        /// </summary>
         private void toggleThemeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToggleTheme(this);
@@ -424,15 +450,30 @@ namespace CharmeleonGUI
 
         bool isDark = false;
 
+        /// <summary>
+        /// ToggleTheme
+        /// Function that toggles the UI theme from dark to light and vice versa
+        /// </summary>
+        /// <param name="root">the Form that holds the controls that need to be adated to the new theme.
+        /// </param>
+        /// 
         void ToggleTheme(Control root)
         {
             isDark = !isDark;
             ApplyTheme(root, isDark);
         }
 
-        void ApplyTheme(Control control, bool dark)
+        /// <summary>
+        /// ApplyTheme
+        /// Helper function that applies the toggled theme to all controls in the form.
+        /// </summary>
+        /// <param name="control">the Form that holds the controls that need to be adated to the new theme.
+        /// </param>
+        /// <param name="is_dark">true if the dark theme needs to be applied, false if the light theme needs to be applied.
+        /// </param>
+        void ApplyTheme(Control control, bool is_dark)
         {
-            if (dark)
+            if (is_dark)
             {
                 control.BackColor = Color.FromArgb(60, 60, 60); // Dark background
                 control.ForeColor = Color.White;
@@ -442,10 +483,10 @@ namespace CharmeleonGUI
                 control.BackColor = SystemColors.Control; // Default light bg
                 control.ForeColor = SystemColors.ControlText;
             }
-
+            // recurseively apply the theme to all child controls
             foreach (Control child in control.Controls)
             {
-                ApplyTheme(child, dark);
+                ApplyTheme(child, is_dark);
             }
         }
 

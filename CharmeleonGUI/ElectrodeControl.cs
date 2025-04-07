@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.ComponentModel;
 
 namespace CharmeleonGUI
 {
@@ -13,7 +10,7 @@ namespace CharmeleonGUI
         private int value = 0;
         private string labelText = "Label";
         public int hardwareChannel = 0;
-        private int maxChannel = 255;
+        public static int maxChannel = 256;
         private TextBox? editBox = null;
         public static Color[] ColorMap = File.Exists("Resources/heat.map") ? LoadColorMapFromFile("Resources/heat.map") : GenerateColorMap();
 
