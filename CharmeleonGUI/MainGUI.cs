@@ -87,7 +87,6 @@ namespace CharmeleonGUI
             //Draw the colormap
             DrawColorMapBox(ElectrodeControl.ColorMap);
             applyMontage(LoadElectrodeData("Resources/DefaultMontage.json"));
-            /*
             // Initialize the Refa amplifier
             try
             {
@@ -112,7 +111,7 @@ namespace CharmeleonGUI
             // Go into the main loop: do that in the timer.
             this.RefreshTimer = new System.Windows.Forms.Timer();
             this.RefreshTimer.Tick += Redraw_Callback;
-            this.RefreshTimer.Start();*/
+            this.RefreshTimer.Start();
         }
 
         /// <summary>
@@ -474,7 +473,6 @@ namespace CharmeleonGUI
         /// </param>
         /// <param name="is_dark">true if the dark theme needs to be applied, false if the light theme needs to be applied.
         /// </param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         void ApplyTheme(Control control, bool is_dark)
         {
             if (control == null) return;
