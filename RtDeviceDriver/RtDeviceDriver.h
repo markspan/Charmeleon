@@ -132,7 +132,7 @@ namespace RtDeviceDriver {
 			try {
 				LibHandle = LoadLibrary(TEXT("C:\\Windows\\System32\\TMSiSDK.dll"));
 			}
-			catch (Exception^ e)
+			catch (Exception^ )
 			{
 				throw gcnew Exception("Cannot open the driver dll.");
 			}
@@ -192,7 +192,7 @@ namespace RtDeviceDriver {
 				if (fpLibraryInit != nullptr)
 					Handle = fpLibraryInit(TMSiConnectionUSB, &ErrorCode);
 			}
-			catch (AccessViolationException^ e)
+			catch (AccessViolationException^ )
 			{
 				//ErrorCode = fpGetErrorCode(Handle);
 				throw gcnew Exception("TMSi Library wont Initialize...");
