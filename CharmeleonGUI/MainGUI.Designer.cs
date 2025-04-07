@@ -110,7 +110,7 @@
             aboutCharmeleonToolStripMenuItem.Name = "aboutCharmeleonToolStripMenuItem";
             aboutCharmeleonToolStripMenuItem.Size = new Size(175, 22);
             aboutCharmeleonToolStripMenuItem.Text = "About Charmeleon";
-            aboutCharmeleonToolStripMenuItem.Click += aboutCharmeleonToolStripMenuItem_Click;
+            aboutCharmeleonToolStripMenuItem.Click += AboutCharmeleonToolStripMenuItem_Click;
             // 
             // RefreshTimer
             // 
@@ -129,7 +129,7 @@
             toggleThemeToolStripMenuItem.Name = "toggleThemeToolStripMenuItem";
             toggleThemeToolStripMenuItem.Size = new Size(180, 22);
             toggleThemeToolStripMenuItem.Text = "Toggle Theme";
-            toggleThemeToolStripMenuItem.Click += toggleThemeToolStripMenuItem_Click;
+            toggleThemeToolStripMenuItem.Click += ToggleThemeToolStripMenuItem_Click;
             // 
             // MainGUI
             // 

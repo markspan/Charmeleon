@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharmeleonGUI", "CharmeleonGUI\CharmeleonGUI.csproj", "{D0506DEC-8B17-4379-8A95-4D14114482AC}"
 EndProject
@@ -21,8 +21,8 @@ Global
 		{D0506DEC-8B17-4379-8A95-4D14114482AC}.Debug|x64.Build.0 = Debug|Any CPU
 		{D0506DEC-8B17-4379-8A95-4D14114482AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0506DEC-8B17-4379-8A95-4D14114482AC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D0506DEC-8B17-4379-8A95-4D14114482AC}.Release|x64.ActiveCfg = Release|Any CPU
-		{D0506DEC-8B17-4379-8A95-4D14114482AC}.Release|x64.Build.0 = Release|Any CPU
+		{D0506DEC-8B17-4379-8A95-4D14114482AC}.Release|x64.ActiveCfg = Release|x64
+		{D0506DEC-8B17-4379-8A95-4D14114482AC}.Release|x64.Build.0 = Release|x64
 		{BE396A9D-8556-4F31-9989-2D4FAB1D735D}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{BE396A9D-8556-4F31-9989-2D4FAB1D735D}.Debug|Any CPU.Build.0 = Debug|x64
 		{BE396A9D-8556-4F31-9989-2D4FAB1D735D}.Debug|x64.ActiveCfg = Debug|x64

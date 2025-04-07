@@ -20,7 +20,7 @@ Environment:
 
 #include <Windows.h>
 #include <stdio.h> 
-
+#include <tchar.h>
 #include "Feature.h" 
 
 
@@ -549,7 +549,7 @@ void ShowError( const LPTSTR String )
 	if( String != NULL ) printf("\n%ws : ", String );
 	
 	if( ErrorMessage != NULL )
-	{	printf("0x%x %s", Error ,ErrorMessage ); 
+	{	_tprintf(_T("(0x%x %s)"), Error ,ErrorMessage ); 
 		LocalFree( ErrorMessage );
 	}
 	else

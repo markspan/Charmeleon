@@ -87,12 +87,14 @@ namespace CharmeleonGUI
             //Draw the colormap
             DrawColorMapBox(ElectrodeControl.ColorMap);
             applyMontage(LoadElectrodeData("Resources/DefaultMontage.json"));
-
+            /*
             // Initialize the Refa amplifier
             try
             {
                 InitializeAmplifier();
-                ElectrodeControl.maxChannel = Amplifier.NrOfChannels;
+                // Set the maximum number of channels for the ElectrodeControl
+                if (Amplifier != null)
+                    ElectrodeControl.maxChannel = Amplifier.NrOfChannels;
             }
             catch (SocketException)
             {
@@ -110,7 +112,7 @@ namespace CharmeleonGUI
             // Go into the main loop: do that in the timer.
             this.RefreshTimer = new System.Windows.Forms.Timer();
             this.RefreshTimer.Tick += Redraw_Callback;
-            this.RefreshTimer.Start();
+            this.RefreshTimer.Start();*/
         }
 
         /// <summary>
@@ -331,15 +333,16 @@ namespace CharmeleonGUI
         /// <param name="loadedData">Dictionary containing the relevant data per electrode. Typically read from a JSON file
         /// Main data are the hardwarechannel and the text useed as label. Also the activation is saves/loaded.
         /// </param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         private void applyMontage(Dictionary<string, ElectrodeControlData> loadedData)
         {
             foreach (var kvp in loadedData)
             {
                 string name = kvp.Key;
                 ElectrodeControlData data = kvp.Value;
-
+                if (Controls == null) return;
                 // Try to find the control by name
-                Control[] matches = this.Controls.Find(name, true);
+                Control[] matches = Controls.Find(name, true);
                 if (matches.Length > 0 && matches[0] is ElectrodeControl control)
                 {
                     control.LabelText = data.LabelText;
@@ -404,7 +407,7 @@ namespace CharmeleonGUI
                }
             );
 
-            using SaveFileDialog dialog = new SaveFileDialog
+            using SaveFileDialog dialog = new ()
             {
                 Filter = "JSON Files (*.json)|*.json",
                 Title = "Save Electrode Configuration"
@@ -424,13 +427,13 @@ namespace CharmeleonGUI
         {
             viewChannelNumbers = !viewChannelNumbers;
             ElectrodeControl.viewHWChannel = viewChannelNumbers;
-            this.Invalidate();
+            Invalidate();
         }
         /// <summary>
-        /// aboutCharmeleonToolStripMenuItem_Click
+        /// AboutCharmeleonToolStripMenuItem_Click
         /// Shows the aboutbox.
         /// </summary>
-        private void aboutCharmeleonToolStripMenuItem_Click(object sender, EventArgs e)
+        private void AboutCharmeleonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (aboutForm about = new aboutForm())
             {
@@ -440,10 +443,10 @@ namespace CharmeleonGUI
         }
 
         /// <summary>
-        /// toggleThemeToolStripMenuItem_Click
+        /// ToggleThemeToolStripMenuItem_Click
         /// Toggles the UI theme from dark to light and vice versa. Menu ite callback that only calls the function.
         /// </summary>
-        private void toggleThemeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ToggleThemeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToggleTheme(this);
         }
@@ -471,11 +474,13 @@ namespace CharmeleonGUI
         /// </param>
         /// <param name="is_dark">true if the dark theme needs to be applied, false if the light theme needs to be applied.
         /// </param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         void ApplyTheme(Control control, bool is_dark)
         {
+            if (control == null) return;
             if (is_dark)
             {
-                control.BackColor = Color.FromArgb(60, 60, 60); // Dark background
+                control.BackColor = Color.FromArgb(80, 80, 80); // Dark background
                 control.ForeColor = Color.White;
             }
             else

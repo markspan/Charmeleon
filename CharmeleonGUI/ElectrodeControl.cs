@@ -2,6 +2,10 @@
 
 namespace CharmeleonGUI
 {
+    /// <summary>
+    /// Represents a UI control for displaying and editing information related to a single electrode.
+    /// Displays an impedance value via color, and allows label editing and hardware channel assignment.
+    /// </summary>
     public partial class ElectrodeControl : UserControl
     {
         private bool isActive = true;
@@ -12,11 +16,19 @@ namespace CharmeleonGUI
         public int hardwareChannel = 0;
         public static int maxChannel = 256;
         private TextBox? editBox = null;
+
+        /// <summary>
+        /// The colormap used to map values to colors. Loaded from file if available, otherwise generated.
+        /// </summary>
         public static Color[] ColorMap = File.Exists("Resources/heat.map") ? LoadColorMapFromFile("Resources/heat.map") : GenerateColorMap();
 
         private static ElectrodeControl? currentlyEditing = null;
         private static TextBox? activeEditBox = null;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ElectrodeControl"/> class.
+        /// Sets up the visual layout and click interaction.
+        /// </summary>
         public ElectrodeControl()
         {
             this.Size = new Size(50, 70);
@@ -25,6 +37,9 @@ namespace CharmeleonGUI
             InitTextBox();
         }
 
+        /// <summary>
+        /// Gets or sets whether the electrode is currently active (i.e., shown with color).
+        /// </summary>
         [Category("Appearance")]
         public bool IsActive
         {
@@ -32,6 +47,9 @@ namespace CharmeleonGUI
             set { isActive = value; Invalidate(); }
         }
 
+        /// <summary>
+        /// Gets or sets whether the control is in editing mode (showing editable hardware channel).
+        /// </summary>
         [Category("Behavior")]
         public bool EditState
         {
@@ -39,6 +57,9 @@ namespace CharmeleonGUI
             set { editState = value; Invalidate(); }
         }
 
+        /// <summary>
+        /// Gets or sets the impedance value (0-255) for color mapping.
+        /// </summary>
         [Category("Data")]
         public int Value
         {
@@ -46,6 +67,9 @@ namespace CharmeleonGUI
             set { this.value = Math.Max(0, Math.Min(255, value)); Invalidate(); }
         }
 
+        /// <summary>
+        /// Gets or sets the textual label shown beneath the electrode.
+        /// </summary>
         [Category("Appearance")]
         public string LabelText
         {
@@ -53,6 +77,9 @@ namespace CharmeleonGUI
             set { labelText = value; Invalidate(); }
         }
 
+        /// <summary>
+        /// Gets or sets the hardware channel number associated with this electrode.
+        /// </summary>
         [Category("Data")]
         public int HardwareChannel
         {
@@ -60,6 +87,9 @@ namespace CharmeleonGUI
             set { hardwareChannel = Math.Max(0, Math.Min(maxChannel, value)); Invalidate(); }
         }
 
+        /// <summary>
+        /// Gets or sets the maximum valid hardware channel index.
+        /// </summary>
         [Category("Data")]
         public int MaxChannel
         {
@@ -67,43 +97,48 @@ namespace CharmeleonGUI
             set { maxChannel = Math.Max(1, value); Invalidate(); }
         }
 
+        /// <summary>
+        /// Initializes the editable textbox used for changing hardware channels.
+        /// </summary>
         private void InitTextBox()
         {
             editBox = new TextBox { Visible = false, TextAlign = HorizontalAlignment.Center };
-            editBox.Leave += (s, e) => SaveHardwareChannel();  // Save the value on losing focus
+            editBox.Leave += (s, e) => SaveHardwareChannel();
             editBox.KeyPress += (s, e) =>
             {
-                // Only allow digits and Backspace
                 if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back && e.KeyChar != (char)Keys.Enter)
                     e.Handled = true;
 
-                // If Enter key is pressed, finalize editing
                 if (e.KeyChar == (char)Keys.Enter)
                 {
                     SaveHardwareChannel();
-                    // After saving, toggle back to display mode
                     EditState = false;
                     editBox.Visible = false;
-                    Invalidate(); // Refresh to show updated label
+                    Invalidate();
                 }
             };
             Controls.Add(editBox);
         }
 
+        /// <summary>
+        /// Toggles the active/inactive state of the electrode when clicked.
+        /// </summary>
         private void ToggleActiveState()
         {
             IsActive = !IsActive;
         }
 
+        /// <summary>
+        /// Shows the hardware channel textbox for inline editing.
+        /// Also hides any other active editor in the UI.
+        /// </summary>
         private void ShowEditBox()
         {
-            // Close previous one if it exists
             if (currentlyEditing != null && currentlyEditing != this)
             {
                 currentlyEditing.HideEditBox();
             }
 
-            // Also remove any lingering edit box
             if (activeEditBox != null)
             {
                 activeEditBox.Parent?.Controls.Remove(activeEditBox);
@@ -143,6 +178,9 @@ namespace CharmeleonGUI
             activeEditBox = textBox;
         }
 
+        /// <summary>
+        /// Hides the currently visible hardware channel editor textbox.
+        /// </summary>
         private void HideEditBox()
         {
             if (activeEditBox != null)
@@ -156,10 +194,12 @@ namespace CharmeleonGUI
             Invalidate();
         }
 
-
-
+        /// <summary>
+        /// Attempts to save the hardware channel from the textbox input.
+        /// </summary>
         private void SaveHardwareChannel()
         {
+            if (editBox == null) return;
             if (int.TryParse(editBox.Text, out int newChannel))
             {
                 HardwareChannel = newChannel;
@@ -167,54 +207,54 @@ namespace CharmeleonGUI
             editBox.Visible = false;
         }
 
+        /// <summary>
+        /// Custom paint logic for drawing the electrode: filled circle, value text, and label.
+        /// </summary>
+        /// <param name="e">Paint event args.</param>
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
             Graphics g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-            // Circle Rectangle
             Rectangle circleRect = new Rectangle(10, 10, Width - 20, Width - 20);
-
-            // Draw Circle
             Color fillColor = IsActive ? ColorMap[Value] : Color.LightGray;
+
             using (SolidBrush brush = new SolidBrush(fillColor))
-            {
                 g.FillEllipse(brush, circleRect);
-            }
 
-            // Draw Border
             using (Pen pen = new Pen(Color.Black, 1))
-            {
                 g.DrawEllipse(pen, circleRect);
-            }
 
-            // Draw Label
             string displayText = editState ? HardwareChannel.ToString() : (Value == 255 ? "Inf" : Value.ToString());
             DrawText(g, displayText, Font, ForeColor, circleRect, ContentAlignment.MiddleCenter);
 
-            // Bottom Label
             if (!editState && !viewHWChannel)
                 DrawText(g, LabelText, Font, ForeColor, new Rectangle(0, Width - 5, Width, 20), ContentAlignment.MiddleCenter);
-            else if (!editBox.Visible)
-                DrawText(g, HardwareChannel.ToString(), Font, ForeColor, new Rectangle(0, Width - 5, Width, 20), ContentAlignment.MiddleCenter);
+            else if (editBox != null && !editBox.Visible)
+                    DrawText(g, HardwareChannel.ToString(), Font, ForeColor, new Rectangle(0, Width - 5, Width, 20), ContentAlignment.MiddleCenter);
             else
                 DrawText(g, HardwareChannel.ToString(), Font, ForeColor, new Rectangle(0, Width - 5, Width, 20), ContentAlignment.MiddleCenter);
         }
 
+        /// <summary>
+        /// Detects clicks on the bottom label area and enters edit mode.
+        /// </summary>
+        /// <param name="e">Mouse event args.</param>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
 
-            // If user clicks on the label, enter edit state
             if (new Rectangle(0, Width - 5, Width, 20).Contains(e.Location))
             {
-                // Enter edit mode
                 EditState = true;
                 ShowEditBox();
             }
         }
 
+        /// <summary>
+        /// Draws centered text within a specified rectangle.
+        /// </summary>
         private static void DrawText(Graphics g, string text, Font font, Color color, Rectangle rect, ContentAlignment alignment)
         {
             using (StringFormat format = new StringFormat())
@@ -226,6 +266,10 @@ namespace CharmeleonGUI
             }
         }
 
+        /// <summary>
+        /// Generates a fallback color map (gradient from green to red) for impedance values.
+        /// </summary>
+        /// <returns>Array of 256 colors.</returns>
         private static Color[] GenerateColorMap()
         {
             Color[] colors = new Color[256];
@@ -237,6 +281,11 @@ namespace CharmeleonGUI
             return colors;
         }
 
+        /// <summary>
+        /// Loads a custom color map from a CSV-like file. Each line should be "R,G,B".
+        /// </summary>
+        /// <param name="filePath">Path to the color map file.</param>
+        /// <returns>Array of 256 colors.</returns>
         private static Color[] LoadColorMapFromFile(string filePath)
         {
             Color[] colors = new Color[256];
@@ -254,11 +303,26 @@ namespace CharmeleonGUI
             return colors;
         }
     }
+
+    /// <summary>
+    /// Serializable data structure for storing electrode settings outside the GUI.
+    /// </summary>
     public class ElectrodeControlData
-    {  // This class is used to store the data for each electrode to make this serializeable.
+    {
+        /// <summary>
+        /// Gets or sets whether the electrode is active.
+        /// </summary>
         public bool IsActive { get; set; }
-        //public int Value { get; set; }
+
+        /// <summary>
+        /// Gets or sets the label text.
+        /// </summary>
         public required string LabelText { get; set; }
+
+        /// <summary>
+        /// Gets or sets the hardware channel index.
+        /// </summary>
         public int HardwareChannel { get; set; }
     }
 }
+
