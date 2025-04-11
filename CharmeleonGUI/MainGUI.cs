@@ -41,8 +41,8 @@ namespace CharmeleonGUI
             { "O2", ( -72, 4) }, { "PO8",( -54, 4) }, { "P8",( -36, 4) }, { "TP8",( -18, 4) },
             { "AF4", (  68, 3.2) }, { "F6", (  43, 3.1) }, { "F4", (  55, 2.5 )}, { "F2", (  70, 2.15) },
             { "AF3", ( 112, 3.2) }, { "F5", ( 137, 3.1) }, { "F3", ( 125, 2.5 )}, { "F1", ( 110, 2.15) },
-            { "PO4", ( -68, 3.2) }, { "P6", ( -43, 3.1) }, { "P4", ( -55, 2.45)}, { "P2", ( -70, 2.15) },
-            { "PO3", (-112, 3.2) }, { "P5", (-137, 3.1) }, { "P3", (-125, 2.45)}, { "P1", (-110, 2.15) },
+            { "PO4", ( -68, 3.1) }, { "P6", ( -43, 3.1) }, { "P4", ( -55, 2.45)}, { "P2", ( -70, 2.15) },
+            { "PO3", (-112, 3.1) }, { "P5", (-137, 3.1) }, { "P3", (-125, 2.45)}, { "P1", (-110, 2.15) },
             { "FC5",(158, 3.05) }, { "FC3",(151, 2.1) }, { "FC1",(135, 1.35) },
             { "CP5",(-158, 3.05)}, { "CP3",(-151, 2.1)}, { "CP1",(-135, 1.35)},
             { "FC6",(  22, 3.05)}, { "FC4",(  29, 2.1)}, { "FC2",( 45, 1.35) },
@@ -400,13 +400,12 @@ namespace CharmeleonGUI
                kv => new ElectrodeControlData
                {
                    IsActive = kv.Value.IsActive,
-                   //Value = kv.Value.Value,
                    LabelText = kv.Value.LabelText,
                    HardwareChannel = kv.Value.HardwareChannel
                }
             );
 
-            using SaveFileDialog dialog = new ()
+            using SaveFileDialog dialog = new()
             {
                 Filter = "JSON Files (*.json)|*.json",
                 Title = "Save Electrode Configuration"
@@ -493,5 +492,9 @@ namespace CharmeleonGUI
             }
         }
 
+        private void resizeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MainGUI_Resize(sender, e);
+        }
     }
 }

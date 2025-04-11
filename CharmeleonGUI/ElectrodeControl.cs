@@ -31,12 +31,29 @@ namespace CharmeleonGUI
         /// </summary>
         public ElectrodeControl()
         {
-            this.Size = new Size(50, 70);
+            this.Size = new Size(65, 80);
+            this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            this.BackColor = Color.Transparent;
             this.DoubleBuffered = true;
             this.Click += (s, e) => ToggleActiveState();
             InitTextBox();
         }
+        private Font impedanceFont = new Font("Segoe UI", 14, FontStyle.Bold);
+        private Font labelFont = new Font("Segoe UI", 12, FontStyle.Regular);
 
+        [Category("Appearance")]
+        public Font ImpedanceFont
+        {
+            get => impedanceFont;
+            set { impedanceFont = value; Invalidate(); }
+        }
+
+        [Category("Appearance")]
+        public Font LabelFont
+        {
+            get => labelFont;
+            set { labelFont = value; Invalidate(); }
+        }
         /// <summary>
         /// Gets or sets whether the electrode is currently active (i.e., shown with color).
         /// </summary>
@@ -227,10 +244,10 @@ namespace CharmeleonGUI
                 g.DrawEllipse(pen, circleRect);
 
             string displayText = editState ? HardwareChannel.ToString() : (Value == 255 ? "Inf" : Value.ToString());
-            DrawText(g, displayText, Font, ForeColor, circleRect, ContentAlignment.MiddleCenter);
+            DrawText(g, displayText, ImpedanceFont, ForeColor, circleRect, ContentAlignment.MiddleCenter);
 
             if (!editState && !viewHWChannel)
-                DrawText(g, LabelText, Font, ForeColor, new Rectangle(0, Width - 5, Width, 20), ContentAlignment.MiddleCenter);
+                DrawText(g, LabelText, LabelFont, ForeColor, new Rectangle(0, Width - 5, Width, 20), ContentAlignment.MiddleCenter);
             else if (editBox != null && !editBox.Visible)
                     DrawText(g, HardwareChannel.ToString(), Font, ForeColor, new Rectangle(0, Width - 5, Width, 20), ContentAlignment.MiddleCenter);
             else
