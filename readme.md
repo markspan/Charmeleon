@@ -9,11 +9,10 @@
 - **Clear color-coded feedback** to indicate electrode contact quality.
 - **Customizable montages** for flexible setup in different experimental configurations.
 - **Intuitive GUI** suitable for lab technicians and researchers alike.
-- **Modular design** for easy integration and adaptation.
 
 ## Screenshot
 
-*Add a screenshot or animation here to show the main GUI.*
+
 
 ## Use Cases
 
@@ -60,7 +59,7 @@ If you have a specific montage you'd like to use, you can create it manually usi
 - **Impedance values not showing?** Confirm the montage file matches the connected cap layout.
 - **Crashes on startup?** Try running the app as Administrator and ensure all required DLLs from the TMSi SDK are present in the executable directory. 
 
-- Dark mode
+- Dark mode!
 
 
 ## Contributing
