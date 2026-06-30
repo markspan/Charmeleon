@@ -1,0 +1,86 @@
+﻿<svg viewBox="0 0 760 470" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',sans-serif" role="img">
+  <title>TMSi Refa: resistive average-reference topology, 4 channels</title>
+  <desc>Each electrode feeds the + input of its own op-amp and also connects through an equal resistor R to a common node. By KCL the common node sits at the mean of all inputs. That mean feeds the minus input of every op-amp, so each output equals EEGn minus the mean.</desc>
+
+  <rect width="760" height="470" fill="#12122a"/>
+  <text x="380" y="26" text-anchor="middle" fill="#e8e8f0" font-size="15" font-weight="600">TMSi Refa</text>
+
+  <!-- CH 1  signal y=80  ref y=120 -->
+  <circle cx="40" cy="80" r="7" fill="#5bc0eb"/><text x="52" y="84" fill="#5bc0eb" font-size="12">EEG 1</text>
+  <line x1="47" y1="80" x2="420" y2="80" stroke="#5bc0eb" stroke-width="1.8"/>
+  <circle cx="165" cy="80" r="4" fill="#f4a261"/>
+  <line x1="165" y1="80" x2="165" y2="88" stroke="#f4a261" stroke-width="1.5"/>
+  <rect x="158" y="88" width="14" height="26" fill="none" stroke="#f4a261" stroke-width="1.5" rx="2"/>
+  <line x1="165" y1="114" x2="165" y2="120" stroke="#f4a261" stroke-width="1.5"/>
+  <text x="183" y="102" fill="#f4a261" font-size="11">R</text>
+  <line x1="165" y1="120" x2="250" y2="120" stroke="#f4a261" stroke-width="1.5"/>
+  <circle cx="250" cy="120" r="4" fill="#f4a261"/>
+  <line x1="250" y1="120" x2="420" y2="120" stroke="#f4a261" stroke-width="1.5"/>
+  <polygon points="420,60 420,140 500,100" fill="none" stroke="#e8e8f0" stroke-width="2"/>
+  <text x="430" y="78"  fill="#aaffaa" font-size="13" font-weight="700">+</text>
+  <text x="430" y="132" fill="#ffaaaa" font-size="13" font-weight="700">-</text>
+  <line x1="500" y1="100" x2="560" y2="100" stroke="#5bc0eb" stroke-width="1.8"/>
+  <text x="565" y="104" fill="#5bc0eb" font-size="12">EEG1 - Vmean</text>
+
+  <!-- CH 2  signal y=190  ref y=230 -->
+  <circle cx="40" cy="190" r="7" fill="#5bc0eb"/><text x="52" y="194" fill="#5bc0eb" font-size="12">EEG 2</text>
+  <line x1="47" y1="190" x2="420" y2="190" stroke="#5bc0eb" stroke-width="1.8"/>
+  <circle cx="165" cy="190" r="4" fill="#f4a261"/>
+  <line x1="165" y1="190" x2="165" y2="198" stroke="#f4a261" stroke-width="1.5"/>
+  <rect x="158" y="198" width="14" height="26" fill="none" stroke="#f4a261" stroke-width="1.5" rx="2"/>
+  <line x1="165" y1="224" x2="165" y2="230" stroke="#f4a261" stroke-width="1.5"/>
+  <text x="183" y="213" fill="#f4a261" font-size="11">R</text>
+  <line x1="165" y1="230" x2="250" y2="230" stroke="#f4a261" stroke-width="1.5"/>
+  <circle cx="250" cy="230" r="4" fill="#f4a261"/>
+  <line x1="250" y1="230" x2="420" y2="230" stroke="#f4a261" stroke-width="1.5"/>
+  <polygon points="420,170 420,250 500,210" fill="none" stroke="#e8e8f0" stroke-width="2"/>
+  <text x="430" y="188" fill="#aaffaa" font-size="13" font-weight="700">+</text>
+  <text x="430" y="242" fill="#ffaaaa" font-size="13" font-weight="700">-</text>
+  <line x1="500" y1="210" x2="560" y2="210" stroke="#5bc0eb" stroke-width="1.8"/>
+  <text x="565" y="214" fill="#5bc0eb" font-size="12">EEG2 - Vmean</text>
+
+  <!-- CH 3  signal y=300  ref y=340 -->
+  <circle cx="40" cy="300" r="7" fill="#5bc0eb"/><text x="52" y="304" fill="#5bc0eb" font-size="12">EEG 3</text>
+  <line x1="47" y1="300" x2="420" y2="300" stroke="#5bc0eb" stroke-width="1.8"/>
+  <circle cx="165" cy="300" r="4" fill="#f4a261"/>
+  <line x1="165" y1="300" x2="165" y2="308" stroke="#f4a261" stroke-width="1.5"/>
+  <rect x="158" y="308" width="14" height="26" fill="none" stroke="#f4a261" stroke-width="1.5" rx="2"/>
+  <line x1="165" y1="334" x2="165" y2="340" stroke="#f4a261" stroke-width="1.5"/>
+  <text x="183" y="323" fill="#f4a261" font-size="11">R</text>
+  <line x1="165" y1="340" x2="250" y2="340" stroke="#f4a261" stroke-width="1.5"/>
+  <circle cx="250" cy="340" r="4" fill="#f4a261"/>
+  <line x1="250" y1="340" x2="420" y2="340" stroke="#f4a261" stroke-width="1.5"/>
+  <polygon points="420,280 420,360 500,320" fill="none" stroke="#e8e8f0" stroke-width="2"/>
+  <text x="430" y="298" fill="#aaffaa" font-size="13" font-weight="700">+</text>
+  <text x="430" y="352" fill="#ffaaaa" font-size="13" font-weight="700">-</text>
+  <line x1="500" y1="320" x2="560" y2="320" stroke="#5bc0eb" stroke-width="1.8"/>
+  <text x="565" y="324" fill="#5bc0eb" font-size="12">EEG3 - Vmean</text>
+
+  <!-- CH 4  signal y=400  ref y=440 -->
+  <circle cx="40" cy="400" r="7" fill="#5bc0eb"/><text x="52" y="404" fill="#5bc0eb" font-size="12">EEG 4</text>
+  <line x1="47" y1="400" x2="420" y2="400" stroke="#5bc0eb" stroke-width="1.8"/>
+  <circle cx="165" cy="400" r="4" fill="#f4a261"/>
+  <line x1="165" y1="400" x2="165" y2="408" stroke="#f4a261" stroke-width="1.5"/>
+  <rect x="158" y="408" width="14" height="26" fill="none" stroke="#f4a261" stroke-width="1.5" rx="2"/>
+  <line x1="165" y1="434" x2="165" y2="440" stroke="#f4a261" stroke-width="1.5"/>
+  <text x="183" y="423" fill="#f4a261" font-size="11">R</text>
+  <line x1="165" y1="440" x2="250" y2="440" stroke="#f4a261" stroke-width="1.5"/>
+  <circle cx="250" cy="440" r="4" fill="#f4a261"/>
+  <line x1="250" y1="440" x2="420" y2="440" stroke="#f4a261" stroke-width="1.5"/>
+  <polygon points="420,380 420,460 500,420" fill="none" stroke="#e8e8f0" stroke-width="2"/>
+  <text x="430" y="398" fill="#aaffaa" font-size="13" font-weight="700">+</text>
+  <text x="430" y="452" fill="#ffaaaa" font-size="13" font-weight="700">-</text>
+  <line x1="500" y1="420" x2="560" y2="420" stroke="#5bc0eb" stroke-width="1.8"/>
+  <text x="565" y="424" fill="#5bc0eb" font-size="12">EEG4 - Vmean</text>
+
+  <!-- Reference bus -->
+  <line x1="250" y1="120" x2="250" y2="440" stroke="#f4a261" stroke-width="2.5"/>
+  <text x="244" y="172" text-anchor="end" fill="#f4a261" font-size="10" font-weight="600">common node</text>
+  <text x="244" y="185" text-anchor="end" fill="#f4a261" font-size="10">V = mean(EEGn)</text>
+</svg>
+
+
+
+
+
+

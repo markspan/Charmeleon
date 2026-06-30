@@ -1,0 +1,42 @@
+﻿name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Publish Charmeleon (self-contained single-file win-x64)
+        run: |
+          dotnet publish CharmeleonGUI\Charmeleon.csproj -c Release -r win-x64 `
+            --self-contained true -p:PublishSingleFile=true `
+            -o publish\Charmeleon
+
+      - name: Stage EEGO SDK (TMSiSDK.dll is installed in System32 by the TMSi driver)
+        run: copy vendor\eego-SDK.dll publish\Charmeleon\
+
+      - name: Get version
+        id: ver
+        run: |
+          $v = "$env:GITHUB_REF_NAME" -replace "^v", ""
+          echo "VERSION=$v" >> $env:GITHUB_OUTPUT
+
+      - name: Build installer
+        run: |
+          & "C:\Program Files (x86)\Inno Setup 6\iscc.exe" `
+            /DMyAppVersion=${{ steps.ver.outputs.VERSION }} `
+            installer\Charmeleon.iss
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: installer\Output\CharmeleonSetup-${{ steps.ver.outputs.VERSION }}.exe
+          generate_release_notes: true
+

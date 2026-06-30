@@ -1,85 +1,70 @@
-﻿namespace CharmeleonGUI
+﻿namespace Charmeleon
 {
     partial class aboutForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            pictureBox1 = new PictureBox();
             richTextBox1 = new RichTextBox();
+            linkLabel1 = new LinkLabel();
             label1 = new Label();
+            pictureBox1 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.Image = Properties.Resources.Charmeleon;
-            pictureBox1.Location = new Point(12, 12);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(263, 190);
-            pictureBox1.TabIndex = 0;
-            pictureBox1.TabStop = false;
-            // 
-            // richTextBox1
-            // 
-            richTextBox1.Location = new Point(307, 44);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(371, 122);
-            richTextBox1.TabIndex = 1;
-            richTextBox1.Text = "Charmeleon (II)\n\nImpedance checking program\nFor use with TMSi Refa Amplifiers\n\n(c) 2025 University of Groningen\nWritten by M.M. Span";
-            // 
-            // label1
-            // 
+
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(307, 12);
-            label1.Name = "label1";
-            label1.Size = new Size(145, 29);
-            label1.TabIndex = 2;
+            label1.Location = new Point(12, 12);
             label1.Text = "Charmeleon";
-            // 
-            // aboutForm
-            // 
+
+            richTextBox1.Location = new Point(12, 55);
+            richTextBox1.Size = new Size(330, 124);
+            richTextBox1.TabIndex = 1;
+            richTextBox1.Text = "Charmeleon\r\n\r\nImpedance checking program\r\nFor use with EEGO and TMSi amplifiers\r\n\r\n(c) 2025 University of Groningen\r\nWritten by M.M. Span";
+            richTextBox1.ReadOnly = true;
+            richTextBox1.BorderStyle = BorderStyle.None;
+
+            linkLabel1.AutoSize = true;
+            linkLabel1.Location = new Point(12, 186);
+            linkLabel1.Text = "github.com/markspan/Charmeleon";
+            linkLabel1.Tag = "https://github.com/markspan/Charmeleon";
+            linkLabel1.LinkClicked += (s, e) => System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo((string)((LinkLabel)s!).Tag!) { UseShellExecute = true });
+
+            pictureBox1.Location = new Point(355, 0);
+            pictureBox1.Size = new Size(190, 190);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabStop = false;
+
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(691, 214);
+            ClientSize = new Size(557, 222);
             Controls.Add(label1);
             Controls.Add(richTextBox1);
+            Controls.Add(linkLabel1);
             Controls.Add(pictureBox1);
-            Name = "aboutForm";
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
+            MinimizeBox = false;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "About Charmeleon";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
-        #endregion
-
-        private PictureBox pictureBox1;
         private RichTextBox richTextBox1;
         private Label label1;
+        private PictureBox pictureBox1;
+        private LinkLabel linkLabel1;
     }
 }
+
+
