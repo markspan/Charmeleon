@@ -80,7 +80,7 @@ The obsession with getting below 5 kΩ is partly legitimate habit, partly histor
 
 <img src="CharmeleonGUI/Resources/Charmeleon.png" height="160" alt="Charmeleon"/>
 
-Connects to a hardware amplifier and displays live electrode impedances on a standard 10-20 head map.
+Connects to a hardware amplifier and displays live electrode impedances on a head map.
 
 ### Supported amplifiers
 
