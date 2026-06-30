@@ -91,7 +91,7 @@ Connects to a hardware amplifier and displays live electrode impedances on a hea
 
 ### The head map
 
-Each circle represents one electrode in standard 10-20 positions. The colour gives a quick visual indication of impedance quality:
+Each circle represents one electrode in a cap. The colour gives a quick visual indication of impedance quality:
 
 | Colour | Impedance |
 |--------|-----------|
