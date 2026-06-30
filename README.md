@@ -2,7 +2,25 @@
 
 <img src="CharmeleonGUI/Resources/Charmeleon.png" height="80" alt="Charmeleon"/>
 
-Electrode impedance checker for EEG recording sessions.
+Electrode impedance checker for EEG recording sessions. Connects to an EEGO or
+TMSi amplifier and shows the live impedance of every electrode on a head map, so
+you can fix poor contacts before the recording starts.
+
+---
+
+## Download and install
+
+Grab the latest installer from the [**Releases**](https://github.com/markspan/Charmeleon/releases/latest)
+page (`CharmeleonSetup-x.y.z.exe`) and run it. It installs Charmeleon, bundles
+the EEGO SDK, and registers the web-view network port so the browser display
+works without any further setup.
+
+- **EEGO (eemagine)** users: nothing else is needed.
+- **TMSi Refa** users: also install the TMSi device driver (it places
+  `TMSiSDK.dll` in `C:\Windows\System32`).
+
+No amplifier to hand? Charmeleon starts in **demo mode**: use the up and down
+arrow keys to sweep the impedance values and explore the display.
 
 ---
 
@@ -15,6 +33,10 @@ A high impedance means that the electrode is not making good contact (perhaps be
 A low impedance means good contact. The signal passes through cleanly and the recording quality is high. As a general guideline, impedances below 10-20 kOhm are considered acceptable for most EEG systems, though the exact threshold depends on the amplifier and the research question.
 
 **Charmeleon** displays the impedance of every electrode in real time, so you can see at a glance which electrodes need more gel or extra prep before the recording starts.
+
+### How the measurement works
+
+The amplifier briefly drives a tiny, known alternating current through each electrode and measures the resulting voltage. Impedance is then simply voltage divided by current (Z = V / I). The current is far too small to be felt and is well within safety limits. Charmeleon reads this value for every channel a few times per second and paints it on the head map, so preparation and measurement happen at the same time: add gel, watch the colour change.
 
 <details>
 <summary><strong>Background: what impedance actually is and what it means for EEG quality</strong></summary>
@@ -40,7 +62,7 @@ At 1 GΩ input impedance and 50 kΩ electrode impedance, the voltage divider rat
 
 **1. Noise pickup (thermal noise and EMI)**
 
-A resistor generates Johnson-Nyquist thermal noise: V_n = sqrt(4kTRB). For a 50 kΩ impedance over 100 Hz EEG bandwidth at room temperature, this is ~9 nV/√Hz. At 500 kΩ it becomes ~28 nV/√Hz. EEG signals are in the µV range, so this matters mainly for very high impedances.
+A resistor generates Johnson-Nyquist thermal noise with a spectral density of e_n = sqrt(4 k T R). A handy anchor is that 1 kΩ produces about 4 nV/√Hz at room temperature, and the density grows with the square root of impedance: roughly 29 nV/√Hz at 50 kΩ and 90 nV/√Hz at 500 kΩ. EEG signals are in the µV range, so even at high impedance this thermal contribution is small in absolute terms; it is one reason, among several, to avoid very high impedances rather than the dominant one.
 
 **2. Common-mode rejection (CMRR) degradation: the real issue**
 
@@ -76,7 +98,7 @@ The obsession with getting below 5 kΩ is partly legitimate habit, partly histor
 
 ---
 
-## Charmeleon
+## Using Charmeleon
 
 <img src="CharmeleonGUI/Resources/Charmeleon.png" height="160" alt="Charmeleon"/>
 
@@ -89,6 +111,8 @@ Connects to a hardware amplifier and displays live electrode impedances on a hea
 | EEGO (eemagine) | Auto-detected; 64 reference channels |
 | [TMSi Refa](docs/tmsi.md) | Auto-detected if no EEGO is found |
 
+If both are present, EEGO is chosen first. If neither is found, Charmeleon opens in demo mode.
+
 ### The head map
 
 Each circle represents one electrode in a cap. The colour gives a quick visual indication of impedance quality:
@@ -100,9 +124,9 @@ Each circle represents one electrode in a cap. The colour gives a quick visual i
 | Red | High (poor contact, >100 kOhm) |
 | Grey | Electrode marked inactive |
 
-The scale bar on the right shows the full 0-256 kOhm range.
+The scale bar on the right shows the full 0 to 255 kOhm range.
 
-> **Note:** the colour boundaries in the table above are approximate guides only. Always read the numeric value shown inside each circle (that is the actual impedance in kOhm).
+> **Note:** the colour boundaries in the table above are approximate guides only. Always read the numeric value shown inside each circle (that is the actual impedance in kOhm). A reading of `Inf` means the channel is open (no contact at all).
 
 ### Interactions
 
@@ -123,6 +147,23 @@ The page connects to a small web server built into Charmeleon (port 8765) and up
 > netsh http add urlacl url=http://*:8765/ user=Everyone
 > netsh advfirewall firewall add rule name="Charmeleon Web" dir=in action=allow protocol=TCP localport=8765
 > ```
+
+---
+
+## Preparing the cap: best practices
+
+Good data starts at the cap. This short video walks through the practical steps of seating an electrode cap and getting clean, balanced contact:
+
+▶️ **[Instructional video: setting up an electrode cap](https://unishare.nl/index.php/s/ejyDJNGgLJXD6kZ?dir=/Instructional%20Videos&editing=false&openfile=true)** (best practices, University of Groningen)
+
+A few rules of thumb that Charmeleon makes easy to follow:
+
+- **Reference and ground first.** Every channel is measured against the reference, so if the reference contact is poor, *every* electrode looks bad. Get the reference and ground green before chasing individual channels.
+- **Part the hair, do not scrub the skin.** Move hair aside so the electrode sits on scalp. A gentle rotation as you add gel helps; you are aiming for contact, not abrasion.
+- **Enough gel, not too much.** Add gel until the impedance drops, but avoid bridging neighbouring electrodes with excess gel (that electrically couples two channels and shows up as two suspiciously similar readings).
+- **Aim for balance, not just a low number.** As the background section explains, a uniform 20-30 kOhm across the cap beats a mix of very low and very high values. Even out the outliers rather than over-prepping the ones that are already fine.
+- **Give it a moment.** Impedance keeps falling for a few seconds after gel is applied as it spreads; re-check before deciding an electrode needs more work.
+- **Watch the colour, confirm the number.** Use the colours to spot problems at a glance, then read the value inside the circle to decide whether it is good enough for your setup.
 
 ---
 
@@ -150,7 +191,7 @@ The TMSi Refa has a **head box**: the blue box near the participant into which t
 
 Charmeleon therefore needs to be told which hardware channel corresponds to which electrode name. This mapping is called a **montage**. Once it is saved, you simply reload it at the start of each session. **You only need to create the montage once**, as long as you cable the cap consistently (and only when you use a non-standard montage).
 
-If your lab always cables the cap the same way, the montage never changes. If different researchers cable differently, each person saves their own montage file.
+If your lab always cables the cap the same way, the montage never changes. If different researchers cable differently, each person saves their own montage file. The repository ships ready-made `WaveGuard CW1308` montages as examples.
 
 ### Step 1: open View Channels mode
 
@@ -178,10 +219,11 @@ Toggle **View > View Channels** off. The circles now show live impedance values 
 
 ## Requirements
 
-- Windows 10/11, x64
-- TMSi: `TMSiSDK.dll` installed in `C:\Windows\System32` (installed with the TMSi device driver)
-
+- Windows 10 or 11, 64-bit
+- An EEGO (eemagine) or TMSi Refa amplifier (or neither, for demo mode)
+- EEGO: `eego-SDK.dll` (bundled with the installer)
+- TMSi: `TMSiSDK.dll` in `C:\Windows\System32` (installed with the TMSi device driver)
 
 ---
 
-*Charmeleon, University of Groningen, 2025. Written by M.M. Span.*
+*Charmeleon, University of Groningen, 2025-2026. Written by M.M. Span.*
