@@ -1,7 +1,7 @@
-/.vs
+﻿# .NET / C# build output
+bin/
+obj/
+.vs/
+*.user
+x64/
 *.pdb
-/CharmeleonGUI/obj
-/.vs
-/CharmeleonGUI/bin
-/RtDeviceDriver/x64
-/x64

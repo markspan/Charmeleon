@@ -1,31 +1,16 @@
-﻿namespace CharmeleonGUI
+﻿namespace Charmeleon
 {
     partial class MainGUI
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
@@ -35,9 +20,14 @@
             setupToolStripMenuItem = new ToolStripMenuItem();
             openMontageToolStripMenuItem = new ToolStripMenuItem();
             saveMontageToolStripMenuItem = new ToolStripMenuItem();
-            exceptionsToolStripMenuItem = new ToolStripMenuItem();
+            createMontageToolStripMenuItem = new ToolStripMenuItem();
+            create1020ToolStripMenuItem = new ToolStripMenuItem();
+            createEquidistantToolStripMenuItem = new ToolStripMenuItem();
+            viewToolStripMenuItem = new ToolStripMenuItem();
             viewChannelsToolStripMenuItem = new ToolStripMenuItem();
             toggleThemeToolStripMenuItem = new ToolStripMenuItem();
+            broadcastToolStripMenuItem = new ToolStripMenuItem();
+            webViewToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             aboutCharmeleonToolStripMenuItem = new ToolStripMenuItem();
             RefreshTimer = new System.Windows.Forms.Timer(components);
@@ -52,20 +42,36 @@
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(1203, 22);
             statusStrip1.TabIndex = 1;
-            statusStrip1.Text = "statusStrip1";
             // 
             // menuStrip1
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { setupToolStripMenuItem, exceptionsToolStripMenuItem, aboutToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { setupToolStripMenuItem, viewToolStripMenuItem, broadcastToolStripMenuItem, aboutToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1203, 24);
             menuStrip1.TabIndex = 2;
-            menuStrip1.Text = "menuStrip1";
             // 
             // setupToolStripMenuItem
             // 
-            setupToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openMontageToolStripMenuItem, saveMontageToolStripMenuItem });
+            setupToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openMontageToolStripMenuItem, saveMontageToolStripMenuItem, new ToolStripSeparator(), createMontageToolStripMenuItem });
+            //
+            // createMontageToolStripMenuItem
+            //
+            createMontageToolStripMenuItem.Name = "createMontageToolStripMenuItem";
+            createMontageToolStripMenuItem.Text = "Create Montage";
+            createMontageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { create1020ToolStripMenuItem, createEquidistantToolStripMenuItem });
+            //
+            // create1020ToolStripMenuItem
+            //
+            create1020ToolStripMenuItem.Name = "create1020ToolStripMenuItem";
+            create1020ToolStripMenuItem.Text = "10/20 Layout";
+            create1020ToolStripMenuItem.Click += create1020ToolStripMenuItem_Click;
+            //
+            // createEquidistantToolStripMenuItem
+            //
+            createEquidistantToolStripMenuItem.Name = "createEquidistantToolStripMenuItem";
+            createEquidistantToolStripMenuItem.Text = "Equidistant Layout";
+            createEquidistantToolStripMenuItem.Click += createEquidistantToolStripMenuItem_Click;
             setupToolStripMenuItem.Name = "setupToolStripMenuItem";
             setupToolStripMenuItem.Size = new Size(49, 20);
             setupToolStripMenuItem.Text = "Setup";
@@ -84,12 +90,12 @@
             saveMontageToolStripMenuItem.Text = "Save Montage";
             saveMontageToolStripMenuItem.Click += saveMontageToolStripMenuItem_Click;
             // 
-            // exceptionsToolStripMenuItem
+            // viewToolStripMenuItem
             // 
-            exceptionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { viewChannelsToolStripMenuItem, toggleThemeToolStripMenuItem });
-            exceptionsToolStripMenuItem.Name = "exceptionsToolStripMenuItem";
-            exceptionsToolStripMenuItem.Size = new Size(76, 20);
-            exceptionsToolStripMenuItem.Text = "Exceptions";
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { viewChannelsToolStripMenuItem, toggleThemeToolStripMenuItem });
+            viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            viewToolStripMenuItem.Size = new Size(44, 20);
+            viewToolStripMenuItem.Text = "View";
             // 
             // viewChannelsToolStripMenuItem
             // 
@@ -105,6 +111,19 @@
             toggleThemeToolStripMenuItem.Text = "Toggle Theme";
             toggleThemeToolStripMenuItem.Click += ToggleThemeToolStripMenuItem_Click;
             // 
+            // broadcastToolStripMenuItem
+            // 
+            broadcastToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { webViewToolStripMenuItem });
+            broadcastToolStripMenuItem.Name = "broadcastToolStripMenuItem";
+            broadcastToolStripMenuItem.Size = new Size(71, 20);
+            broadcastToolStripMenuItem.Text = "Web";
+            //
+            // webViewToolStripMenuItem
+            //
+            webViewToolStripMenuItem.Name = "webViewToolStripMenuItem";
+            webViewToolStripMenuItem.Text = "Web View...";
+            webViewToolStripMenuItem.Click += webViewToolStripMenuItem_Click;
+            // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutCharmeleonToolStripMenuItem });
@@ -115,7 +134,7 @@
             // aboutCharmeleonToolStripMenuItem
             // 
             aboutCharmeleonToolStripMenuItem.Name = "aboutCharmeleonToolStripMenuItem";
-            aboutCharmeleonToolStripMenuItem.Size = new Size(175, 22);
+            aboutCharmeleonToolStripMenuItem.Size = new Size(152, 22);
             aboutCharmeleonToolStripMenuItem.Text = "About Charmeleon";
             aboutCharmeleonToolStripMenuItem.Click += AboutCharmeleonToolStripMenuItem_Click;
             // 
@@ -135,7 +154,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1203, 985);
+            ClientSize = new Size(1183, 887);
             Controls.Add(pictureBox1);
             Controls.Add(statusStrip1);
             Controls.Add(menuStrip1);
@@ -143,6 +162,7 @@
             MainMenuStrip = menuStrip1;
             Name = "MainGUI";
             Text = "Charmeleon";
+            Resize += MainGUI_Resize;
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -150,18 +170,25 @@
             PerformLayout();
         }
 
-        #endregion
         private StatusStrip statusStrip1;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem setupToolStripMenuItem;
         private ToolStripMenuItem openMontageToolStripMenuItem;
         private ToolStripMenuItem saveMontageToolStripMenuItem;
-        private ToolStripMenuItem exceptionsToolStripMenuItem;
+        private ToolStripMenuItem viewToolStripMenuItem;
         private ToolStripMenuItem viewChannelsToolStripMenuItem;
+        private ToolStripMenuItem toggleThemeToolStripMenuItem;
+        private ToolStripMenuItem broadcastToolStripMenuItem;
+        private ToolStripMenuItem webViewToolStripMenuItem;
         private System.Windows.Forms.Timer RefreshTimer;
         private PictureBox pictureBox1;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStripMenuItem aboutCharmeleonToolStripMenuItem;
-        private ToolStripMenuItem toggleThemeToolStripMenuItem;
+        private ToolStripMenuItem createMontageToolStripMenuItem;
+        private ToolStripMenuItem create1020ToolStripMenuItem;
+        private ToolStripMenuItem createEquidistantToolStripMenuItem;
     }
 }
+
+
+
