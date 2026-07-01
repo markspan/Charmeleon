@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
 namespace Charmeleon
 {
@@ -10,18 +10,18 @@ namespace Charmeleon
     public sealed class TmsiDriver : IImpedanceDriver
     {
         // --- TMSiSDK constants ---
-        const int  TMSiConnectionUSB         = 3;     // _TMSiConnectionEnum: USB 2.0 direct
+        const int TMSiConnectionUSB = 3;     // _TMSiConnectionEnum: USB 2.0 direct
         const uint MEASURE_MODE_IMPEDANCE_EX = 0x3;
-        const int  IC_OHM_200                = 6;     // 200 kOhm impedance limit
-        const int  MaxFrontEndNameLength     = 256;
+        const int IC_OHM_200 = 6;     // 200 kOhm impedance limit
+        const int MaxFrontEndNameLength = 256;
 
-        IntPtr   _handle      = IntPtr.Zero;
-        IntPtr   _deviceList  = IntPtr.Zero;
-        int      _deviceCount;
-        int      _channelCount;
-        uint[]   _buffer      = [];
-        uint     _bufferBytes;
-        double[] _lastValues  = [];
+        IntPtr _handle = IntPtr.Zero;
+        IntPtr _deviceList = IntPtr.Zero;
+        int _deviceCount;
+        int _channelCount;
+        uint[] _buffer = [];
+        uint _bufferBytes;
+        double[] _lastValues = [];
 
         /// <inheritdoc/>
         public int ChannelCount => _channelCount;
@@ -58,11 +58,11 @@ namespace Charmeleon
 
             // Impedance mode samples at rate 0; allocate the sample buffer.
             uint sampleRateMilliHz = 0;
-            uint bufferSamples     = 1000;
+            uint bufferSamples = 1000;
             if (!SetSignalBuffer(_handle, ref sampleRateMilliHz, ref bufferSamples))
                 throw new Exception("TMSi SetSignalBuffer failed.");
 
-            _buffer      = new uint[bufferSamples * (uint)_channelCount];
+            _buffer = new uint[bufferSamples * (uint)_channelCount];
             _bufferBytes = (uint)_buffer.Length * sizeof(uint);
 
             if (!Start(_handle))

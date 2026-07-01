@@ -1,4 +1,4 @@
-﻿namespace Charmeleon
+namespace Charmeleon
 {
     /// <summary>
     /// Application entry point and amplifier selection: try EEGO first, then TMSi,
@@ -15,11 +15,11 @@
             ApplicationConfiguration.Initialize();
 
             IImpedanceDriver? driver = null;
-            bool   demo          = false;
-            bool   eegoFound     = false;
-            string? eegoError    = null;
-            string? tmsiError    = null;
-            bool   tmsiLoadError = false;
+            bool demo = false;
+            bool eegoFound = false;
+            string? eegoError = null;
+            string? tmsiError = null;
+            bool tmsiLoadError = false;
 
             // 1. EEGO: an empty amplifier list means "none connected" (not an error);
             //    an exception means the SDK or amplifier failed.
@@ -44,7 +44,7 @@
                 try { driver = new TmsiDriver(); }
                 catch (Exception ex)
                 {
-                    tmsiError     = Describe(ex);
+                    tmsiError = Describe(ex);
                     tmsiLoadError = IsLoadError(ex);
                 }
             }

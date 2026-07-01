@@ -10,6 +10,8 @@
     <AssemblyName>Charmeleon</AssemblyName>
     <RootNamespace>Charmeleon</RootNamespace>
     <ApplicationIcon>Resources\Charmeleon.ico</ApplicationIcon>
+    <!-- Run the .editorconfig code-style rules (naming, formatting) during build. -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <ItemGroup>

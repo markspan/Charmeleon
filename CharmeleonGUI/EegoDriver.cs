@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
 namespace Charmeleon
 {
@@ -172,7 +172,7 @@ namespace Charmeleon
         public void Dispose()
         {
             if (_streamId >= 0) { eemagine_sdk_close_stream(_streamId); _streamId = -1; }
-            if (_ampId >= 0)    { eemagine_sdk_close_amplifier(_ampId); _ampId = -1; }
+            if (_ampId >= 0) { eemagine_sdk_close_amplifier(_ampId); _ampId = -1; }
         }
     }
 }

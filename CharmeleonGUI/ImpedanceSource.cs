@@ -20,9 +20,9 @@ namespace Charmeleon
         static ElectrodeSnap[] _state = [];
         static readonly object _lock = new();
 
-        static readonly JsonSerializerOptions JsonOpts = new()
+        static readonly JsonSerializerOptions _jsonOpts = new()
         {
-            PropertyNamingPolicy   = JsonNamingPolicy.CamelCase,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         };
 
@@ -40,8 +40,8 @@ namespace Charmeleon
             var list = new List<ElectrodeSnap>(electrodes.Count);
             foreach (var (name, el) in electrodes)
             {
-                int ch      = el.HardwareChannel - 1;
-                double val  = (ch >= 0 && ch < kOhm.Length) ? kOhm[ch] : -1;
+                int ch = el.HardwareChannel - 1;
+                double val = (ch >= 0 && ch < kOhm.Length) ? kOhm[ch] : -1;
                 bool active = el.IsActive && val >= 0;
                 double snap = active ? val : -1;
 
@@ -59,7 +59,7 @@ namespace Charmeleon
         {
             ElectrodeSnap[] snap;
             lock (_lock) { snap = _state; }
-            return JsonSerializer.Serialize(new { electrodes = snap }, JsonOpts);
+            return JsonSerializer.Serialize(new { electrodes = snap }, _jsonOpts);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Charmeleon
         /// </summary>
         public static string GetColorMapJson()
         {
-            var cm  = HeadMapView.ColorMap;
+            var cm = HeadMapView.ColorMap;
             var hex = new string[cm.Length];
             for (int i = 0; i < cm.Length; i++)
                 hex[i] = $"#{cm[i].R:X2}{cm[i].G:X2}{cm[i].B:X2}";

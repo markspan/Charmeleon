@@ -1,4 +1,4 @@
-﻿namespace Charmeleon
+namespace Charmeleon
 {
     /// <summary>
     /// Common interface for impedance-measurement backends (EEGO and TMSi).

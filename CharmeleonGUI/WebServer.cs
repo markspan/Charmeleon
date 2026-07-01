@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -135,11 +135,11 @@ namespace Charmeleon
 
                     switch (path)
                     {
-                        case "/":         ServeEmbedded(ssl, "index.html", "text/html; charset=utf-8"); break;
-                        case "/app.js":   ServeEmbedded(ssl, "app.js",     "application/javascript");   break;
+                        case "/": ServeEmbedded(ssl, "index.html", "text/html; charset=utf-8"); break;
+                        case "/app.js": ServeEmbedded(ssl, "app.js", "application/javascript"); break;
                         case "/colormap": ServeText(ssl, ImpedanceSource.GetColorMapJson(), "application/json"); break;
-                        case "/stream":   ServeStream(ssl); break;
-                        default:          WriteResponse(ssl, "404 Not Found", "text/plain", Encoding.UTF8.GetBytes("Not found")); break;
+                        case "/stream": ServeStream(ssl); break;
+                        default: WriteResponse(ssl, "404 Not Found", "text/plain", Encoding.UTF8.GetBytes("Not found")); break;
                     }
                 }
             }
@@ -227,7 +227,7 @@ namespace Charmeleon
 
         static X509Certificate2 LoadOrCreateCertificate()
         {
-            string dir  = Path.Combine(
+            string dir = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Charmeleon");
             string path = Path.Combine(dir, "webcert.pfx");
 

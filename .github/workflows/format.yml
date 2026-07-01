@@ -1,0 +1,15 @@
+name: Format
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  format:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Verify formatting and code style
+        run: dotnet format Charmeleon.sln --verify-no-changes --verbosity minimal

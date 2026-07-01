@@ -1,4 +1,4 @@
-﻿using QRCoder;
+using QRCoder;
 
 namespace Charmeleon
 {
@@ -22,7 +22,7 @@ namespace Charmeleon
 
         void ShowSelected()
         {
-            string ip  = cboAddress.SelectedItem?.ToString() ?? "localhost";
+            string ip = cboAddress.SelectedItem?.ToString() ?? "localhost";
             string url = WebServer.UrlFor(ip);
             lblUrl.Text = url;
             pictureBox1.Image?.Dispose();
@@ -31,9 +31,9 @@ namespace Charmeleon
 
         static Bitmap GenerateQR(string url)
         {
-            using var gen  = new QRCodeGenerator();
+            using var gen = new QRCodeGenerator();
             using var data = gen.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
-            using var qr   = new QRCode(data);
+            using var qr = new QRCode(data);
             return qr.GetGraphic(6, Color.Black, Color.White, drawQuietZones: true);
         }
     }

@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 
 namespace Charmeleon
 {
@@ -12,7 +12,7 @@ namespace Charmeleon
         //  10-20 system: standard 64-channel Waveguard positions
         //  Format: (name, angle_deg, radius)  angle: 90=front 0=right -90=back
         // ------------------------------------------------------------------ //
-        static readonly (string Name, double Angle, double Radius)[] Positions1020 =
+        static readonly (string Name, double Angle, double Radius)[] _positions1020 =
         [
             ("Nz",   90,   5),    ("FPz",  90,   4),    ("AFz",  90,   3),
             ("Fz",   90,   2),    ("FCz",  90,   1),    ("Cz",    0,   0),
@@ -50,7 +50,7 @@ namespace Charmeleon
         //  Projection: azimuthal equidistant from crown pole (centroid of
         //  4Z/5Z/5L/5R), back-half stretched by a factor 1.112 for visual balance.
         // ------------------------------------------------------------------ //
-        static readonly (string Name, double X, double Y, double Z)[] Equidistant3D =
+        static readonly (string Name, double X, double Y, double Z)[] _equidistant3D =
         [
             ("0Z",   87.8245,   0,      13.6565), ("1Z",   76.9711,   0,      47.3542),
             ("2Z",   51.6656,   0,      77.9432), ("3Z",   18.6706,   0,      95.5387),
@@ -96,17 +96,17 @@ namespace Charmeleon
         /// </summary>
         public static Dictionary<string, ElectrodeControlData> Generate1020()
         {
-            return Positions1020
+            return _positions1020
                 .Select((p, i) => (p, i))
                 .ToDictionary(
                     t => t.p.Name,
                     t => new ElectrodeControlData
                     {
-                        LabelText       = t.p.Name,
+                        LabelText = t.p.Name,
                         HardwareChannel = t.i + 1,
-                        IsActive        = true,
-                        Angle           = t.p.Angle,
-                        Radius          = t.p.Radius
+                        IsActive = true,
+                        Angle = t.p.Angle,
+                        Radius = t.p.Radius
                     });
         }
 
@@ -115,7 +115,7 @@ namespace Charmeleon
         {
             // Crown pole = centroid of 4Z/5Z/5L/5R on unit sphere
             var crownNames = new[] { "4Z", "5Z", "5L", "5R" };
-            var pos = Equidistant3D.ToDictionary(e => e.Name, e => (e.X, e.Y, e.Z));
+            var pos = _equidistant3D.ToDictionary(e => e.Name, e => (e.X, e.Y, e.Z));
 
             (double x, double y, double z) pole = (0, 0, 0);
             foreach (var n in crownNames)
@@ -127,14 +127,14 @@ namespace Charmeleon
 
             // Reference directions in plane perpendicular to pole
             var front = Perp((1.0, 0.0, 0.0), pole);
-            var left  = Perp((0.0, 1.0, 0.0), pole);
+            var left = Perp((0.0, 1.0, 0.0), pole);
 
             // Project each electrode
             var raw = new List<(string Name, double Angle, double Radius)>();
-            foreach (var (name, x, y, z) in Equidistant3D)
+            foreach (var (name, x, y, z) in _equidistant3D)
             {
-                var q     = Norm((x, y, z));
-                double d  = Math.Max(-1.0, Math.Min(1.0, Dot(pole, q)));
+                var q = Norm((x, y, z));
+                double d = Math.Max(-1.0, Math.Min(1.0, Dot(pole, q)));
                 double colat = (180.0 / Math.PI) * Math.Acos(d);
                 var perp = Sub(q, Scale(pole, d));
                 double fa = Dot(perp, front);
@@ -159,11 +159,11 @@ namespace Charmeleon
                         radius *= backStretch;
                     return new ElectrodeControlData
                     {
-                        LabelText       = t.r.Name,
+                        LabelText = t.r.Name,
                         HardwareChannel = t.i + 1,
-                        IsActive        = true,
-                        Angle           = Math.Round(t.r.Angle, 2),
-                        Radius          = Math.Round(radius, 3)
+                        IsActive = true,
+                        Angle = Math.Round(t.r.Angle, 2),
+                        Radius = Math.Round(radius, 3)
                     };
                 });
         }
@@ -173,9 +173,9 @@ namespace Charmeleon
         {
             using var dlg = new SaveFileDialog
             {
-                Filter      = "JSON Files (*.json)|*.json",
-                Title       = "Save Layout",
-                DefaultExt  = "json"
+                Filter = "JSON Files (*.json)|*.json",
+                Title = "Save Layout",
+                DefaultExt = "json"
             };
             if (dlg.ShowDialog() != DialogResult.OK) return null;
             File.WriteAllText(dlg.FileName,
@@ -188,16 +188,16 @@ namespace Charmeleon
         // ------------------------------------------------------------------ //
         static (double x, double y, double z) Norm((double x, double y, double z) v)
         {
-            double r = Math.Sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
-            return (v.x/r, v.y/r, v.z/r);
+            double r = Math.Sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+            return (v.x / r, v.y / r, v.z / r);
         }
-        static double Dot((double x,double y,double z) a, (double x,double y,double z) b)
-            => a.x*b.x + a.y*b.y + a.z*b.z;
-        static (double x,double y,double z) Scale((double x,double y,double z) v, double s)
-            => (v.x*s, v.y*s, v.z*s);
-        static (double x,double y,double z) Sub((double x,double y,double z) a,(double x,double y,double z) b)
-            => (a.x-b.x, a.y-b.y, a.z-b.z);
-        static (double x,double y,double z) Perp((double x,double y,double z) v,(double x,double y,double z) p)
+        static double Dot((double x, double y, double z) a, (double x, double y, double z) b)
+            => a.x * b.x + a.y * b.y + a.z * b.z;
+        static (double x, double y, double z) Scale((double x, double y, double z) v, double s)
+            => (v.x * s, v.y * s, v.z * s);
+        static (double x, double y, double z) Sub((double x, double y, double z) a, (double x, double y, double z) b)
+            => (a.x - b.x, a.y - b.y, a.z - b.z);
+        static (double x, double y, double z) Perp((double x, double y, double z) v, (double x, double y, double z) p)
             => Norm(Sub(v, Scale(p, Dot(v, p))));
     }
 }

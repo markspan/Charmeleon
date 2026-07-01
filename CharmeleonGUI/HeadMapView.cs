@@ -47,7 +47,7 @@ namespace Charmeleon
         /// <summary>Reads a 256-line "r,g,b" colour table; missing/short lines stay default.</summary>
         static Color[] LoadColorMap(string path)
         {
-            var c     = new Color[256];
+            var c = new Color[256];
             var lines = File.ReadAllLines(path);
             for (int i = 0; i < Math.Min(lines.Length, 256); i++)
             {

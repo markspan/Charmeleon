@@ -1,4 +1,4 @@
-﻿namespace Charmeleon
+namespace Charmeleon
 {
     /// <summary>About dialog showing the Charmeleon logo.</summary>
     public partial class aboutForm : Form

@@ -1,4 +1,4 @@
-﻿using System.Drawing.Drawing2D;
+using System.Drawing.Drawing2D;
 using System.Text.Json;
 
 namespace Charmeleon
@@ -40,7 +40,7 @@ namespace Charmeleon
         };
 
         // Inline channel-edit textbox (one at a time, managed by the form).
-        string?  _editingName;
+        string? _editingName;
         TextBox? _editBox;
 
         /// <summary>Radial spacing between the concentric 10-20 guide rings.</summary>
@@ -60,7 +60,7 @@ namespace Charmeleon
         public MainGUI(IImpedanceDriver? driver, bool demo)
         {
             _driver = driver;
-            _demo   = demo;
+            _demo = demo;
 
             InitializeComponent();
             RecomputeGeometry();
@@ -75,7 +75,7 @@ namespace Charmeleon
             if (_demo)
             {
                 HeadMapView.MaxChannel = 64;
-                Text       = "Charmeleon  [DEMO - no amplifier]";
+                Text = "Charmeleon  [DEMO - no amplifier]";
                 KeyPreview = true;             // so the arrow keys reach ProcessCmdKey
             }
             else
@@ -85,7 +85,7 @@ namespace Charmeleon
             }
 
             RefreshTimer.Interval = 300;
-            RefreshTimer.Tick    += Redraw_Callback;
+            RefreshTimer.Tick += Redraw_Callback;
             RefreshTimer.Start();
 
             _webServer = new WebServer();
@@ -120,9 +120,9 @@ namespace Charmeleon
 
             foreach (var (_, el) in _electrodes)
             {
-                int ch    = el.HardwareChannel - 1;
+                int ch = el.HardwareChannel - 1;
                 bool live = ch >= 0 && ch < impedances.Length && el.IsActive;
-                el.Value  = live ? (int)Math.Min(255, impedances[ch]) : 0;
+                el.Value = live ? (int)Math.Min(255, impedances[ch]) : 0;
                 if (ch >= 0 && ch < _lastKOhm.Length)
                     _lastKOhm[ch] = live ? impedances[ch] : -1;
             }
@@ -136,8 +136,8 @@ namespace Charmeleon
         {
             if (_demo)
             {
-                if (keyData == Keys.Up)   { _demoValue = Math.Min(255, _demoValue + 1); return true; }
-                if (keyData == Keys.Down) { _demoValue = Math.Max(0,   _demoValue - 1); return true; }
+                if (keyData == Keys.Up) { _demoValue = Math.Min(255, _demoValue + 1); return true; }
+                if (keyData == Keys.Down) { _demoValue = Math.Max(0, _demoValue - 1); return true; }
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
@@ -150,10 +150,10 @@ namespace Charmeleon
         void RecomputeGeometry()
         {
             _formHeight = ClientSize.Height;
-            _formWidth  = ClientSize.Width;
+            _formWidth = ClientSize.Width;
             _fullRadius = (int)(_formHeight * 0.43);
-            _centerX    = _formWidth  / 2;
-            _centerY    = _formHeight / 2;
+            _centerX = _formWidth / 2;
+            _centerY = _formHeight / 2;
         }
 
         /// <summary>Places the four AUX markers at their fractional screen positions.</summary>
@@ -224,7 +224,7 @@ namespace Charmeleon
             int earW = _fullRadius / 7;
             int earH = _fullRadius / 4;
             g.DrawEllipse(Pens.Black, _centerX - _fullRadius - earW, _centerY - earH / 2, earW, earH);
-            g.DrawEllipse(Pens.Black, _centerX + _fullRadius,          _centerY - earH / 2, earW, earH);
+            g.DrawEllipse(Pens.Black, _centerX + _fullRadius, _centerY - earH / 2, earW, earH);
 
             DrawElectrodes(g);
 
@@ -233,7 +233,7 @@ namespace Charmeleon
             var p = pictureBox1.Location;
             float cmScale = pictureBox1.Height / 256f;
             using var labelBrush = new SolidBrush(SystemColors.ControlText);
-            using var labelFont  = new Font("Segoe UI", 8);
+            using var labelFont = new Font("Segoe UI", 8);
             var labelFmt = new StringFormat { Alignment = StringAlignment.Far };
             foreach (int y in labels)
                 g.DrawString(y.ToString(), labelFont, labelBrush, p.X - 2, p.Y + y * cmScale, labelFmt);
@@ -245,19 +245,19 @@ namespace Charmeleon
         /// </summary>
         void DrawElectrodes(Graphics g)
         {
-            int size   = HeadMapView.ElectrodeSize;
-            int cd     = Math.Max(12, size - 20);   // circle diameter (matches the old UserControl margin)
-            int cr     = cd / 2;
+            int size = HeadMapView.ElectrodeSize;
+            int cd = Math.Max(12, size - 20);   // circle diameter (matches the old UserControl margin)
+            int cr = cd / 2;
             float impFontSz = Math.Max(6f, cd * 0.32f);
             float lblFontSz = Math.Max(5f, cd * 0.28f);
             using var impFont = new Font("Segoe UI", impFontSz, FontStyle.Bold);
             using var lblFont = new Font("Segoe UI", lblFontSz);
-            using var fmt     = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+            using var fmt = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
 
             foreach (var (_, el) in _electrodes)
             {
                 var circle = new Rectangle(el.Center.X - cr, el.Center.Y - cr, cd, cd);
-                var fill   = el.IsActive ? HeadMapView.ColorMap[el.Value] : Color.LightGray;
+                var fill = el.IsActive ? HeadMapView.ColorMap[el.Value] : Color.LightGray;
                 using (var b = new SolidBrush(fill)) g.FillEllipse(b, circle);
                 g.DrawEllipse(Pens.Black, circle);
 
@@ -319,18 +319,18 @@ namespace Charmeleon
             int r = s / 2;
             var box = new TextBox
             {
-                Text      = el.HardwareChannel.ToString(),
-                Location  = new Point(el.Center.X - r, el.Center.Y + r - 4),
-                Size      = new Size(s, 20),
+                Text = el.HardwareChannel.ToString(),
+                Location = new Point(el.Center.X - r, el.Center.Y + r - 4),
+                Size = new Size(s, 20),
                 TextAlign = HorizontalAlignment.Center,
                 MaxLength = 3
             };
-            box.KeyDown  += (_, ke) => { if (ke.KeyCode == Keys.Enter) CommitActiveEdit(); };
+            box.KeyDown += (_, ke) => { if (ke.KeyCode == Keys.Enter) CommitActiveEdit(); };
             box.KeyPress += (_, ke) => { if (!char.IsDigit(ke.KeyChar) && ke.KeyChar != (char)Keys.Back) ke.Handled = true; };
-            box.Leave    += (_, _)  => CommitActiveEdit();
-            _editingName  = name;
-            el.Editing    = true;
-            _editBox      = box;
+            box.Leave += (_, _) => CommitActiveEdit();
+            _editingName = name;
+            el.Editing = true;
+            _editBox = box;
             Controls.Add(box);
             box.BringToFront();
             box.Focus();
@@ -346,9 +346,9 @@ namespace Charmeleon
             // focused textbox, which fires its Leave event synchronously and re-enters
             // this method; clearing the fields up front makes that re-entry bail at the
             // guard above instead of dereferencing a box we are about to dispose.
-            var box  = _editBox;
+            var box = _editBox;
             var name = _editingName;
-            _editBox     = null;
+            _editBox = null;
             _editingName = null;
 
             if (_electrodes.TryGetValue(name, out var el))
@@ -424,9 +424,9 @@ namespace Charmeleon
             foreach (var (name, cfg) in data)
                 if (_electrodes.TryGetValue(name, out var el))
                 {
-                    el.LabelText       = cfg.LabelText;
+                    el.LabelText = cfg.LabelText;
                     el.HardwareChannel = cfg.HardwareChannel;
-                    el.IsActive        = cfg.HardwareChannel > 0 &&
+                    el.IsActive = cfg.HardwareChannel > 0 &&
                                          cfg.HardwareChannel <= HeadMapView.MaxChannel &&
                                          cfg.IsActive;
                 }
@@ -450,13 +450,13 @@ namespace Charmeleon
                 _electrodePositions.TryGetValue(kv.Key, out var pos);
                 return new ElectrodeControlData
                 {
-                    IsActive        = kv.Value.IsActive,
-                    LabelText       = kv.Value.LabelText,
+                    IsActive = kv.Value.IsActive,
+                    LabelText = kv.Value.LabelText,
                     HardwareChannel = kv.Value.HardwareChannel,
-                    Angle           = isAux ? null : pos.Angle,
-                    Radius          = isAux ? null : pos.Radius,
-                    X               = isAux ? frac.X : null,
-                    Y               = isAux ? frac.Y : null
+                    Angle = isAux ? null : pos.Angle,
+                    Radius = isAux ? null : pos.Radius,
+                    X = isAux ? frac.X : null,
+                    Y = isAux ? frac.Y : null
                 };
             });
             using var dlg = new SaveFileDialog { Filter = "JSON Files (*.json)|*.json", Title = "Save Configuration" };
@@ -504,7 +504,7 @@ namespace Charmeleon
                 if (_electrodes.TryGetValue(key, out var el))
                 {
                     el.HardwareChannel = cfg.HardwareChannel;
-                    el.IsActive        = cfg.IsActive;
+                    el.IsActive = cfg.IsActive;
                 }
             Invalidate();
         }
@@ -521,16 +521,16 @@ namespace Charmeleon
             int auxCX = (auxX1 + auxX2) / 2;
             int auxY1 = _auxPositions.Values.Min(p => p.Y);
 
-            int cmWidth  = 40;
+            int cmWidth = 40;
             int cmHeight = Math.Max(64, (auxY1 - 16) * 2 / 3);
-            pictureBox1.Size     = new Size(cmWidth, cmHeight);
+            pictureBox1.Size = new Size(cmWidth, cmHeight);
             pictureBox1.Location = new Point(auxCX, (auxY1 - cmHeight) / 2);
 
             var bmp = new Bitmap(cmWidth, cmHeight);
             using (var g = Graphics.FromImage(bmp))
                 for (int i = 0; i < 256; i++)
                 {
-                    int y0 = (int)(i       * cmHeight / 256.0);
+                    int y0 = (int)(i * cmHeight / 256.0);
                     int y1 = (int)((i + 1) * cmHeight / 256.0);
                     using var pen = new Pen(colorMap[i]);
                     for (int py = y0; py < y1; py++)

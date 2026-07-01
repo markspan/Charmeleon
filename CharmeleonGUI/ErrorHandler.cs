@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 
 namespace Charmeleon
 {
@@ -8,7 +8,7 @@ namespace Charmeleon
     static class ErrorHandler
     {
         // Known DLL -> friendly description + fix hint
-        static readonly (string Key, string Name, string Hint)[] KnownDlls =
+        static readonly (string Key, string Name, string Hint)[] _knownDlls =
         [
             ("eego",            "EEGO amplifier SDK (eego-SDK.dll)",
              "Copy eego-SDK.dll to the application folder.\nObtain it from the eemagine EEGO software installation."),
@@ -25,7 +25,7 @@ namespace Charmeleon
         public static void Register()
         {
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-            Application.ThreadException          += (_, e) => Show(e.Exception);
+            Application.ThreadException += (_, e) => Show(e.Exception);
             AppDomain.CurrentDomain.UnhandledException += (_, e) =>
             {
                 Show(e.ExceptionObject as Exception);
@@ -45,14 +45,14 @@ namespace Charmeleon
 
             string message = ex switch
             {
-                DllNotFoundException d      => DllMessage(d),
-                BadImageFormatException b   => $"A DLL was found but could not be loaded " +
+                DllNotFoundException d => DllMessage(d),
+                BadImageFormatException b => $"A DLL was found but could not be loaded " +
                                                $"(wrong CPU architecture).\n\n{b.FileName}\n\n" +
                                                "Make sure you are running the 64-bit version of Charmeleon.",
-                FileNotFoundException f     => $"A required file was not found.\n\n{f.FileName}\n\n" +
+                FileNotFoundException f => $"A required file was not found.\n\n{f.FileName}\n\n" +
                                                "Make sure all application files are present.",
-                null                        => "An unknown error occurred.",
-                _                           => $"{ex.GetType().Name}\n\n{ex.Message}"
+                null => "An unknown error occurred.",
+                _ => $"{ex.GetType().Name}\n\n{ex.Message}"
             };
 
             MessageBox.Show(message, "Charmeleon - Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -61,7 +61,7 @@ namespace Charmeleon
         static string DllMessage(DllNotFoundException ex)
         {
             string raw = ex.Message.ToLowerInvariant();
-            foreach (var (key, name, hint) in KnownDlls)
+            foreach (var (key, name, hint) in _knownDlls)
             {
                 if (raw.Contains(key.ToLowerInvariant()))
                     return $"A required DLL could not be loaded.\n\n" +
