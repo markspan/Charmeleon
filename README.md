@@ -153,9 +153,17 @@ The page connects to a small web server built into Charmeleon (port 8765) and up
 
 ## Preparing the cap: best practices
 
-Good data starts at the cap. This short video walks through the practical steps of seating an electrode cap and getting clean, balanced contact:
+Good data starts at the cap. The University of Groningen has a short instructional video series (below) covering the whole recording workflow. **[Setting Up The Cap](https://unishare.nl/index.php/s/ejyDJNGgLJXD6kZ?dir=/Instructional%20Videos&openfile=75269356)** is the one most relevant here:
 
-▶️ **[Instructional video: setting up an electrode cap](https://unishare.nl/index.php/s/ejyDJNGgLJXD6kZ?dir=/Instructional%20Videos&openfile=75269356)** (best practices, University of Groningen)
+### Instructional video series
+
+1. [Introduction](https://unishare.nl/index.php/s/ejyDJNGgLJXD6kZ?dir=/Instructional%20Videos&openfile=75269304)
+2. [Setting Up The Cap](https://unishare.nl/index.php/s/ejyDJNGgLJXD6kZ?dir=/Instructional%20Videos&openfile=75269356)
+3. [Electrodes and Gel](https://unishare.nl/index.php/s/ejyDJNGgLJXD6kZ?dir=/Instructional%20Videos&openfile=75269324)
+4. [Running the Experiment](https://unishare.nl/index.php/s/ejyDJNGgLJXD6kZ?dir=/Instructional%20Videos&openfile=75269363)
+5. [Cleaning Up](https://unishare.nl/index.php/s/ejyDJNGgLJXD6kZ?dir=/Instructional%20Videos&openfile=75269361)
+6. [Artifacts: Eyes](https://unishare.nl/index.php/s/ejyDJNGgLJXD6kZ?dir=/Instructional%20Videos&openfile=75269333)
+7. [Artifacts: Muscles](https://unishare.nl/index.php/s/ejyDJNGgLJXD6kZ?dir=/Instructional%20Videos&openfile=75269352)
 
 A few rules of thumb that Charmeleon makes easy to follow:
 
