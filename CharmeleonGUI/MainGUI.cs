@@ -250,9 +250,12 @@ namespace Charmeleon
             int cr = cd / 2;
             float impFontSz = Math.Max(6f, cd * 0.32f);
             float lblFontSz = Math.Max(5f, cd * 0.28f);
-            using var impFont = new Font("Segoe UI", impFontSz, FontStyle.Bold);
-            using var lblFont = new Font("Segoe UI", lblFontSz);
-            using var fmt = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+            using var fmt = new StringFormat
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center,
+                FormatFlags = StringFormatFlags.NoWrap   // a label is one line, never wrapped/hyphenated
+            };
 
             foreach (var (_, el) in _electrodes)
             {
@@ -268,17 +271,36 @@ namespace Charmeleon
                     ? el.LabelText
                     : (el.Value == 255 ? "Inf" : el.Value.ToString());
                 Color tc = (el.IsActive && el.Value > 220) ? Color.White : ForeColor;
+                using var innerFont = FitFont(g, inner,
+                    HeadMapView.ShowChannels ? lblFontSz : impFontSz,
+                    HeadMapView.ShowChannels ? FontStyle.Regular : FontStyle.Bold, cd * 0.9f);
                 using (var b = new SolidBrush(tc))
-                    g.DrawString(inner, HeadMapView.ShowChannels ? lblFont : impFont, b, circle, fmt);
+                    g.DrawString(inner, innerFont, b, circle, fmt);
 
                 // Beneath the circle: hardware channel in channel view, else the name.
                 string below = HeadMapView.ShowChannels
                     ? el.HardwareChannel.ToString()
                     : el.LabelText;
                 var lblRect = new RectangleF(el.Center.X - cr, el.Center.Y + cr + 3, cd, 18);
+                using var belowFont = FitFont(g, below, lblFontSz, FontStyle.Regular, cd * 0.9f);
                 using (var b = new SolidBrush(ForeColor))
-                    g.DrawString(below, lblFont, b, lblRect, fmt);
+                    g.DrawString(below, belowFont, b, lblRect, fmt);
             }
+        }
+
+        /// <summary>
+        /// A "Segoe UI" font at <paramref name="baseSize"/>, shrunk just enough (floor 5pt) that
+        /// <paramref name="text"/> renders within <paramref name="maxWidth"/> pixels, so long
+        /// labels such as "PO10" fit inside the electrode without clipping or hyphenating.
+        /// </summary>
+        static Font FitFont(Graphics g, string text, float baseSize, FontStyle style, float maxWidth)
+        {
+            var font = new Font("Segoe UI", baseSize, style);
+            if (string.IsNullOrEmpty(text)) return font;
+            float w = g.MeasureString(text, font).Width;
+            if (w <= maxWidth || w <= 0) return font;
+            font.Dispose();
+            return new Font("Segoe UI", Math.Max(5f, baseSize * maxWidth / w), style);
         }
 
         // ------------------------------------------------------------------ //
