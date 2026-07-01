@@ -1,7 +1,12 @@
 ﻿namespace Charmeleon
 {
+    /// <summary>
+    /// Application entry point and amplifier selection: try EEGO first, then TMSi,
+    /// then fall back to demo mode (reporting to the user why, if nothing opened).
+    /// </summary>
     internal static class Program
     {
+        /// <summary>Selects a driver (EEGO, then TMSi) or demo mode, then runs the main window.</summary>
         [STAThread]
         static void Main()
         {

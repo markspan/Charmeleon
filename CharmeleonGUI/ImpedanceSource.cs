@@ -1,25 +1,36 @@
-﻿using System.Globalization;
-using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Charmeleon
 {
     /// <summary>
     /// Thread-safe snapshot of the current electrode state, serialised to JSON for
-    /// the Web View stream. Head-map electrodes carry a polar position (angle,
-    /// radius); AUX channels (Left/Right/Top/Bottom) carry a fractional screen
-    /// position (x, y). All numbers are formatted with InvariantCulture so the
-    /// JSON is valid regardless of the machine's locale.
+    /// the Web View stream. Head-map electrodes carry a polar position
+    /// (angle, radius); AUX channels (Left/Right/Top/Bottom) carry a fractional
+    /// screen position (x, y). The UI thread calls <see cref="Update"/> a few times
+    /// per second; the web server thread reads <see cref="GetJson"/> once per second.
     /// </summary>
     static class ImpedanceSource
     {
+        /// <summary>One electrode in the snapshot. Null position fields are omitted from the JSON.</summary>
         record ElectrodeSnap(
             string Label, double KOhm, bool Active,
             double? Angle, double? Radius, double? X, double? Y);
 
         static ElectrodeSnap[] _state = [];
-        static readonly object _lock  = new();
-        static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
+        static readonly object _lock = new();
 
+        static readonly JsonSerializerOptions JsonOpts = new()
+        {
+            PropertyNamingPolicy   = JsonNamingPolicy.CamelCase,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        };
+
+        /// <summary>
+        /// Rebuilds the snapshot from the current electrode set. Inactive electrodes
+        /// and those without a live channel report a kOhm of -1; electrodes with no
+        /// position are skipped.
+        /// </summary>
         public static void Update(
             double[] kOhm,
             Dictionary<string, ElectrodeState> electrodes,
@@ -29,63 +40,40 @@ namespace Charmeleon
             var list = new List<ElectrodeSnap>(electrodes.Count);
             foreach (var (name, el) in electrodes)
             {
-                int ch     = el.HardwareChannel - 1;
-                double val = (ch >= 0 && ch < kOhm.Length) ? kOhm[ch] : -1;
+                int ch      = el.HardwareChannel - 1;
+                double val  = (ch >= 0 && ch < kOhm.Length) ? kOhm[ch] : -1;
                 bool active = el.IsActive && val >= 0;
-                double snapVal = active ? val : -1;
+                double snap = active ? val : -1;
 
                 if (positions.TryGetValue(name, out var p))
-                    list.Add(new ElectrodeSnap(el.LabelText, snapVal, active, p.Angle, p.Radius, null, null));
+                    list.Add(new ElectrodeSnap(el.LabelText, snap, active, p.Angle, p.Radius, null, null));
                 else if (auxFractions.TryGetValue(name, out var f))
-                    list.Add(new ElectrodeSnap(el.LabelText, snapVal, active, null, null, f.X, f.Y));
+                    list.Add(new ElectrodeSnap(el.LabelText, snap, active, null, null, f.X, f.Y));
                 // else: electrode has no position, skip it.
             }
             lock (_lock) { _state = [.. list]; }
         }
 
+        /// <summary>The current snapshot as <c>{"electrodes":[...]}</c>.</summary>
         public static string GetJson()
         {
             ElectrodeSnap[] snap;
             lock (_lock) { snap = _state; }
-
-            if (snap.Length == 0) return "{\"electrodes\":[]}";
-
-            var sb = new StringBuilder("{\"electrodes\":[", snap.Length * 64);
-            for (int i = 0; i < snap.Length; i++)
-            {
-                if (i > 0) sb.Append(',');
-                var e = snap[i];
-                sb.Append("{\"label\":\"").Append(e.Label).Append('"')
-                  .Append(",\"kOhm\":").Append((e.Active ? e.KOhm : -1).ToString("F1", Inv))
-                  .Append(",\"active\":").Append(e.Active ? "true" : "false");
-                if (e.Angle.HasValue && e.Radius.HasValue)
-                    sb.Append(",\"angle\":").Append(e.Angle.Value.ToString("F2", Inv))
-                      .Append(",\"radius\":").Append(e.Radius.Value.ToString("F3", Inv));
-                else if (e.X.HasValue && e.Y.HasValue)
-                    sb.Append(",\"x\":").Append(e.X.Value.ToString("F4", Inv))
-                      .Append(",\"y\":").Append(e.Y.Value.ToString("F4", Inv));
-                sb.Append('}');
-            }
-            sb.Append("]}");
-            return sb.ToString();
+            return JsonSerializer.Serialize(new { electrodes = snap }, JsonOpts);
         }
 
         /// <summary>
-        /// Returns Charmeleon's 256-entry colour table as a JSON array of "#rrggbb"
-        /// strings, so Web View can colour electrodes identically (including a
-        /// custom Resources/heat.map if one is present).
+        /// Returns the head map's 256-entry colour table as a JSON array of
+        /// "#rrggbb" strings, so the Web View colours electrodes identically
+        /// (including a custom <c>Resources/heat.map</c> if one is present).
         /// </summary>
         public static string GetColorMapJson()
         {
-            var cm = ElectrodeState.ColorMap;
-            var sb = new StringBuilder("[", cm.Length * 12);
+            var cm  = HeadMapView.ColorMap;
+            var hex = new string[cm.Length];
             for (int i = 0; i < cm.Length; i++)
-            {
-                if (i > 0) sb.Append(',');
-                sb.Append($"\"#{cm[i].R:X2}{cm[i].G:X2}{cm[i].B:X2}\"");
-            }
-            sb.Append(']');
-            return sb.ToString();
+                hex[i] = $"#{cm[i].R:X2}{cm[i].G:X2}{cm[i].B:X2}";
+            return JsonSerializer.Serialize(hex);
         }
     }
 }

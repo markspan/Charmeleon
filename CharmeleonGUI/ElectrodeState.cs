@@ -1,55 +1,30 @@
-﻿namespace Charmeleon
+namespace Charmeleon
 {
     /// <summary>
-    /// Runtime state of one electrode on the head map.
-    /// Pure data â€” drawn directly by the parent form in a single OnPaint pass,
+    /// Runtime state of one electrode on the head map: its label, the amplifier
+    /// channel it is wired to, whether it is in use, its latest impedance and its
+    /// on-screen position. Drawn directly by the form in a single OnPaint pass,
     /// which gives true transparency with no overlapping control rectangles.
+    /// Process-wide view settings live on <see cref="HeadMapView"/>.
     /// </summary>
     public class ElectrodeState
     {
-        public string LabelText      { get; set; } = "";
-        public int    HardwareChannel{ get; set; } = 0;
-        public bool   IsActive       { get; set; } = true;
-        public int    Value          { get; set; } = 0;   // 0-255 kOhm
-        public Point  Center         { get; set; }
-        internal bool Editing        { get; set; } = false;
+        /// <summary>Electrode name shown on the map (for example "Cz").</summary>
+        public string LabelText { get; set; } = "";
 
-        // ---- Shared static state (one set per process) ----
+        /// <summary>Amplifier hardware channel this electrode is wired to (1-based; 0 = unassigned).</summary>
+        public int HardwareChannel { get; set; }
 
-        public static bool    viewHWChannel = false;
-        public static int     maxChannel    = 64;
-        public static int     ScaledSize    = 65;
+        /// <summary>Whether this electrode is in use for the current recording.</summary>
+        public bool IsActive { get; set; } = true;
 
-        public static Color[] ColorMap = File.Exists("Resources/heat.map")
-            ? LoadColorMapFromFile("Resources/heat.map")
-            : GenerateColorMap();
+        /// <summary>Most recent impedance, clamped to the 0-255 kOhm colour range.</summary>
+        public int Value { get; set; }
 
-        public static void ApplyScale(int size) =>
-            ScaledSize = Math.Max(24, size);
+        /// <summary>On-screen centre of the electrode circle.</summary>
+        public Point Center { get; set; }
 
-        static Color[] GenerateColorMap()
-        {
-            var c = new Color[256];
-            c[0] = Color.FromArgb(0, 1, 254, 0);
-            for (int i = 1; i < 256; i++)
-                c[i] = Color.FromArgb(255, i, 255 - i, 0);
-            return c;
-        }
-
-        static Color[] LoadColorMapFromFile(string path)
-        {
-            var c     = new Color[256];
-            var lines = File.ReadAllLines(path);
-            for (int i = 0; i < Math.Min(lines.Length, 256); i++)
-            {
-                var parts = lines[i].Split(',');
-                if (parts.Length == 3 &&
-                    int.TryParse(parts[0], out int r) &&
-                    int.TryParse(parts[1], out int g) &&
-                    int.TryParse(parts[2], out int b))
-                    c[i] = Color.FromArgb(255, r, g, b);
-            }
-            return c;
-        }
+        /// <summary>True while the inline channel-number editor is open over this electrode.</summary>
+        internal bool Editing { get; set; }
     }
 }

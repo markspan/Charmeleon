@@ -9,7 +9,7 @@ namespace Charmeleon
     static class MontageGenerator
     {
         // ------------------------------------------------------------------ //
-        //  10-20 system â€” standard 64-ch Waveguard positions
+        //  10-20 system: standard 64-channel Waveguard positions
         //  Format: (name, angle_deg, radius)  angle: 90=front 0=right -90=back
         // ------------------------------------------------------------------ //
         static readonly (string Name, double Angle, double Radius)[] Positions1020 =
@@ -46,9 +46,9 @@ namespace Charmeleon
         ];
 
         // ------------------------------------------------------------------ //
-        //  Equidistant Duke layout â€” 3-D positions from ANT Waveguard .elc
+        //  Equidistant Duke layout: 3-D positions from ANT Waveguard .elc
         //  Projection: azimuthal equidistant from crown pole (centroid of
-        //  4Z/5Z/5L/5R), back-half stretched Ã— 1.112 for visual balance.
+        //  4Z/5Z/5L/5R), back-half stretched by a factor 1.112 for visual balance.
         // ------------------------------------------------------------------ //
         static readonly (string Name, double X, double Y, double Z)[] Equidistant3D =
         [

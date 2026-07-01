@@ -3,27 +3,34 @@ using System.Text.Json;
 
 namespace Charmeleon
 {
+    /// <summary>
+    /// Main window. Draws the head map, runs the refresh timer that reads live
+    /// impedances from the amplifier (or the demo value), handles electrode
+    /// clicks and channel editing, and loads/saves montages. Electrodes are
+    /// painted directly in <see cref="OnPaint"/> rather than being child controls,
+    /// which gives true transparency with no overlapping rectangles.
+    /// </summary>
     public partial class MainGUI : Form
     {
-        IImpedanceDriver? _driver = null;
-        readonly bool _demo = false;
-        int _demoValue = 255;
-        WebServer?  _webServer       = null;
-        double[] _lastKOhm = Enumerable.Repeat(-1.0, 64).ToArray();
+        readonly IImpedanceDriver? _driver;
+        readonly bool _demo;
+        int _demoValue = 255;                 // impedance shown for every active electrode in demo mode
+        WebServer? _webServer;
+        readonly double[] _lastKOhm = Enumerable.Repeat(-1.0, 64).ToArray();  // per-channel, -1 = inactive/none
 
-        int centerX = 0, centerY = 0, formHeight = 0, formWidth = 0, fullRadius = 0;
-        bool isDark = false;
+        // Head-map geometry, recomputed on construction and on resize.
+        int _centerX, _centerY, _formHeight, _formWidth, _fullRadius;
+        bool _isDark;
 
-        // Electrode state â€” drawn directly in OnPaint, not added as Controls.
-        public Dictionary<string, ElectrodeState> electrodes = new();
-        public Dictionary<string, (double Angle, double Radius)> electrodePositions = new();
-
-        public Dictionary<string, Point> AUXPositions = new()
+        // Electrode data. Head-map electrodes keep a polar position; the four AUX
+        // markers (Left/Right/Top/Bottom) keep a fractional screen position.
+        readonly Dictionary<string, ElectrodeState> _electrodes = new();
+        readonly Dictionary<string, (double Angle, double Radius)> _electrodePositions = new();
+        readonly Dictionary<string, Point> _auxPositions = new()
         {
             { "Left", new Point() }, { "Right", new Point() },
             { "Top",  new Point() }, { "Bottom", new Point() }
         };
-
         readonly Dictionary<string, (double X, double Y)> _auxFractions = new()
         {
             { "Left",   (0.85, 0.80) },
@@ -33,42 +40,47 @@ namespace Charmeleon
         };
 
         // Inline channel-edit textbox (one at a time, managed by the form).
-        string?  _editingName = null;
-        TextBox? _editBox     = null;
+        string?  _editingName;
+        TextBox? _editBox;
+
+        /// <summary>Radial spacing between the concentric 10-20 guide rings.</summary>
+        double RingUnit => _fullRadius / 5.0;
+
+        /// <summary>Electrode diameter derived from the head radius, clamped to 24-80 px.</summary>
+        int ComputeElectrodeSize() => Math.Max(24, Math.Min(80, (int)(_fullRadius / 5.0 * 0.828)));
 
         // ------------------------------------------------------------------ //
-        //  Constructor
+        //  Construction / teardown
         // ------------------------------------------------------------------ //
 
+        /// <summary>
+        /// Builds the window for the given amplifier driver, or for demo mode when
+        /// <paramref name="driver"/> is null.
+        /// </summary>
         public MainGUI(IImpedanceDriver? driver, bool demo)
         {
             _driver = driver;
             _demo   = demo;
 
             InitializeComponent();
+            RecomputeGeometry();
 
-            formHeight = ClientSize.Height;
-            formWidth  = ClientSize.Width;
-            fullRadius = (int)(formHeight * 0.43);
-            centerX    = formWidth  / 2;
-            centerY    = formHeight / 2;
-
-            ElectrodeState.ApplyScale(Math.Max(24, Math.Min(80, (int)(fullRadius / 5.0 * 0.828))));
+            HeadMapView.SetElectrodeSize(ComputeElectrodeSize());
             SetAuxiliaryPositions();
             AddAuxiliaryElectrodes();
             DoubleBuffered = true;
-            DrawColorMapBox(ElectrodeState.ColorMap);
+            DrawColorMapBox(HeadMapView.ColorMap);
             LoadConfig("Resources/1020Layout.json");
 
             if (_demo)
             {
-                ElectrodeState.maxChannel = 64;
-                Text      = "Charmeleon  [DEMO - no amplifier]";
-                KeyPreview = true;
+                HeadMapView.MaxChannel = 64;
+                Text       = "Charmeleon  [DEMO - no amplifier]";
+                KeyPreview = true;             // so the arrow keys reach ProcessCmdKey
             }
             else
             {
-                ElectrodeState.maxChannel = _driver!.ChannelCount;
+                HeadMapView.MaxChannel = _driver!.ChannelCount;
                 Text = "Charmeleon";
             }
 
@@ -79,6 +91,7 @@ namespace Charmeleon
             _webServer = new WebServer();
         }
 
+        /// <summary>Stops the timer and releases the web server and amplifier on close.</summary>
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             RefreshTimer.Stop();
@@ -91,44 +104,34 @@ namespace Charmeleon
         //  Impedance refresh
         // ------------------------------------------------------------------ //
 
+        /// <summary>
+        /// Timer tick (about 3 Hz): reads the latest impedances (or the demo value),
+        /// updates every electrode and the Web View snapshot, then repaints.
+        /// </summary>
         void Redraw_Callback(object? source, EventArgs e)
         {
+            double[] impedances;
             if (_demo)
-            {
-                foreach (var (_, el) in electrodes)
-                {
-                    int ch = el.HardwareChannel - 1;
-                    if (ch >= 0 && ch < _lastKOhm.Length)
-                    {
-                        if (el.IsActive) { el.Value = _demoValue; _lastKOhm[ch] = _demoValue; }
-                        else             {                          _lastKOhm[ch] = -1; }
-                    }
-                }
-                ImpedanceSource.Update(_lastKOhm, electrodes, electrodePositions, _auxFractions);
-                Invalidate();
+                impedances = Enumerable.Repeat((double)_demoValue, _lastKOhm.Length).ToArray();
+            else if (_driver != null)
+                impedances = _driver.GetImpedancesKOhm();
+            else
                 return;
+
+            foreach (var (_, el) in _electrodes)
+            {
+                int ch    = el.HardwareChannel - 1;
+                bool live = ch >= 0 && ch < impedances.Length && el.IsActive;
+                el.Value  = live ? (int)Math.Min(255, impedances[ch]) : 0;
+                if (ch >= 0 && ch < _lastKOhm.Length)
+                    _lastKOhm[ch] = live ? impedances[ch] : -1;
             }
 
-            if (_driver == null) return;
-            double[] impedances = _driver.GetImpedancesKOhm();
-            foreach (var (_, el) in electrodes)
-            {
-                int ch = el.HardwareChannel - 1;
-                if (ch >= 0 && ch < impedances.Length && el.IsActive)
-                {
-                    el.Value = (int)Math.Min(255, impedances[ch]);
-                    if (ch < _lastKOhm.Length) _lastKOhm[ch] = impedances[ch];
-                }
-                else
-                {
-                    el.Value = 0;
-                    if (ch >= 0 && ch < _lastKOhm.Length) _lastKOhm[ch] = -1;
-                }
-            }
-            ImpedanceSource.Update(_lastKOhm, electrodes, electrodePositions, _auxFractions);
+            ImpedanceSource.Update(_lastKOhm, _electrodes, _electrodePositions, _auxFractions);
             Invalidate();
         }
 
+        /// <summary>Demo mode: Up/Down arrows sweep the impedance shown on every active electrode.</summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (_demo)
@@ -143,37 +146,52 @@ namespace Charmeleon
         //  Electrode layout helpers
         // ------------------------------------------------------------------ //
 
+        /// <summary>Recomputes centre, radius and dimensions from the current client size.</summary>
+        void RecomputeGeometry()
+        {
+            _formHeight = ClientSize.Height;
+            _formWidth  = ClientSize.Width;
+            _fullRadius = (int)(_formHeight * 0.43);
+            _centerX    = _formWidth  / 2;
+            _centerY    = _formHeight / 2;
+        }
+
+        /// <summary>Places the four AUX markers at their fractional screen positions.</summary>
         void SetAuxiliaryPositions()
         {
-            foreach (var name in AUXPositions.Keys.ToList())
+            foreach (var name in _auxPositions.Keys.ToList())
             {
                 var (fx, fy) = _auxFractions.TryGetValue(name, out var f) ? f : (0.85, 0.80);
-                AUXPositions[name] = new Point((int)(formWidth * fx), (int)(formHeight * fy));
-                if (electrodes.TryGetValue(name, out var el)) el.Center = AUXPositions[name];
+                _auxPositions[name] = new Point((int)(_formWidth * fx), (int)(_formHeight * fy));
+                if (_electrodes.TryGetValue(name, out var el)) el.Center = _auxPositions[name];
             }
         }
 
+        /// <summary>Creates the AUX electrode states if they do not exist yet.</summary>
         void AddAuxiliaryElectrodes()
         {
-            foreach (var aux in AUXPositions)
-                if (!electrodes.ContainsKey(aux.Key))
-                    electrodes[aux.Key] = new ElectrodeState { LabelText = aux.Key, Center = aux.Value };
+            foreach (var aux in _auxPositions)
+                if (!_electrodes.ContainsKey(aux.Key))
+                    _electrodes[aux.Key] = new ElectrodeState { LabelText = aux.Key, Center = aux.Value };
         }
 
+        /// <summary>
+        /// Rescales and repositions the head-map electrodes from their polar
+        /// positions, creating any that do not exist yet. AUX markers are untouched.
+        /// </summary>
         void AddElectrodes()
         {
-            int elSize = Math.Max(24, Math.Min(80, (int)(fullRadius / 5.0 * 0.828)));
-            ElectrodeState.ApplyScale(elSize);
+            HeadMapView.SetElectrodeSize(ComputeElectrodeSize());
 
-            foreach (var (name, (angle, radius)) in electrodePositions)
+            foreach (var (name, (angle, radius)) in _electrodePositions)
             {
                 double rad = angle * Math.PI / 180.0;
-                int x = centerX + (int)(Math.Cos(rad) * (radius * (fullRadius / 5.0)));
-                int y = centerY - (int)(Math.Sin(rad) * (radius * (fullRadius / 5.0)));
-                if (electrodes.TryGetValue(name, out var existing))
+                int x = _centerX + (int)(Math.Cos(rad) * (radius * RingUnit));
+                int y = _centerY - (int)(Math.Sin(rad) * (radius * RingUnit));
+                if (_electrodes.TryGetValue(name, out var existing))
                     existing.Center = new Point(x, y);
                 else
-                    electrodes[name] = new ElectrodeState { LabelText = name, Center = new Point(x, y) };
+                    _electrodes[name] = new ElectrodeState { LabelText = name, Center = new Point(x, y) };
             }
         }
 
@@ -181,73 +199,80 @@ namespace Charmeleon
         //  Drawing
         // ------------------------------------------------------------------ //
 
+        /// <summary>Paints the head outline, guide rings, ears, electrodes and colour-scale labels.</summary>
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
             var g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            // Head circle and guide rings
+            // Head circle and concentric guide rings
             using var dashPen = new Pen(Color.Gray, 1) { DashStyle = DashStyle.Dash };
-            g.DrawEllipse(Pens.Black, centerX - fullRadius, centerY - fullRadius, fullRadius * 2, fullRadius * 2);
+            g.DrawEllipse(Pens.Black, _centerX - _fullRadius, _centerY - _fullRadius, _fullRadius * 2, _fullRadius * 2);
             foreach (int r in new[] { 4, 3, 2, 1 })
             {
-                int cr = (fullRadius * r) / 5;
-                g.DrawEllipse(dashPen, centerX - cr, centerY - cr, 2 * cr, 2 * cr);
+                int cr = (int)(r * RingUnit);
+                g.DrawEllipse(dashPen, _centerX - cr, _centerY - cr, 2 * cr, 2 * cr);
             }
 
+            // Cross-hairs
             using var dotPen = new Pen(Color.Gray) { DashStyle = DashStyle.Dot };
-            g.DrawLine(dotPen, 0, centerY, (int)(formHeight * 1.125), centerY);
-            g.DrawLine(dotPen, centerX, 0, centerX, formHeight);
+            g.DrawLine(dotPen, 0, _centerY, (int)(_formHeight * 1.125), _centerY);
+            g.DrawLine(dotPen, _centerX, 0, _centerX, _formHeight);
 
-            // Ear ellipses â€” fixed to the sides of the head circle, centred on the horizontal midline
-            int earW = fullRadius / 7;
-            int earH = fullRadius / 4;
-            g.DrawEllipse(Pens.Black, centerX - fullRadius - earW, centerY - earH / 2, earW, earH);
-            g.DrawEllipse(Pens.Black, centerX + fullRadius,         centerY - earH / 2, earW, earH);
+            // Ears: fixed to the sides of the head circle, centred on the horizontal midline
+            int earW = _fullRadius / 7;
+            int earH = _fullRadius / 4;
+            g.DrawEllipse(Pens.Black, _centerX - _fullRadius - earW, _centerY - earH / 2, earW, earH);
+            g.DrawEllipse(Pens.Black, _centerX + _fullRadius,          _centerY - earH / 2, earW, earH);
 
-            // All electrodes in one pass â€” true transparency, no overlapping rectangles
             DrawElectrodes(g);
 
-            // Colormap value labels
-            int[] labelList = { 2, 5, 10, 20, 50, 100, 200, 256 };
-            var P = pictureBox1.Location;
+            // Colour-scale value labels down the left of the scale bar
+            int[] labels = { 2, 5, 10, 20, 50, 100, 200, 256 };
+            var p = pictureBox1.Location;
             float cmScale = pictureBox1.Height / 256f;
-            using var lBrush = new SolidBrush(SystemColors.ControlText);
-            using var lFont  = new Font("Segoe UI", 8);
-            var lFmt = new StringFormat { Alignment = StringAlignment.Far };
-            foreach (int y in labelList)
-                g.DrawString(y.ToString(), lFont, lBrush, P.X - 2, P.Y + y * cmScale, lFmt);
+            using var labelBrush = new SolidBrush(SystemColors.ControlText);
+            using var labelFont  = new Font("Segoe UI", 8);
+            var labelFmt = new StringFormat { Alignment = StringAlignment.Far };
+            foreach (int y in labels)
+                g.DrawString(y.ToString(), labelFont, labelBrush, p.X - 2, p.Y + y * cmScale, labelFmt);
         }
 
+        /// <summary>
+        /// Draws every electrode circle in one pass: fill colour from the impedance
+        /// (grey when inactive), the value or name inside, and the label beneath.
+        /// </summary>
         void DrawElectrodes(Graphics g)
         {
-            int s    = ElectrodeState.ScaledSize;
-            int cd   = Math.Max(12, s - 20);   // circle diameter â€” matches old UserControl margin
-            int cr   = cd / 2;
+            int size   = HeadMapView.ElectrodeSize;
+            int cd     = Math.Max(12, size - 20);   // circle diameter (matches the old UserControl margin)
+            int cr     = cd / 2;
             float impFontSz = Math.Max(6f, cd * 0.32f);
             float lblFontSz = Math.Max(5f, cd * 0.28f);
             using var impFont = new Font("Segoe UI", impFontSz, FontStyle.Bold);
             using var lblFont = new Font("Segoe UI", lblFontSz);
             using var fmt     = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
 
-            foreach (var (_, el) in electrodes)
+            foreach (var (_, el) in _electrodes)
             {
                 var circle = new Rectangle(el.Center.X - cr, el.Center.Y - cr, cd, cd);
-                var fill   = el.IsActive ? ElectrodeState.ColorMap[el.Value] : Color.LightGray;
+                var fill   = el.IsActive ? HeadMapView.ColorMap[el.Value] : Color.LightGray;
                 using (var b = new SolidBrush(fill)) g.FillEllipse(b, circle);
                 g.DrawEllipse(Pens.Black, circle);
 
-                if (el.Editing) continue;
+                if (el.Editing) continue;   // the inline textbox is showing over this circle
 
-                string inner = ElectrodeState.viewHWChannel
+                // Inside the circle: electrode name in channel view, else the impedance value.
+                string inner = HeadMapView.ShowChannels
                     ? el.LabelText
                     : (el.Value == 255 ? "Inf" : el.Value.ToString());
                 Color tc = (el.IsActive && el.Value > 220) ? Color.White : ForeColor;
                 using (var b = new SolidBrush(tc))
-                    g.DrawString(inner, ElectrodeState.viewHWChannel ? lblFont : impFont, b, circle, fmt);
+                    g.DrawString(inner, HeadMapView.ShowChannels ? lblFont : impFont, b, circle, fmt);
 
-                string below = ElectrodeState.viewHWChannel
+                // Beneath the circle: hardware channel in channel view, else the name.
+                string below = HeadMapView.ShowChannels
                     ? el.HardwareChannel.ToString()
                     : el.LabelText;
                 var lblRect = new RectangleF(el.Center.X - cr, el.Center.Y + cr + 3, cd, 18);
@@ -260,20 +285,24 @@ namespace Charmeleon
         //  Click handling
         // ------------------------------------------------------------------ //
 
+        /// <summary>
+        /// Click on an electrode: in channel view, clicking the label opens the
+        /// channel editor; otherwise it toggles the electrode active/inactive.
+        /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
             CommitActiveEdit();
 
-            int r = ElectrodeState.ScaledSize / 2;
-            foreach (var (name, el) in electrodes)
+            int r = HeadMapView.ElectrodeSize / 2;
+            foreach (var (name, el) in _electrodes)
             {
                 double dx = e.X - el.Center.X;
                 double dy = e.Y - el.Center.Y;
                 if (dx * dx + dy * dy <= (r + 4) * (r + 4))
                 {
                     bool inLabel = e.Y > el.Center.Y + r - 6;
-                    if (ElectrodeState.viewHWChannel && inLabel)
+                    if (HeadMapView.ShowChannels && inLabel)
                         ShowChannelEditor(name, el);
                     else
                         el.IsActive = !el.IsActive;
@@ -283,9 +312,10 @@ namespace Charmeleon
             }
         }
 
+        /// <summary>Opens a small numeric textbox over an electrode to edit its hardware channel.</summary>
         void ShowChannelEditor(string name, ElectrodeState el)
         {
-            int s = ElectrodeState.ScaledSize;
+            int s = HeadMapView.ElectrodeSize;
             int r = s / 2;
             var box = new TextBox
             {
@@ -307,6 +337,7 @@ namespace Charmeleon
             Invalidate();
         }
 
+        /// <summary>Commits and closes the inline channel editor, if one is open.</summary>
         void CommitActiveEdit()
         {
             if (_editBox == null || _editingName == null) return;
@@ -320,10 +351,10 @@ namespace Charmeleon
             _editBox     = null;
             _editingName = null;
 
-            if (electrodes.TryGetValue(name, out var el))
+            if (_electrodes.TryGetValue(name, out var el))
             {
                 if (int.TryParse(box.Text, out int ch))
-                    el.HardwareChannel = Math.Max(0, Math.Min(ElectrodeState.maxChannel, ch));
+                    el.HardwareChannel = Math.Max(0, Math.Min(HeadMapView.MaxChannel, ch));
                 el.Editing = false;
             }
             Controls.Remove(box);
@@ -335,16 +366,13 @@ namespace Charmeleon
         //  Resize
         // ------------------------------------------------------------------ //
 
+        /// <summary>Recomputes geometry and repositions everything when the window is resized.</summary>
         void MainGUI_Resize(object sender, EventArgs e)
         {
-            formHeight = ClientSize.Height;
-            formWidth  = ClientSize.Width;
-            fullRadius = (int)(formHeight * 0.43);
-            centerX    = formWidth  / 2;
-            centerY    = formHeight / 2;
+            RecomputeGeometry();
             SetAuxiliaryPositions();
             AddElectrodes();
-            DrawColorMapBox(ElectrodeState.ColorMap);
+            DrawColorMapBox(HeadMapView.ColorMap);
             Invalidate();
         }
 
@@ -352,6 +380,11 @@ namespace Charmeleon
         //  Configuration load / save
         // ------------------------------------------------------------------ //
 
+        /// <summary>
+        /// Loads a montage from <paramref name="fileName"/>, or prompts for one when
+        /// it is empty. Replaces the head-map electrodes (AUX markers are kept) and
+        /// applies each electrode's label, channel and active state.
+        /// </summary>
         void LoadConfig(string fileName)
         {
             if (fileName == "")
@@ -360,6 +393,7 @@ namespace Charmeleon
                 if (dlg.ShowDialog() != DialogResult.OK) return;
                 fileName = dlg.FileName;
             }
+
             Dictionary<string, ElectrodeControlData> data;
             try
             {
@@ -370,14 +404,11 @@ namespace Charmeleon
             }
             catch (Exception ex) { MessageBox.Show($"Error loading configuration: {ex.Message}"); return; }
 
-            // Remove existing EEG electrodes (keep AUX)
-            foreach (var name in electrodes.Keys.Except(AUXPositions.Keys).ToList())
-                electrodes.Remove(name);
-            electrodePositions.Clear();
+            RemoveHeadMapElectrodes();
 
             foreach (var (name, cfg) in data)
             {
-                if (AUXPositions.ContainsKey(name))
+                if (_auxPositions.ContainsKey(name))
                 {
                     if (cfg.X.HasValue && cfg.Y.HasValue)
                     {
@@ -386,35 +417,37 @@ namespace Charmeleon
                     }
                 }
                 else if (cfg.Angle.HasValue && cfg.Radius.HasValue)
-                    electrodePositions[name] = (cfg.Angle.Value, cfg.Radius.Value);
+                    _electrodePositions[name] = (cfg.Angle.Value, cfg.Radius.Value);
             }
             AddElectrodes();
 
             foreach (var (name, cfg) in data)
-            {
-                if (electrodes.TryGetValue(name, out var el))
+                if (_electrodes.TryGetValue(name, out var el))
                 {
-                    el.LabelText        = cfg.LabelText;
-                    el.HardwareChannel  = cfg.HardwareChannel;
-                    el.IsActive         = cfg.HardwareChannel > 0 &&
-                                          cfg.HardwareChannel <= ElectrodeState.maxChannel &&
-                                          cfg.IsActive;
+                    el.LabelText       = cfg.LabelText;
+                    el.HardwareChannel = cfg.HardwareChannel;
+                    el.IsActive        = cfg.HardwareChannel > 0 &&
+                                         cfg.HardwareChannel <= HeadMapView.MaxChannel &&
+                                         cfg.IsActive;
                 }
-            }
         }
 
-        void openMontageToolStripMenuItem_Click(object sender, EventArgs e)
+        /// <summary>Removes every head-map electrode, keeping the AUX markers and clearing positions.</summary>
+        void RemoveHeadMapElectrodes()
         {
-            LoadConfig("");
+            foreach (var name in _electrodes.Keys.Except(_auxPositions.Keys).ToList())
+                _electrodes.Remove(name);
+            _electrodePositions.Clear();
         }
 
+        /// <summary>Serialises the current electrode set (positions, channels, active state) to a JSON file.</summary>
         void saveMontageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var data = electrodes.ToDictionary(kv => kv.Key, kv =>
+            var data = _electrodes.ToDictionary(kv => kv.Key, kv =>
             {
-                bool isAux = AUXPositions.ContainsKey(kv.Key);
+                bool isAux = _auxPositions.ContainsKey(kv.Key);
                 _auxFractions.TryGetValue(kv.Key, out var frac);
-                electrodePositions.TryGetValue(kv.Key, out var pos);
+                _electrodePositions.TryGetValue(kv.Key, out var pos);
                 return new ElectrodeControlData
                 {
                     IsActive        = kv.Value.IsActive,
@@ -431,38 +464,44 @@ namespace Charmeleon
                 File.WriteAllText(dlg.FileName, JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true }));
         }
 
+        /// <summary>Setup, Open Montage.</summary>
+        void openMontageToolStripMenuItem_Click(object sender, EventArgs e) => LoadConfig("");
+
         // ------------------------------------------------------------------ //
         //  Create Montage
         // ------------------------------------------------------------------ //
 
+        /// <summary>Setup, Create Montage, 10/20 Layout.</summary>
         void create1020ToolStripMenuItem_Click(object sender, EventArgs e)
             => ApplyGeneratedMontage(MontageGenerator.Generate1020(), "10/20");
 
+        /// <summary>Setup, Create Montage, Equidistant Layout.</summary>
         void createEquidistantToolStripMenuItem_Click(object sender, EventArgs e)
             => ApplyGeneratedMontage(MontageGenerator.GenerateEquidistant(), "Equidistant");
 
+        /// <summary>
+        /// Applies a generated layout to the head map (optionally saving it first),
+        /// carrying its hardware channels and active state onto the electrodes.
+        /// </summary>
         void ApplyGeneratedMontage(Dictionary<string, ElectrodeControlData> layout, string name)
         {
             if (MessageBox.Show($"Save the {name} layout to a file?",
                     "Create Montage", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 MontageGenerator.SaveToFile(layout);
 
-            foreach (var key in electrodes.Keys.Except(AUXPositions.Keys).ToList())
-                electrodes.Remove(key);
-            electrodePositions.Clear();
+            RemoveHeadMapElectrodes();
 
             foreach (var (key, cfg) in layout)
             {
-                if (AUXPositions.ContainsKey(key)) continue;
+                if (_auxPositions.ContainsKey(key)) continue;
                 if (cfg.Angle.HasValue && cfg.Radius.HasValue)
-                    electrodePositions[key] = (cfg.Angle.Value, cfg.Radius.Value);
+                    _electrodePositions[key] = (cfg.Angle.Value, cfg.Radius.Value);
             }
             AddElectrodes();
 
-            // Carry the generated hardware channels and active state onto the
-            // electrode states (AddElectrodes only sets positions, not channels).
+            // AddElectrodes only sets positions, so copy channels and active state too.
             foreach (var (key, cfg) in layout)
-                if (electrodes.TryGetValue(key, out var el))
+                if (_electrodes.TryGetValue(key, out var el))
                 {
                     el.HardwareChannel = cfg.HardwareChannel;
                     el.IsActive        = cfg.IsActive;
@@ -470,19 +509,17 @@ namespace Charmeleon
             Invalidate();
         }
 
-
-
-
         // ------------------------------------------------------------------ //
-        //  UI helpers
+        //  Colour scale and menu handlers
         // ------------------------------------------------------------------ //
 
+        /// <summary>Sizes, positions and paints the vertical colour-scale bar next to the AUX cluster.</summary>
         void DrawColorMapBox(Color[] colorMap)
         {
-            int auxX1 = AUXPositions.Values.Min(p => p.X);
-            int auxX2 = AUXPositions.Values.Max(p => p.X);
+            int auxX1 = _auxPositions.Values.Min(p => p.X);
+            int auxX2 = _auxPositions.Values.Max(p => p.X);
             int auxCX = (auxX1 + auxX2) / 2;
-            int auxY1 = AUXPositions.Values.Min(p => p.Y);
+            int auxY1 = _auxPositions.Values.Min(p => p.Y);
 
             int cmWidth  = 40;
             int cmHeight = Math.Max(64, (auxY1 - 16) * 2 / 3);
@@ -502,23 +539,29 @@ namespace Charmeleon
             pictureBox1.Image = bmp;
         }
 
+        /// <summary>View, View Channels: toggles between impedance values and channel names.</summary>
         void viewChannelsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ElectrodeState.viewHWChannel = !ElectrodeState.viewHWChannel;
+            HeadMapView.ShowChannels = !HeadMapView.ShowChannels;
             Invalidate();
         }
 
+        /// <summary>About, About Charmeleon.</summary>
         void AboutCharmeleonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using var about = new aboutForm();
-            ApplyTheme(about, isDark);
+            ApplyTheme(about, _isDark);
             about.ShowDialog();
         }
 
-        void ToggleThemeToolStripMenuItem_Click(object sender, EventArgs e) => ToggleTheme(this);
+        /// <summary>View, Toggle Theme.</summary>
+        void ToggleThemeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _isDark = !_isDark;
+            ApplyTheme(this, _isDark);
+        }
 
-        void ToggleTheme(Control root) { isDark = !isDark; ApplyTheme(root, isDark); }
-
+        /// <summary>Recursively applies the light or dark palette to a control tree.</summary>
         void ApplyTheme(Control c, bool dark)
         {
             if (c == null) return;
@@ -527,23 +570,19 @@ namespace Charmeleon
             foreach (Control child in c.Controls) ApplyTheme(child, dark);
         }
 
+        /// <summary>Web, Web View: shows the QR / URL dialog, or an error if the server did not start.</summary>
         void webViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_webServer is { Started: false })
             {
                 MessageBox.Show("Could not start the Web View server:\n" + _webServer.ErrorMessage +
-                    "\n\nRun:  netsh http add urlacl url=http://*:8765/ user=Everyone",
+                    "\n\nAnother application may already be using port 8765.",
                     "Web View", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             using var dlg = new WebDialog();
-            ApplyTheme(dlg, isDark);
+            ApplyTheme(dlg, _isDark);
             dlg.ShowDialog(this);
         }
-
-        void resizeToolStripMenuItem_Click(object sender, EventArgs e) => MainGUI_Resize(sender, e);
     }
 }
-
-
-
