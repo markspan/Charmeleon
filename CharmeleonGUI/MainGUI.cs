@@ -257,7 +257,7 @@ namespace Charmeleon
                 FormatFlags = StringFormatFlags.NoWrap   // a label is one line, never wrapped/hyphenated
             };
 
-            foreach (var (_, el) in _electrodes)
+            foreach (var (name, el) in _electrodes)
             {
                 var circle = new Rectangle(el.Center.X - cr, el.Center.Y - cr, cd, cd);
                 var fill = el.IsActive ? HeadMapView.ColorMap[el.Value] : Color.LightGray;
@@ -278,11 +278,16 @@ namespace Charmeleon
                     g.DrawString(inner, innerFont, b, circle, fmt);
 
                 // Beneath the circle: hardware channel in channel view, else the name.
+                // The four AUX markers (Left/Right/Top/Bottom) sit in a spaced-out cluster, so
+                // their names get the full font size and a wide box; packed head-map labels
+                // auto-fit to the circle width instead.
                 string below = HeadMapView.ShowChannels
                     ? el.HardwareChannel.ToString()
                     : el.LabelText;
-                var lblRect = new RectangleF(el.Center.X - cr, el.Center.Y + cr + 3, cd, 18);
-                using var belowFont = FitFont(g, below, lblFontSz, FontStyle.Regular, cd * 0.9f);
+                bool isAux = _auxPositions.ContainsKey(name);
+                float belowW = isAux ? cd * 3f : cd;
+                var lblRect = new RectangleF(el.Center.X - belowW / 2f, el.Center.Y + cr + 3, belowW, 18);
+                using var belowFont = FitFont(g, below, lblFontSz, FontStyle.Regular, isAux ? cd * 3f : cd * 0.9f);
                 using (var b = new SolidBrush(ForeColor))
                     g.DrawString(below, belowFont, b, lblRect, fmt);
             }
