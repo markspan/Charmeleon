@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Reflection;
@@ -65,6 +66,47 @@ namespace Charmeleon
                 return ((IPEndPoint)s.LocalEndPoint!).Address.ToString();
             }
             catch { return "localhost"; }
+        }
+
+        /// <summary>URL for a specific host or IP.</summary>
+        public static string UrlFor(string ip) => $"https://{ip}:{Port}/";
+
+        /// <summary>
+        /// All usable local IPv4 addresses, best guess first: the internet-routed
+        /// address leads, then adapters that have a default gateway (real LANs),
+        /// then the rest. Loopback, link-local (169.254) and tunnel adapters are
+        /// skipped. Lets the user pick another address when the machine has
+        /// several (VPNs, virtual/host-only adapters).
+        /// </summary>
+        public static IReadOnlyList<string> Addresses()
+        {
+            string routed = LocalIP();
+            var scored = new List<(int rank, string ip)>();
+
+            foreach (var ni in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                if (ni.OperationalStatus != OperationalStatus.Up) continue;
+                if (ni.NetworkInterfaceType is NetworkInterfaceType.Loopback or NetworkInterfaceType.Tunnel) continue;
+
+                var props = ni.GetIPProperties();
+                bool hasGateway = props.GatewayAddresses.Any(g =>
+                    g.Address.AddressFamily == AddressFamily.InterNetwork &&
+                    g.Address.GetAddressBytes().Any(b => b != 0));
+
+                foreach (var ua in props.UnicastAddresses)
+                {
+                    if (ua.Address.AddressFamily != AddressFamily.InterNetwork) continue;
+                    if (IPAddress.IsLoopback(ua.Address)) continue;
+                    string ip = ua.Address.ToString();
+                    if (ip.StartsWith("169.254.")) continue;               // APIPA / link-local
+                    if (scored.Any(s => s.ip == ip)) continue;
+                    int rank = ip == routed ? 0 : (hasGateway ? 1 : 2);    // routed, real LAN, then virtual
+                    scored.Add((rank, ip));
+                }
+            }
+
+            if (scored.Count == 0) return new[] { routed };
+            return scored.OrderBy(s => s.rank).Select(s => s.ip).ToList();
         }
 
         void AcceptLoop()
