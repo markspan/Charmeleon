@@ -15,6 +15,7 @@
             pictureBox1 = new PictureBox();
             lblUrl      = new Label();
             lblHint     = new Label();
+            lblNote     = new Label();
             btnClose    = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
@@ -34,6 +35,12 @@
             lblUrl.Location  = new Point(244, 38);
             lblUrl.MaximumSize = new Size(260, 0);
 
+            lblNote.AutoSize    = true;
+            lblNote.ForeColor   = SystemColors.GrayText;
+            lblNote.Location    = new Point(244, 84);
+            lblNote.MaximumSize = new Size(268, 0);
+            lblNote.Text        = "The first time each device connects, the browser warns that the certificate is not trusted. Choose Advanced, then Proceed, to continue. This is expected for a local self-signed certificate.";
+
             btnClose.Text     = "Close";
             btnClose.Location = new Point(366, 196);
             btnClose.Size     = new Size(80, 28);
@@ -45,6 +52,7 @@
             Controls.Add(pictureBox1);
             Controls.Add(lblHint);
             Controls.Add(lblUrl);
+            Controls.Add(lblNote);
             Controls.Add(btnClose);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox     = false;
@@ -59,6 +67,7 @@
         private PictureBox pictureBox1;
         private Label lblUrl;
         private Label lblHint;
+        private Label lblNote;
         private Button btnClose;
     }
 }

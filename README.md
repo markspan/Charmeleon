@@ -138,13 +138,14 @@ The scale bar on the right shows the full 0 to 255 kOhm range.
 
 ### Web view: see impedances on any phone, tablet or second PC
 
-**Web > Web View...** opens a dialog showing a QR code and a URL. Scan the code with any phone or tablet on the same Wi-Fi network, or type the URL into any browser on any device on the network, and the impedance head map opens instantly. Nothing needs to be installed on the viewing device.
+**Web > Web View...** opens a dialog showing a QR code and a URL. Scan the code with any phone or tablet on the same Wi-Fi network, or type the URL into any browser on any device on the network, and the impedance head map opens in the browser. Nothing needs to be installed on the viewing device.
 
-The page connects to a small web server built into Charmeleon (port 8765) and updates the head map once per second. It requests the Screen Wake Lock so the display stays on during cap preparation, and reconnects automatically if the connection drops. You can pan and zoom (pinch or scroll) to enlarge any part of the map.
+The page connects to a small web server built into Charmeleon (port 8765) and updates the head map once per second. It requests the Screen Wake Lock so the display stays on during cap preparation (the HTTPS connection provides the secure context the Wake Lock needs, so it works on phones and tablets), and reconnects automatically if the connection drops. You can pan and zoom (pinch or scroll) to enlarge any part of the map.
 
-> The web server registers itself at install time. If you run Charmeleon without having run the installer first, open a command prompt as administrator and run:
+> **First-time certificate warning:** the connection uses HTTPS with a self-signed certificate, so the first time each device connects the browser shows a `not private` or `not trusted` warning. Choose **Advanced** and then **Proceed** (the exact wording varies by browser) to continue. This is expected for a self-signed certificate on a local network and only needs to be accepted once per device.
+
+> The installer opens the port through the firewall for you. If you run Charmeleon without having run the installer first, open a command prompt as administrator and run:
 > ```
-> netsh http add urlacl url=http://*:8765/ user=Everyone
 > netsh advfirewall firewall add rule name="Charmeleon Web" dir=in action=allow protocol=TCP localport=8765
 > ```
 
@@ -174,7 +175,7 @@ In many EEG labs the operator sits in a separate room from the participant. The 
 The built-in **web view** solves this with nothing to install in the cabin. Any device with a browser on the same network (the task PC whose monitor is in the cabin, a tablet, or a phone) can open the live head map:
 
 1. On the acquisition PC, open Charmeleon and connect to the amplifier as normal.
-2. Go to **Web > Web View...** and either scan the QR code or read off the URL (for example `http://192.168.1.42:8765/`).
+2. Go to **Web > Web View...** and either scan the QR code or read off the URL (for example `https://192.168.1.42:8765/`).
 3. Open that URL in a browser on the cabin device. The live head map appears and updates once per second.
 
 From this point on, the person in the cabin sees every electrode's impedance without any communication with the operator room. Inactive electrodes (grey in Charmeleon) appear grey in the web view as well. Because the viewer is just a web page, it works on any operating system and needs no configuration beyond being on the same network.

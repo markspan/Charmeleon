@@ -38,9 +38,9 @@
             // 
             // statusStrip1
             // 
-            statusStrip1.Location = new Point(0, 963);
+            statusStrip1.Location = new Point(0, 865);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(1203, 22);
+            statusStrip1.Size = new Size(1183, 22);
             statusStrip1.TabIndex = 1;
             // 
             // menuStrip1
@@ -48,30 +48,12 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { setupToolStripMenuItem, viewToolStripMenuItem, broadcastToolStripMenuItem, aboutToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(1203, 24);
+            menuStrip1.Size = new Size(1183, 24);
             menuStrip1.TabIndex = 2;
             // 
             // setupToolStripMenuItem
             // 
-            setupToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openMontageToolStripMenuItem, saveMontageToolStripMenuItem, new ToolStripSeparator(), createMontageToolStripMenuItem });
-            //
-            // createMontageToolStripMenuItem
-            //
-            createMontageToolStripMenuItem.Name = "createMontageToolStripMenuItem";
-            createMontageToolStripMenuItem.Text = "Create Montage";
-            createMontageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { create1020ToolStripMenuItem, createEquidistantToolStripMenuItem });
-            //
-            // create1020ToolStripMenuItem
-            //
-            create1020ToolStripMenuItem.Name = "create1020ToolStripMenuItem";
-            create1020ToolStripMenuItem.Text = "10/20 Layout";
-            create1020ToolStripMenuItem.Click += create1020ToolStripMenuItem_Click;
-            //
-            // createEquidistantToolStripMenuItem
-            //
-            createEquidistantToolStripMenuItem.Name = "createEquidistantToolStripMenuItem";
-            createEquidistantToolStripMenuItem.Text = "Equidistant Layout";
-            createEquidistantToolStripMenuItem.Click += createEquidistantToolStripMenuItem_Click;
+            setupToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { openMontageToolStripMenuItem, saveMontageToolStripMenuItem, createMontageToolStripMenuItem });
             setupToolStripMenuItem.Name = "setupToolStripMenuItem";
             setupToolStripMenuItem.Size = new Size(49, 20);
             setupToolStripMenuItem.Text = "Setup";
@@ -79,16 +61,37 @@
             // openMontageToolStripMenuItem
             // 
             openMontageToolStripMenuItem.Name = "openMontageToolStripMenuItem";
-            openMontageToolStripMenuItem.Size = new Size(154, 22);
+            openMontageToolStripMenuItem.Size = new Size(159, 22);
             openMontageToolStripMenuItem.Text = "Open Montage";
             openMontageToolStripMenuItem.Click += openMontageToolStripMenuItem_Click;
             // 
             // saveMontageToolStripMenuItem
             // 
             saveMontageToolStripMenuItem.Name = "saveMontageToolStripMenuItem";
-            saveMontageToolStripMenuItem.Size = new Size(154, 22);
+            saveMontageToolStripMenuItem.Size = new Size(159, 22);
             saveMontageToolStripMenuItem.Text = "Save Montage";
             saveMontageToolStripMenuItem.Click += saveMontageToolStripMenuItem_Click;
+            // 
+            // createMontageToolStripMenuItem
+            // 
+            createMontageToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { create1020ToolStripMenuItem, createEquidistantToolStripMenuItem });
+            createMontageToolStripMenuItem.Name = "createMontageToolStripMenuItem";
+            createMontageToolStripMenuItem.Size = new Size(159, 22);
+            createMontageToolStripMenuItem.Text = "Create Montage";
+            // 
+            // create1020ToolStripMenuItem
+            // 
+            create1020ToolStripMenuItem.Name = "create1020ToolStripMenuItem";
+            create1020ToolStripMenuItem.Size = new Size(172, 22);
+            create1020ToolStripMenuItem.Text = "10/20 Layout";
+            create1020ToolStripMenuItem.Click += create1020ToolStripMenuItem_Click;
+            // 
+            // createEquidistantToolStripMenuItem
+            // 
+            createEquidistantToolStripMenuItem.Name = "createEquidistantToolStripMenuItem";
+            createEquidistantToolStripMenuItem.Size = new Size(172, 22);
+            createEquidistantToolStripMenuItem.Text = "Equidistant Layout";
+            createEquidistantToolStripMenuItem.Click += createEquidistantToolStripMenuItem_Click;
             // 
             // viewToolStripMenuItem
             // 
@@ -115,12 +118,13 @@
             // 
             broadcastToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { webViewToolStripMenuItem });
             broadcastToolStripMenuItem.Name = "broadcastToolStripMenuItem";
-            broadcastToolStripMenuItem.Size = new Size(71, 20);
+            broadcastToolStripMenuItem.Size = new Size(43, 20);
             broadcastToolStripMenuItem.Text = "Web";
-            //
+            // 
             // webViewToolStripMenuItem
-            //
+            // 
             webViewToolStripMenuItem.Name = "webViewToolStripMenuItem";
+            webViewToolStripMenuItem.Size = new Size(135, 22);
             webViewToolStripMenuItem.Text = "Web View...";
             webViewToolStripMenuItem.Click += webViewToolStripMenuItem_Click;
             // 
@@ -134,7 +138,7 @@
             // aboutCharmeleonToolStripMenuItem
             // 
             aboutCharmeleonToolStripMenuItem.Name = "aboutCharmeleonToolStripMenuItem";
-            aboutCharmeleonToolStripMenuItem.Size = new Size(152, 22);
+            aboutCharmeleonToolStripMenuItem.Size = new Size(175, 22);
             aboutCharmeleonToolStripMenuItem.Text = "About Charmeleon";
             aboutCharmeleonToolStripMenuItem.Click += AboutCharmeleonToolStripMenuItem_Click;
             // 
