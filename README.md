@@ -113,6 +113,15 @@ Connects to a hardware amplifier and displays live electrode impedances on a hea
 
 If both are present, EEGO is chosen first. If neither is found, Charmeleon opens in demo mode.
 
+<details>
+<summary><strong>Why is the EEGO SDK bundled with Charmeleon, but not the TMSi one?</strong></summary>
+
+`eego-SDK.dll` (eemagine) is a redistributable user-space library with no fixed system location, so it ships inside the Charmeleon folder.
+
+`TMSiSDK.dll` is deliberately **not** bundled: it is the user-mode half of the TMSi driver stack and is version-locked to the TMSi device driver installed on the machine (which places it in `C:\Windows\System32`). Bundling a fixed copy would let Windows load the app-folder version ahead of the System32 one, risking a mismatch with the installed driver. Since a Refa cannot run without that driver anyway, the matching `TMSiSDK.dll` is always already present; if it is missing, Charmeleon says so and starts in demo mode.
+
+</details>
+
 ### The head map
 
 Each circle represents one electrode in a cap. The colour gives a quick visual indication of impedance quality:
