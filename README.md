@@ -155,7 +155,7 @@ The page connects to a small web server built into Charmeleon (port 8765) and up
 
 Good data starts at the cap. This short video walks through the practical steps of seating an electrode cap and getting clean, balanced contact:
 
-▶️ **[Instructional video: setting up an electrode cap](https://unishare.nl/index.php/s/ejyDJNGgLJXD6kZ?dir=/Instructional%20Videos&editing=false&openfile=true)** (best practices, University of Groningen)
+▶️ **[Instructional video: setting up an electrode cap](https://unishare.nl/index.php/s/ejyDJNGgLJXD6kZ?dir=/Instructional%20Videos&openfile=75269356)** (best practices, University of Groningen)
 
 A few rules of thumb that Charmeleon makes easy to follow:
 
