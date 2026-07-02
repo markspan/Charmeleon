@@ -9,9 +9,9 @@
     "Y": 0.8
   },
   "Right": {
-    "IsActive": false,
-    "LabelText": "Right",
-    "HardwareChannel": 75,
+    "IsActive": true,
+    "LabelText": "EOG",
+    "HardwareChannel": 32,
     "Angle": null,
     "Radius": null,
     "X": 0.85,
@@ -38,7 +38,7 @@
   "I2": {
     "IsActive": false,
     "LabelText": "I2",
-    "HardwareChannel": 68,
+    "HardwareChannel": 77,
     "Angle": -75,
     "Radius": 5,
     "X": null,
@@ -47,7 +47,7 @@
   "I1": {
     "IsActive": false,
     "LabelText": "I1",
-    "HardwareChannel": 67,
+    "HardwareChannel": 76,
     "Angle": -105,
     "Radius": 5,
     "X": null,
@@ -56,7 +56,7 @@
   "PO10": {
     "IsActive": false,
     "LabelText": "PO10",
-    "HardwareChannel": 66,
+    "HardwareChannel": 75,
     "Angle": -54,
     "Radius": 5,
     "X": null,
@@ -65,7 +65,7 @@
   "PO9": {
     "IsActive": false,
     "LabelText": "PO9",
-    "HardwareChannel": 65,
+    "HardwareChannel": 74,
     "Angle": -126,
     "Radius": 5,
     "X": null,
@@ -83,7 +83,7 @@
   "CP4": {
     "IsActive": true,
     "LabelText": "CP4",
-    "HardwareChannel": 50,
+    "HardwareChannel": 49,
     "Angle": -29,
     "Radius": 2.1,
     "X": null,
@@ -182,7 +182,7 @@
   "P1": {
     "IsActive": true,
     "LabelText": "P1",
-    "HardwareChannel": 52,
+    "HardwareChannel": 51,
     "Angle": -110,
     "Radius": 2.15,
     "X": null,
@@ -200,7 +200,7 @@
   "P5": {
     "IsActive": true,
     "LabelText": "P5",
-    "HardwareChannel": 51,
+    "HardwareChannel": 50,
     "Angle": -137,
     "Radius": 3.1,
     "X": null,
@@ -209,16 +209,25 @@
   "PO3": {
     "IsActive": true,
     "LabelText": "PO3",
-    "HardwareChannel": 56,
+    "HardwareChannel": 55,
     "Angle": -112,
     "Radius": 3.1,
+    "X": null,
+    "Y": null
+  },
+  "PO5": {
+    "IsActive": true,
+    "LabelText": "PO5",
+    "HardwareChannel": 55,
+    "Angle": -124,
+    "Radius": 3.3,
     "X": null,
     "Y": null
   },
   "P2": {
     "IsActive": true,
     "LabelText": "P2",
-    "HardwareChannel": 53,
+    "HardwareChannel": 52,
     "Angle": -70,
     "Radius": 2.15,
     "X": null,
@@ -236,7 +245,7 @@
   "P6": {
     "IsActive": true,
     "LabelText": "P6",
-    "HardwareChannel": 54,
+    "HardwareChannel": 53,
     "Angle": -43,
     "Radius": 3.1,
     "X": null,
@@ -245,9 +254,18 @@
   "PO4": {
     "IsActive": true,
     "LabelText": "PO4",
-    "HardwareChannel": 57,
+    "HardwareChannel": 56,
     "Angle": -68,
     "Radius": 3.1,
+    "X": null,
+    "Y": null
+  },
+  "PO6": {
+    "IsActive": true,
+    "LabelText": "PO6",
+    "HardwareChannel": 55,
+    "Angle": -55,
+    "Radius": 3.3,
     "X": null,
     "Y": null
   },
@@ -326,7 +344,7 @@
   "TP8": {
     "IsActive": true,
     "LabelText": "TP8",
-    "HardwareChannel": 62,
+    "HardwareChannel": 61,
     "Angle": -18,
     "Radius": 4,
     "X": null,
@@ -344,7 +362,7 @@
   "PO8": {
     "IsActive": true,
     "LabelText": "PO8",
-    "HardwareChannel": 64,
+    "HardwareChannel": 63,
     "Angle": -54,
     "Radius": 4,
     "X": null,
@@ -353,7 +371,7 @@
   "O2": {
     "IsActive": true,
     "LabelText": "O2",
-    "HardwareChannel": 32,
+    "HardwareChannel": 31,
     "Angle": -72,
     "Radius": 4,
     "X": null,
@@ -362,7 +380,7 @@
   "TP7": {
     "IsActive": true,
     "LabelText": "TP7",
-    "HardwareChannel": 61,
+    "HardwareChannel": 60,
     "Angle": -162,
     "Radius": 4,
     "X": null,
@@ -380,7 +398,7 @@
   "PO7": {
     "IsActive": true,
     "LabelText": "PO7",
-    "HardwareChannel": 63,
+    "HardwareChannel": 62,
     "Angle": -126,
     "Radius": 4,
     "X": null,
@@ -398,7 +416,7 @@
   "FT8": {
     "IsActive": true,
     "LabelText": "FT8",
-    "HardwareChannel": 60,
+    "HardwareChannel": 59,
     "Angle": 18,
     "Radius": 4,
     "X": null,
@@ -434,7 +452,7 @@
   "FT7": {
     "IsActive": true,
     "LabelText": "FT7",
-    "HardwareChannel": 59,
+    "HardwareChannel": 58,
     "Angle": 162,
     "Radius": 4,
     "X": null,
@@ -461,16 +479,16 @@
   "Fp1": {
     "IsActive": true,
     "LabelText": "Fp1",
-    "HardwareChannel": 10,
+    "HardwareChannel": 1,
     "Angle": 108,
     "Radius": 4,
     "X": null,
     "Y": null
   },
   "P10": {
-    "IsActive": true,
+    "IsActive": false,
     "LabelText": "P10",
-    "HardwareChannel": 58,
+    "HardwareChannel": 29,
     "Angle": -36,
     "Radius": 5,
     "X": null,
@@ -479,7 +497,7 @@
   "TP10": {
     "IsActive": false,
     "LabelText": "TP10",
-    "HardwareChannel": 80,
+    "HardwareChannel": 28,
     "Angle": -18,
     "Radius": 5,
     "X": null,
@@ -488,7 +506,7 @@
   "FT10": {
     "IsActive": false,
     "LabelText": "FT10",
-    "HardwareChannel": 71,
+    "HardwareChannel": 27,
     "Angle": 18,
     "Radius": 5,
     "X": null,
@@ -497,16 +515,16 @@
   "F10": {
     "IsActive": false,
     "LabelText": "F10",
-    "HardwareChannel": 79,
+    "HardwareChannel": 26,
     "Angle": 36,
     "Radius": 5,
     "X": null,
     "Y": null
   },
   "P9": {
-    "IsActive": true,
+    "IsActive": false,
     "LabelText": "P9",
-    "HardwareChannel": 55,
+    "HardwareChannel": 25,
     "Angle": 216,
     "Radius": 5,
     "X": null,
@@ -515,7 +533,7 @@
   "TP9": {
     "IsActive": false,
     "LabelText": "TP9",
-    "HardwareChannel": 78,
+    "HardwareChannel": 24,
     "Angle": 198,
     "Radius": 5,
     "X": null,
@@ -524,7 +542,7 @@
   "FT9": {
     "IsActive": false,
     "LabelText": "FT9",
-    "HardwareChannel": 70,
+    "HardwareChannel": 23,
     "Angle": 162,
     "Radius": 5,
     "X": null,
@@ -533,7 +551,7 @@
   "F9": {
     "IsActive": false,
     "LabelText": "F9",
-    "HardwareChannel": 77,
+    "HardwareChannel": 22,
     "Angle": 144,
     "Radius": 5,
     "X": null,
@@ -632,7 +650,7 @@
   "Iz": {
     "IsActive": false,
     "LabelText": "Iz",
-    "HardwareChannel": 68,
+    "HardwareChannel": 11,
     "Angle": -90,
     "Radius": 5,
     "X": null,
@@ -641,7 +659,7 @@
   "Oz": {
     "IsActive": true,
     "LabelText": "Oz",
-    "HardwareChannel": 31,
+    "HardwareChannel": 64,
     "Angle": -90,
     "Radius": 4,
     "X": null,
@@ -668,7 +686,7 @@
   "CPz": {
     "IsActive": true,
     "LabelText": "CPz",
-    "HardwareChannel": 49,
+    "HardwareChannel": 7,
     "Angle": -90,
     "Radius": 1,
     "X": null,
@@ -704,7 +722,7 @@
   "AFz": {
     "IsActive": true,
     "LabelText": "AFz",
-    "HardwareChannel": 50,
+    "HardwareChannel": 3,
     "Angle": 90,
     "Radius": 3,
     "X": null,
@@ -720,7 +738,7 @@
     "Y": null
   },
   "Nz": {
-    "IsActive": true,
+    "IsActive": false,
     "LabelText": "Nz",
     "HardwareChannel": 1,
     "Angle": 90,

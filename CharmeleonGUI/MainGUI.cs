@@ -381,7 +381,15 @@ namespace Charmeleon
             if (_electrodes.TryGetValue(name, out var el))
             {
                 if (int.TryParse(box.Text, out int ch))
-                    el.HardwareChannel = Math.Max(0, Math.Min(HeadMapView.MaxChannel, ch));
+                {
+                    ch = Math.Max(0, ch);
+                    // Head-map electrodes are EEG (reference) channels, so they stay within the
+                    // amplifier's reference count (MaxChannel). AUX markers map to BIP/AUX
+                    // hardware channels above that range, so they are not capped to MaxChannel
+                    // (the 3-digit textbox already bounds the input).
+                    if (!_auxPositions.ContainsKey(name)) { ch = Math.Min(ch, HeadMapView.MaxChannel); }
+                    el.HardwareChannel = ch;
+                }
                 el.Editing = false;
             }
             Controls.Remove(box);
@@ -453,9 +461,10 @@ namespace Charmeleon
                 {
                     el.LabelText = cfg.LabelText;
                     el.HardwareChannel = cfg.HardwareChannel;
-                    el.IsActive = cfg.HardwareChannel > 0 &&
-                                         cfg.HardwareChannel <= HeadMapView.MaxChannel &&
-                                         cfg.IsActive;
+                    // Honour the montage's own active flag (as the create-montage path does);
+                    // do not override it with a MaxChannel range test, which forced every AUX
+                    // marker (channels above the EEG count) inactive on load.
+                    el.IsActive = cfg.IsActive;
                 }
         }
 

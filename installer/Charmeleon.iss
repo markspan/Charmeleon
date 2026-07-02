@@ -34,6 +34,9 @@ Name: desktopicon; Description: "{cm:CreateDesktopIcon}"; Flags: unchecked
 Source: "..\publish\Charmeleon\Charmeleon.exe";   DestDir: "{app}"; Flags: ignoreversion
 Source: "..\publish\Charmeleon\eego-SDK.dll";  DestDir: "{app}"; Flags: ignoreversion
 Source: "..\publish\Charmeleon\Resources\*";   DestDir: "{app}\Resources"; Flags: ignoreversion recursesubdirs
+; Bundled montage library: installed read-only (on top of the Program Files ACLs).
+; uninsremovereadonly lets the uninstaller clear the attribute so these are still removed.
+Source: "..\montages\*";                       DestDir: "{app}\montages";  Flags: ignoreversion recursesubdirs readonly uninsremovereadonly
 
 [Icons]
 Name: "{group}\Charmeleon";          Filename: "{app}\Charmeleon.exe"; IconFilename: "{app}\Resources\Charmeleon.ico"

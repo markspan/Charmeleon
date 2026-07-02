@@ -1,0 +1,731 @@
+{
+  "Left": {
+    "IsActive": false,
+    "LabelText": "Left",
+    "HardwareChannel": 73,
+    "Angle": null,
+    "Radius": null,
+    "X": 0.85,
+    "Y": 0.8
+  },
+  "Right": {
+    "IsActive": false,
+    "LabelText": "Right",
+    "HardwareChannel": 75,
+    "Angle": null,
+    "Radius": null,
+    "X": 0.85,
+    "Y": 0.72
+  },
+  "Top": {
+    "IsActive": false,
+    "LabelText": "Top",
+    "HardwareChannel": 72,
+    "Angle": null,
+    "Radius": null,
+    "X": 0.9,
+    "Y": 0.72
+  },
+  "Bottom": {
+    "IsActive": false,
+    "LabelText": "Bottom",
+    "HardwareChannel": 74,
+    "Angle": null,
+    "Radius": null,
+    "X": 0.9,
+    "Y": 0.8
+  },
+  "Nz": {
+    "IsActive": false,
+    "LabelText": "Nz",
+    "HardwareChannel": 76,
+    "Angle": 90,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "FPz": {
+    "IsActive": true,
+    "LabelText": "FPz",
+    "HardwareChannel": 6,
+    "Angle": 90,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "AFz": {
+    "IsActive": false,
+    "LabelText": "AFz",
+    "HardwareChannel": 50,
+    "Angle": 90,
+    "Radius": 3,
+    "X": null,
+    "Y": null
+  },
+  "Fz": {
+    "IsActive": true,
+    "LabelText": "Fz",
+    "HardwareChannel": 1,
+    "Angle": 90,
+    "Radius": 2,
+    "X": null,
+    "Y": null
+  },
+  "FCz": {
+    "IsActive": false,
+    "LabelText": "FCz",
+    "HardwareChannel": 42,
+    "Angle": 90,
+    "Radius": 1,
+    "X": null,
+    "Y": null
+  },
+  "Cz": {
+    "IsActive": true,
+    "LabelText": "Cz",
+    "HardwareChannel": 2,
+    "Angle": 0,
+    "Radius": 0,
+    "X": null,
+    "Y": null
+  },
+  "CPz": {
+    "IsActive": false,
+    "LabelText": "CPz",
+    "HardwareChannel": 49,
+    "Angle": -90,
+    "Radius": 1,
+    "X": null,
+    "Y": null
+  },
+  "Pz": {
+    "IsActive": true,
+    "LabelText": "Pz",
+    "HardwareChannel": 3,
+    "Angle": -90,
+    "Radius": 2,
+    "X": null,
+    "Y": null
+  },
+  "POz": {
+    "IsActive": false,
+    "LabelText": "POz",
+    "HardwareChannel": 29,
+    "Angle": -90,
+    "Radius": 3,
+    "X": null,
+    "Y": null
+  },
+  "Oz": {
+    "IsActive": false,
+    "LabelText": "Oz",
+    "HardwareChannel": 31,
+    "Angle": -90,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "Iz": {
+    "IsActive": false,
+    "LabelText": "Iz",
+    "HardwareChannel": 68,
+    "Angle": -90,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "T7": {
+    "IsActive": false,
+    "LabelText": "T7",
+    "HardwareChannel": 14,
+    "Angle": 180,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "C5": {
+    "IsActive": false,
+    "LabelText": "C5",
+    "HardwareChannel": 44,
+    "Angle": 180,
+    "Radius": 3,
+    "X": null,
+    "Y": null
+  },
+  "C3": {
+    "IsActive": true,
+    "LabelText": "C3",
+    "HardwareChannel": 7,
+    "Angle": 180,
+    "Radius": 2,
+    "X": null,
+    "Y": null
+  },
+  "C1": {
+    "IsActive": false,
+    "LabelText": "C1",
+    "HardwareChannel": 45,
+    "Angle": 180,
+    "Radius": 1,
+    "X": null,
+    "Y": null
+  },
+  "C2": {
+    "IsActive": false,
+    "LabelText": "C2",
+    "HardwareChannel": 46,
+    "Angle": 0,
+    "Radius": 1,
+    "X": null,
+    "Y": null
+  },
+  "C4": {
+    "IsActive": true,
+    "LabelText": "C4",
+    "HardwareChannel": 8,
+    "Angle": 0,
+    "Radius": 2,
+    "X": null,
+    "Y": null
+  },
+  "C6": {
+    "IsActive": false,
+    "LabelText": "C6",
+    "HardwareChannel": 47,
+    "Angle": 0,
+    "Radius": 3,
+    "X": null,
+    "Y": null
+  },
+  "T8": {
+    "IsActive": false,
+    "LabelText": "T8",
+    "HardwareChannel": 18,
+    "Angle": 0,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "A2": {
+    "IsActive": false,
+    "LabelText": "A2",
+    "HardwareChannel": 19,
+    "Angle": 0,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "A1": {
+    "IsActive": false,
+    "LabelText": "A1",
+    "HardwareChannel": 13,
+    "Angle": 180,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "F9": {
+    "IsActive": false,
+    "LabelText": "F9",
+    "HardwareChannel": 77,
+    "Angle": 144,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "FT9": {
+    "IsActive": false,
+    "LabelText": "FT9",
+    "HardwareChannel": 70,
+    "Angle": 162,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "TP9": {
+    "IsActive": false,
+    "LabelText": "TP9",
+    "HardwareChannel": 78,
+    "Angle": 198,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "P9": {
+    "IsActive": false,
+    "LabelText": "P9",
+    "HardwareChannel": 55,
+    "Angle": 216,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "F10": {
+    "IsActive": false,
+    "LabelText": "F10",
+    "HardwareChannel": 79,
+    "Angle": 36,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "FT10": {
+    "IsActive": false,
+    "LabelText": "FT10",
+    "HardwareChannel": 71,
+    "Angle": 18,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "TP10": {
+    "IsActive": false,
+    "LabelText": "TP10",
+    "HardwareChannel": 80,
+    "Angle": -18,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "P10": {
+    "IsActive": false,
+    "LabelText": "P10",
+    "HardwareChannel": 58,
+    "Angle": -36,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "Fp1": {
+    "IsActive": false,
+    "LabelText": "Fp1",
+    "HardwareChannel": 10,
+    "Angle": 108,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "AF7": {
+    "IsActive": false,
+    "LabelText": "AF7",
+    "HardwareChannel": 33,
+    "Angle": 126,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "F7": {
+    "IsActive": false,
+    "LabelText": "F7",
+    "HardwareChannel": 4,
+    "Angle": 144,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "FT7": {
+    "IsActive": false,
+    "LabelText": "FT7",
+    "HardwareChannel": 59,
+    "Angle": 162,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "Fp2": {
+    "IsActive": false,
+    "LabelText": "Fp2",
+    "HardwareChannel": 3,
+    "Angle": 72,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "AF8": {
+    "IsActive": false,
+    "LabelText": "AF8",
+    "HardwareChannel": 36,
+    "Angle": 54,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "F8": {
+    "IsActive": false,
+    "LabelText": "F8",
+    "HardwareChannel": 8,
+    "Angle": 36,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "FT8": {
+    "IsActive": false,
+    "LabelText": "FT8",
+    "HardwareChannel": 60,
+    "Angle": 18,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "O1": {
+    "IsActive": false,
+    "LabelText": "O1",
+    "HardwareChannel": 30,
+    "Angle": -108,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "PO7": {
+    "IsActive": false,
+    "LabelText": "PO7",
+    "HardwareChannel": 63,
+    "Angle": -126,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "P7": {
+    "IsActive": false,
+    "LabelText": "P7",
+    "HardwareChannel": 24,
+    "Angle": -144,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "TP7": {
+    "IsActive": false,
+    "LabelText": "TP7",
+    "HardwareChannel": 61,
+    "Angle": -162,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "O2": {
+    "IsActive": false,
+    "LabelText": "O2",
+    "HardwareChannel": 32,
+    "Angle": -72,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "PO8": {
+    "IsActive": false,
+    "LabelText": "PO8",
+    "HardwareChannel": 64,
+    "Angle": -54,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "P8": {
+    "IsActive": false,
+    "LabelText": "P8",
+    "HardwareChannel": 28,
+    "Angle": -36,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "TP8": {
+    "IsActive": false,
+    "LabelText": "TP8",
+    "HardwareChannel": 62,
+    "Angle": -18,
+    "Radius": 4,
+    "X": null,
+    "Y": null
+  },
+  "AF4": {
+    "IsActive": false,
+    "LabelText": "AF4",
+    "HardwareChannel": 35,
+    "Angle": 68,
+    "Radius": 3.2,
+    "X": null,
+    "Y": null
+  },
+  "F6": {
+    "IsActive": false,
+    "LabelText": "F6",
+    "HardwareChannel": 40,
+    "Angle": 43,
+    "Radius": 3.1,
+    "X": null,
+    "Y": null
+  },
+  "F4": {
+    "IsActive": true,
+    "LabelText": "F4",
+    "HardwareChannel": 5,
+    "Angle": 55,
+    "Radius": 2.5,
+    "X": null,
+    "Y": null
+  },
+  "F2": {
+    "IsActive": false,
+    "LabelText": "F2",
+    "HardwareChannel": 39,
+    "Angle": 70,
+    "Radius": 2.15,
+    "X": null,
+    "Y": null
+  },
+  "AF3": {
+    "IsActive": false,
+    "LabelText": "AF3",
+    "HardwareChannel": 34,
+    "Angle": 112,
+    "Radius": 3.2,
+    "X": null,
+    "Y": null
+  },
+  "F5": {
+    "IsActive": false,
+    "LabelText": "F5",
+    "HardwareChannel": 37,
+    "Angle": 137,
+    "Radius": 3.1,
+    "X": null,
+    "Y": null
+  },
+  "F3": {
+    "IsActive": true,
+    "LabelText": "F3",
+    "HardwareChannel": 4,
+    "Angle": 125,
+    "Radius": 2.5,
+    "X": null,
+    "Y": null
+  },
+  "F1": {
+    "IsActive": false,
+    "LabelText": "F1",
+    "HardwareChannel": 38,
+    "Angle": 110,
+    "Radius": 2.15,
+    "X": null,
+    "Y": null
+  },
+  "PO4": {
+    "IsActive": false,
+    "LabelText": "PO4",
+    "HardwareChannel": 57,
+    "Angle": -68,
+    "Radius": 3.1,
+    "X": null,
+    "Y": null
+  },
+  "P6": {
+    "IsActive": false,
+    "LabelText": "P6",
+    "HardwareChannel": 54,
+    "Angle": -43,
+    "Radius": 3.1,
+    "X": null,
+    "Y": null
+  },
+  "P4": {
+    "IsActive": false,
+    "LabelText": "P4",
+    "HardwareChannel": 27,
+    "Angle": -55,
+    "Radius": 2.45,
+    "X": null,
+    "Y": null
+  },
+  "P2": {
+    "IsActive": false,
+    "LabelText": "P2",
+    "HardwareChannel": 53,
+    "Angle": -70,
+    "Radius": 2.15,
+    "X": null,
+    "Y": null
+  },
+  "PO3": {
+    "IsActive": false,
+    "LabelText": "PO3",
+    "HardwareChannel": 56,
+    "Angle": -112,
+    "Radius": 3.1,
+    "X": null,
+    "Y": null
+  },
+  "P5": {
+    "IsActive": false,
+    "LabelText": "P5",
+    "HardwareChannel": 51,
+    "Angle": -137,
+    "Radius": 3.1,
+    "X": null,
+    "Y": null
+  },
+  "P3": {
+    "IsActive": false,
+    "LabelText": "P3",
+    "HardwareChannel": 25,
+    "Angle": -125,
+    "Radius": 2.45,
+    "X": null,
+    "Y": null
+  },
+  "P1": {
+    "IsActive": false,
+    "LabelText": "P1",
+    "HardwareChannel": 52,
+    "Angle": -110,
+    "Radius": 2.15,
+    "X": null,
+    "Y": null
+  },
+  "FC5": {
+    "IsActive": false,
+    "LabelText": "FC5",
+    "HardwareChannel": 9,
+    "Angle": 158,
+    "Radius": 3.05,
+    "X": null,
+    "Y": null
+  },
+  "FC3": {
+    "IsActive": false,
+    "LabelText": "FC3",
+    "HardwareChannel": 41,
+    "Angle": 151,
+    "Radius": 2.1,
+    "X": null,
+    "Y": null
+  },
+  "FC1": {
+    "IsActive": false,
+    "LabelText": "FC1",
+    "HardwareChannel": 10,
+    "Angle": 135,
+    "Radius": 1.35,
+    "X": null,
+    "Y": null
+  },
+  "CP5": {
+    "IsActive": false,
+    "LabelText": "CP5",
+    "HardwareChannel": 20,
+    "Angle": -158,
+    "Radius": 3.05,
+    "X": null,
+    "Y": null
+  },
+  "CP3": {
+    "IsActive": false,
+    "LabelText": "CP3",
+    "HardwareChannel": 48,
+    "Angle": -151,
+    "Radius": 2.1,
+    "X": null,
+    "Y": null
+  },
+  "CP1": {
+    "IsActive": false,
+    "LabelText": "CP1",
+    "HardwareChannel": 21,
+    "Angle": -135,
+    "Radius": 1.35,
+    "X": null,
+    "Y": null
+  },
+  "FC6": {
+    "IsActive": false,
+    "LabelText": "FC6",
+    "HardwareChannel": 12,
+    "Angle": 22,
+    "Radius": 3.05,
+    "X": null,
+    "Y": null
+  },
+  "FC4": {
+    "IsActive": false,
+    "LabelText": "FC4",
+    "HardwareChannel": 43,
+    "Angle": 29,
+    "Radius": 2.1,
+    "X": null,
+    "Y": null
+  },
+  "FC2": {
+    "IsActive": false,
+    "LabelText": "FC2",
+    "HardwareChannel": 11,
+    "Angle": 45,
+    "Radius": 1.35,
+    "X": null,
+    "Y": null
+  },
+  "CP6": {
+    "IsActive": false,
+    "LabelText": "CP6",
+    "HardwareChannel": 23,
+    "Angle": -22,
+    "Radius": 3.05,
+    "X": null,
+    "Y": null
+  },
+  "CP4": {
+    "IsActive": false,
+    "LabelText": "CP4",
+    "HardwareChannel": 50,
+    "Angle": -29,
+    "Radius": 2.1,
+    "X": null,
+    "Y": null
+  },
+  "CP2": {
+    "IsActive": false,
+    "LabelText": "CP2",
+    "HardwareChannel": 22,
+    "Angle": -45,
+    "Radius": 1.35,
+    "X": null,
+    "Y": null
+  },
+  "PO9": {
+    "IsActive": false,
+    "LabelText": "PO9",
+    "HardwareChannel": 65,
+    "Angle": -126,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "PO10": {
+    "IsActive": false,
+    "LabelText": "PO10",
+    "HardwareChannel": 66,
+    "Angle": -54,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "I1": {
+    "IsActive": false,
+    "LabelText": "I1",
+    "HardwareChannel": 67,
+    "Angle": -105,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  },
+  "I2": {
+    "IsActive": false,
+    "LabelText": "I2",
+    "HardwareChannel": 68,
+    "Angle": -75,
+    "Radius": 5,
+    "X": null,
+    "Y": null
+  }
+}

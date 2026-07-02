@@ -21,12 +21,6 @@
     <None Update="Resources\EquidistantLayout.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\WaveGuard CW1308.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\WaveGuard CW1308 1st Connector.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Resources\heat.map">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
