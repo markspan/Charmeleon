@@ -27,12 +27,11 @@ namespace Charmeleon
         };
 
         /// <summary>
-        /// Rebuilds the snapshot from the current electrode set. Inactive electrodes
-        /// and those without a live channel report a kOhm of -1; electrodes with no
+        /// Rebuilds the snapshot from the current electrode set, per electrode (mirroring
+        /// the desktop view). Inactive electrodes report a kOhm of -1; electrodes with no
         /// position are skipped.
         /// </summary>
         public static void Update(
-            double[] kOhm,
             Dictionary<string, ElectrodeState> electrodes,
             Dictionary<string, (double Angle, double Radius)> positions,
             Dictionary<string, (double X, double Y)> auxFractions)
@@ -40,10 +39,13 @@ namespace Charmeleon
             var list = new List<ElectrodeSnap>(electrodes.Count);
             foreach (var (name, el) in electrodes)
             {
-                int ch = el.HardwareChannel - 1;
-                double val = (ch >= 0 && ch < kOhm.Length) ? kOhm[ch] : -1;
-                bool active = el.IsActive && val >= 0;
-                double snap = active ? val : -1;
+                // Take active/value straight from the electrode. Deriving "active" from a
+                // channel-indexed impedance array was wrong: montages routinely map several
+                // electrodes onto one hardware channel, and an inactive twin sharing that
+                // channel would blank the slot (-1), greying out an active electrode in the
+                // web view only (the desktop reads el.Value/el.IsActive per electrode).
+                bool active = el.IsActive;
+                double snap = active ? el.Value : -1;
 
                 if (positions.TryGetValue(name, out var p))
                     list.Add(new ElectrodeSnap(el.LabelText, snap, active, p.Angle, p.Radius, null, null));

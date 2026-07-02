@@ -16,7 +16,6 @@ namespace Charmeleon
         readonly bool _demo;
         int _demoValue = 255;                 // impedance shown for every active electrode in demo mode
         WebServer? _webServer;
-        readonly double[] _lastKOhm = Enumerable.Repeat(-1.0, 64).ToArray();  // per-channel, -1 = inactive/none
 
         // Head-map geometry, recomputed on construction and on resize.
         int _centerX, _centerY, _formHeight, _formWidth, _fullRadius;
@@ -112,7 +111,7 @@ namespace Charmeleon
         {
             double[] impedances;
             if (_demo)
-                impedances = Enumerable.Repeat((double)_demoValue, _lastKOhm.Length).ToArray();
+                impedances = Enumerable.Repeat((double)_demoValue, HeadMapView.MaxChannel).ToArray();
             else if (_driver != null)
                 impedances = _driver.GetImpedancesKOhm();
             else
@@ -123,11 +122,9 @@ namespace Charmeleon
                 int ch = el.HardwareChannel - 1;
                 bool live = ch >= 0 && ch < impedances.Length && el.IsActive;
                 el.Value = live ? (int)Math.Min(255, impedances[ch]) : 0;
-                if (ch >= 0 && ch < _lastKOhm.Length)
-                    _lastKOhm[ch] = live ? impedances[ch] : -1;
             }
 
-            ImpedanceSource.Update(_lastKOhm, _electrodes, _electrodePositions, _auxFractions);
+            ImpedanceSource.Update(_electrodes, _electrodePositions, _auxFractions);
             Invalidate();
         }
 
