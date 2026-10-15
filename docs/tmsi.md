@@ -85,6 +85,44 @@ The common average is not the only derivation. The amplifier can also run in **c
 
 If all channels are recorded in the same derivation mode, any other derivation between channels can be made afterwards, either with external differential amplifiers or by on-line or off-line computation.
 
+## Comparison with other research amplifiers
+
+The main difference between EEG amplifiers is **where and when the reference is formed**: in analog hardware before amplification (TMSi common average), against a physical reference electrode (ANT Neuro, Brain Products), or not at all during acquisition (BioSemi).
+
+| Amplifier | How the reference is formed | What the recorded data contain | Ground / common-mode handling |
+|---|---|---|---|
+| TMSi (this document) | Analog average of all connected inputs (E_av), fed back to every preamplifier | E_i - E_av (CA mode), or relative to channel 1 or the mean of channels 1 and 2 (CR mode) | Separate COMMON electrode; guarded leads; galvanic isolation |
+| ANT Neuro eego (mylab, sports) | Physical reference electrode | Referential channels (each electrode minus the reference), plus optional bipolar channels | Separate reference and patient ground electrodes; actively shielded inputs |
+| Brain Products actiCHamp Plus | Physical reference electrode | Each electrode minus the reference | Separate ground electrode |
+| BioSemi ActiveTwo | None during acquisition | Each electrode minus CMS; not valid EEG until re-referenced offline | CMS/DRL feedback loop instead of a passive ground: DRL drives a small current so the electrodes follow CMS |
+
+Published headline specifications:
+
+| Amplifier | Input impedance | Common-mode rejection | Source |
+|---|---|---|---|
+| TMSi (as described here) | 10^12 Ohm | 110 dB at 50 Hz | Clots, Mulder & Hoekstra |
+| ANT Neuro eego mylab | > 1 GOhm | > 100 dB (referential channels) | eego mylab brochure |
+| ANT Neuro eego, per FDA 510(k) K172312 | > 10^9 Ohm (EE-2XX), > 10^12 Ohm (EE-4XX) | > 100 dB (EE-2XX), 90 dB (EE-4XX) | FDA clearance document |
+| Brain Products actiCHamp Plus | > 1000 MOhm (DC) | 100 dB (per IEC 60601-2-26) | Brain Products product page |
+
+These figures are **not directly comparable**. They come from different decades, amplifier generations and test conditions, and a CMR figure without a test frequency and imbalance condition says little.
+
+### What the differences mean in practice
+
+- **Referential amplifiers (ANT Neuro, Brain Products).** Every channel shares the reference electrode, so noise or a bad contact at the reference shows up in all channels. That is the problem the common average approach avoids. Because the raw referential data are stored, you can still re-reference offline, for example to the average of all electrodes.
+- **Hardware average vs. software average.** Offline re-referencing of referential data to the average of all electrodes gives the same derivation, E_i - mean(E), that the TMSi amplifier forms in hardware, provided the original reference electrode is added back as a zero-valued channel. The difference is *when* the subtraction happens. The TMSi design removes the common signal before the main gain stages, so the common signal is never amplified. Modern 24-bit DC-coupled amplifiers have enough dynamic range to record it and remove it digitally.
+- **BioSemi.** The data are stored relative to CMS, which is only the working point of the feedback loop, not a meaningful reference. You must choose a reference after loading the data (FieldTrip recommends doing this straight away). Until then the channels still contain the common-mode interference.
+- **The same caveat applies everywhere.** Any average reference, whether in hardware or software, removes activity that is common to all electrodes, and its result depends on which electrodes are included.
+
+Sources for this comparison (vendor and third-party pages; check them against each manufacturer's current datasheet before citing):
+
+- [ANT Neuro eego mylab product page](https://www.ant-neuro.com/products/eego-mylab) and [eego mylab brochure](https://www.braintrends.it/uploads/7/8/7/4/78742426/eego_mylab_brochure_a4_2020-06-26_0.pdf)
+- [ANT Neuro eego sports product page](https://www.ant-neuro.com/products/eego-sports)
+- [FDA 510(k) K172312, eemagine Medical Imaging Solutions (eego)](https://www.accessdata.fda.gov/cdrh_docs/pdf17/K172312.pdf)
+- [Brain Products actiCHamp series](https://www.brainproducts.com/solutions/actichamp/)
+- [FieldTrip: Why should I start with rereferencing for BioSemi EEG data?](https://www.fieldtriptoolbox.org/faq/preproc/biosemi_reference)
+- [FieldTrip: getting started with BioSemi](https://www.fieldtriptoolbox.org/getting_started/eeg/biosemi/)
+
 ## Why the montage matters
 
 The electrode cables plug into numbered inputs, and the researcher decides which input receives which cap electrode. Charmeleon must therefore be told the mapping ("input 7 is Fz") before it can display the correct electrode names. This is what the montage file stores. See the [montage tutorial in the main README](../README.md#tutorial-setting-up-a-tmsi-refa-montage).
