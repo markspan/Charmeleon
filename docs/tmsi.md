@@ -10,7 +10,7 @@ The principle itself goes back to Vos, Lammertsma, & van Eykern (1977), cited in
 
 Many amplifiers measure each channel relative to a single **reference electrode** (mastoid, ear lobe, nose, Cz). Every channel then sees:
 
-> output = E_i - E_reference
+$$\text{output}_i = E_i - E_{\text{ref}}$$
 
 The quality of every channel depends on that one electrode. If it has a high impedance, sits in a noisy location, or picks up an artifact, all channels are affected.
 
@@ -18,22 +18,22 @@ The quality of every channel depends on that one electrode. If it has a high imp
 
 In common average mode the amplifier does not use a reference electrode. Per the block diagram of the EEG channels:
 
-1. Each electrode input **IN i** drives the **+ input** of its own **50x preamplifier**.
-2. The outputs of all *connected* preamplifiers are combined in a **summing/averaging stage (Σ) followed by a 1x buffer**. Its output is the average, **E_av**. This is an active circuit, not a passive resistor network.
-3. E_av is **fed back to the - input of every preamplifier**. As a result only the electrode input voltage is amplified; the signal common to all electrodes is not.
-4. E_av is also fed to the **- input of a 1x differential stage** behind each preamplifier, which subtracts the common signal from that preamplifier's output.
+1. Each electrode input **IN $i$** drives the **+ input** of its own **50x preamplifier**.
+2. The outputs of all *connected* preamplifiers are combined in a **summing/averaging stage (Σ) followed by a 1x buffer**. Its output is the average, $E_{\text{av}} = \frac{1}{n}\sum_{j} E_j$. This is an active circuit, not a passive resistor network.
+3. $E_{\text{av}}$ is **fed back to the - input of every preamplifier**. As a result only the electrode input voltage is amplified; the signal common to all electrodes is not.
+4. $E_{\text{av}}$ is also fed to the **- input of a 1x differential stage** behind each preamplifier, which subtracts the common signal from that preamplifier's output.
 
 Each channel therefore delivers the derivation:
 
-> E_i - E_av
+$$E_i - E_{\text{av}}$$
 
-where E_i is the voltage at input i and E_av is the average of all connected inputs. The paper calls this the **common average (CA)** derivation.
+where $E_i$ is the voltage at input $i$, $E_{\text{av}}$ is the average of all connected inputs, and $n$ is the number of connected inputs. The paper calls this the **common average (CA)** derivation.
 
 ![Common average input stage](refa_topology.svg)
 
-*Blue: electrode signal path. IN 1 ... IN n each drive the + input of a 50x preamplifier through a guarded (actively shielded) lead. The dashed blue bus collects all preamplifier outputs, which are averaged by Σ and buffered (1x). Orange: the resulting E_av is fed back to the - input of every preamplifier and to the - input of each 1x differential stage, whose output is E_i - E_av. Each channel then passes the 10 s time constant, the 100x amplifier with low-pass, the pulse width modulator, the optical isolation barrier, the demodulator, the 200 Hz anti-alias filter and the gain stage. A separate COMMON electrode connects the subject to the isolated amplifier ground. Redrawn after the EEG block diagram in Clots, Mulder & Hoekstra.*
+*Blue: electrode signal path. IN 1 ... IN n each drive the + input of a 50x preamplifier through a guarded (actively shielded) lead. The dashed blue bus collects all preamplifier outputs, which are averaged by Σ and buffered (1x). Orange: the resulting $E_{\text{av}}$ is fed back to the - input of every preamplifier and to the - input of each 1x differential stage, whose output is $E_i - E_{\text{av}}$. Each channel then passes the 10 s time constant, the 100x amplifier with low-pass, the pulse width modulator, the optical isolation barrier, the demodulator, the 200 Hz anti-alias filter and the gain stage. A separate COMMON electrode connects the subject to the isolated amplifier ground. Redrawn after the EEG block diagram in Clots, Mulder & Hoekstra.*
 
-> Note: the original figure captions in the paper are swapped. The diagram with IN 1 ... IN n, Σ and E_av (printed as "Figure 1b") is the EEG channel diagram.
+> Note: the original figure captions in the paper are swapped. The diagram with IN 1 ... IN n, Σ and $E_{\text{av}}$ (printed as "Figure 1b") is the EEG channel diagram.
 
 ## The remainder of the EEG signal chain
 
@@ -41,7 +41,7 @@ After the common average stage, each EEG channel passes through:
 
 | Stage | Function |
 |---|---|
-| Time constant (τ = 10 s) | High-pass coupling that removes offset voltages, mainly the already amplified electrode-potential differences. Can be "deblocked" (reset). |
+| Time constant ($\tau = 10$ s) | High-pass coupling that removes offset voltages, mainly the already amplified electrode-potential differences. Can be "deblocked" (reset). |
 | 100x amplifier + low-pass filter | Further amplification. |
 | Modulator | Pulse width modulation of the signal. |
 | Optical isolation | The modulated, now digital, signal crosses the galvanic separation optically. |
@@ -52,19 +52,19 @@ Sensitivity, time constant, low-pass filter and derivation are set per measureme
 
 ## Why it amplifies signal but not common noise
 
-Any voltage that appears equally on **all** connected electrodes (for example capacitively coupled mains interference) is part of E_av. Because E_av is fed back to the - inputs, that common signal is not amplified, and because it is subtracted again in the differential stage, it is removed from every output.
+Any voltage that appears equally on **all** connected electrodes (for example capacitively coupled mains interference) is part of $E_{\text{av}}$. Because $E_{\text{av}}$ is fed back to the - inputs, that common signal is not amplified, and because it is subtracted again in the differential stage, it is removed from every output.
 
-Formally, if a voltage N appears on all inputs:
+Formally, if a voltage $N$ appears on all inputs:
 
-> output_i = (E_i + N) - mean(E + N) = E_i - mean(E)
+$$\text{output}_i = (E_i + N) - \frac{1}{n}\sum_{j}(E_j + N) = E_i - \frac{1}{n}\sum_{j} E_j$$
 
-N cancels. Across all channels in CA mode the outputs sum to zero, since Σ (E_i - E_av) = 0.
+$N$ cancels. Across all channels in CA mode the outputs sum to zero, since $\sum_{i} (E_i - E_{\text{av}}) = 0$.
 
 DC electrode offsets are a different matter: they differ per electrode, so they are not removed by the average but by the 10 s time constant after the preamplifier.
 
 The common average is only one part of the noise strategy. The paper lists:
 
-- High input impedance: 10^12 Ohm.
+- High input impedance: $10^{12}$ Ohm.
 - Low noise: 2 µV top-top.
 - Common mode rejection (CMR): 110 dB at 50 Hz.
 - Isolation mode rejection (IMR): 170 dB at 50 Hz.
@@ -74,7 +74,7 @@ The common average is only one part of the noise strategy. The paper lists:
 
 ## The important caveat
 
-The CA derivation cannot distinguish between shared noise and shared brain signal. Activity that is present on all connected electrodes is part of E_av and is removed along with the noise. What remains is each electrode's deviation from the average of the *connected* electrodes, so the recorded values depend on which, and how many, electrodes are plugged in. Channels whose input is not plugged in are switched off automatically and do not contribute to the average.
+The CA derivation cannot distinguish between shared noise and shared brain signal. Activity that is present on all connected electrodes is part of $E_{\text{av}}$ and is removed along with the noise. What remains is each electrode's deviation from the average of the *connected* electrodes, so the recorded values depend on which, and how many, electrodes are plugged in. Channels whose input is not plugged in are switched off automatically and do not contribute to the average.
 
 ## Common reference (CR) mode
 
@@ -91,7 +91,7 @@ The main difference between EEG amplifiers is **where and when the reference is 
 
 | Amplifier | How the reference is formed | What the recorded data contain | Ground / common-mode handling |
 |---|---|---|---|
-| TMSi (this document) | Analog average of all connected inputs (E_av), fed back to every preamplifier | E_i - E_av (CA mode), or relative to channel 1 or the mean of channels 1 and 2 (CR mode) | Separate COMMON electrode; guarded leads; galvanic isolation |
+| TMSi (this document) | Analog average of all connected inputs ($E_{\text{av}}$), fed back to every preamplifier | $E_i - E_{\text{av}}$ (CA mode), or relative to channel 1 or the mean of channels 1 and 2 (CR mode) | Separate COMMON electrode; guarded leads; galvanic isolation |
 | ANT Neuro eego (mylab, sports) | Physical reference electrode | Referential channels (each electrode minus the reference), plus optional bipolar channels | Separate reference and patient ground electrodes; actively shielded inputs |
 | Brain Products actiCHamp Plus | Physical reference electrode | Each electrode minus the reference | Separate ground electrode |
 | BioSemi ActiveTwo | None during acquisition | Each electrode minus CMS; not valid EEG until re-referenced offline | CMS/DRL feedback loop instead of a passive ground: DRL drives a small current so the electrodes follow CMS |
@@ -100,9 +100,9 @@ Published headline specifications:
 
 | Amplifier | Input impedance | Common-mode rejection | Source |
 |---|---|---|---|
-| TMSi (as described here) | 10^12 Ohm | 110 dB at 50 Hz | Clots, Mulder & Hoekstra |
+| TMSi (as described here) | $10^{12}$ Ohm | 110 dB at 50 Hz | Clots, Mulder & Hoekstra |
 | ANT Neuro eego mylab | > 1 GOhm | > 100 dB (referential channels) | eego mylab brochure |
-| ANT Neuro eego, per FDA 510(k) K172312 | > 10^9 Ohm (EE-2XX), > 10^12 Ohm (EE-4XX) | > 100 dB (EE-2XX), 90 dB (EE-4XX) | FDA clearance document |
+| ANT Neuro eego, per FDA 510(k) K172312 | > $10^{9}$ Ohm (EE-2XX), > $10^{12}$ Ohm (EE-4XX) | > 100 dB (EE-2XX), 90 dB (EE-4XX) | FDA clearance document |
 | Brain Products actiCHamp Plus | > 1000 MOhm (DC) | 100 dB (per IEC 60601-2-26) | Brain Products product page |
 
 These figures are **not directly comparable**. They come from different decades, amplifier generations and test conditions, and a CMR figure without a test frequency and imbalance condition says little.
@@ -110,7 +110,7 @@ These figures are **not directly comparable**. They come from different decades,
 ### What the differences mean in practice
 
 - **Referential amplifiers (ANT Neuro, Brain Products).** Every channel shares the reference electrode, so noise or a bad contact at the reference shows up in all channels. That is the problem the common average approach avoids. Because the raw referential data are stored, you can still re-reference offline, for example to the average of all electrodes.
-- **Hardware average vs. software average.** Offline re-referencing of referential data to the average of all electrodes gives the same derivation, E_i - mean(E), that the TMSi amplifier forms in hardware, provided the original reference electrode is added back as a zero-valued channel. The difference is *when* the subtraction happens. The TMSi design removes the common signal before the main gain stages, so the common signal is never amplified. Modern 24-bit DC-coupled amplifiers have enough dynamic range to record it and remove it digitally.
+- **Hardware average vs. software average.** Offline re-referencing of referential data to the average of all electrodes gives the same derivation, $E_i - \frac{1}{n}\sum_{j} E_j$, that the TMSi amplifier forms in hardware, provided the original reference electrode is added back as a zero-valued channel. The difference is *when* the subtraction happens. The TMSi design removes the common signal before the main gain stages, so the common signal is never amplified. Modern 24-bit DC-coupled amplifiers have enough dynamic range to record it and remove it digitally.
 - **BioSemi.** The data are stored relative to CMS, which is only the working point of the feedback loop, not a meaningful reference. You must choose a reference after loading the data (FieldTrip recommends doing this straight away). Until then the channels still contain the common-mode interference.
 - **The same caveat applies everywhere.** Any average reference, whether in hardware or software, removes activity that is common to all electrodes, and its result depends on which electrodes are included.
 
