@@ -43,16 +43,16 @@ The amplifier briefly drives a tiny, known alternating current through each elec
 
 ### The Actual Signal Path
 
-The relevant circuit is a voltage divider. The signal source (the electrode-skin interface, with impedance Z_electrode) drives an amplifier with input impedance Z_in. The fraction of the true signal voltage that reaches the amplifier input is:
+The relevant circuit is a voltage divider. The signal source (the electrode-skin interface, with impedance $Z_{\text{electrode}}$) drives an amplifier with input impedance $Z_{\text{in}}$. The fraction of the true signal voltage that reaches the amplifier input is:
 
-**V_measured / V_true = Z_in / (Z_in + Z_electrode)**
+$$\frac{V_{\text{measured}}}{V_{\text{true}}} = \frac{Z_{\text{in}}}{Z_{\text{in}} + Z_{\text{electrode}}}$$
 
-So what matters is **not** Z_electrode in absolute terms, but the **ratio** Z_in / Z_electrode.
+So what matters is **not** $Z_{\text{electrode}}$ in absolute terms, but the **ratio** $Z_{\text{in}} / Z_{\text{electrode}}$.
 
 ### Modern Amplifier Input Impedances
 
-- **1970s-80s amplifiers:** Z_in ~ 1-10 MΩ; electrode impedance of 5-20 kΩ was genuinely problematic (ratio of only 50-2000:1)
-- **Modern active-electrode amplifiers (e.g. TMSi, BrainProducts actiCHamp, Biosemi ActiveTwo):** Z_in typically **1 GΩ or higher** in differential mode
+- **1970s-80s amplifiers:** $Z_{\text{in}} \approx$ 1-10 MΩ; electrode impedance of 5-20 kΩ was genuinely problematic (ratio of only 50-2000:1)
+- **Modern active-electrode amplifiers (e.g. TMSi, BrainProducts actiCHamp, Biosemi ActiveTwo):** $Z_{\text{in}}$ typically **1 GΩ or higher** in differential mode
 
 At 1 GΩ input impedance and 50 kΩ electrode impedance, the voltage divider ratio is 20,000:1. The signal attenuation is 0.005%, negligible for any EEG purpose.
 
@@ -62,7 +62,7 @@ At 1 GΩ input impedance and 50 kΩ electrode impedance, the voltage divider rat
 
 **1. Noise pickup (thermal noise and EMI)**
 
-A resistor generates Johnson-Nyquist thermal noise with a spectral density of e_n = sqrt(4 k T R). A handy anchor is that 1 kΩ produces about 4 nV/√Hz at room temperature, and the density grows with the square root of impedance: roughly 29 nV/√Hz at 50 kΩ and 90 nV/√Hz at 500 kΩ. EEG signals are in the µV range, so even at high impedance this thermal contribution is small in absolute terms; it is one reason, among several, to avoid very high impedances rather than the dominant one.
+A resistor generates Johnson-Nyquist thermal noise with a spectral density of $e_n = \sqrt{4 k_B T R}$, with $k_B$ Boltzmann's constant, $T$ the absolute temperature and $R$ the resistance. A handy anchor is that 1 kΩ produces about 4 nV/√Hz at room temperature, and the density grows with the square root of impedance: roughly 29 nV/√Hz at 50 kΩ and 90 nV/√Hz at 500 kΩ. EEG signals are in the µV range, so even at high impedance this thermal contribution is small in absolute terms; it is one reason, among several, to avoid very high impedances rather than the dominant one.
 
 **2. Common-mode rejection (CMRR) degradation: the real issue**
 
@@ -84,11 +84,11 @@ High source impedance combined with cable capacitance to ground creates a path b
 
 | Effect | Governed by | Critical threshold |
 |---|---|---|
-| Signal attenuation | Z_electrode / Z_in ratio | Negligible at modern Z_in |
-| Thermal noise | Absolute Z_electrode | Matters above ~200 kΩ |
-| CMRR degradation | Inter-electrode Z mismatch | Keep mismatch < 5-10x |
-| DC drift / stability | Absolute Z_electrode | Lower is better; < 50 kΩ practical target |
-| EMI / triboelectric | Absolute Z_electrode | Matters in noisy environments |
+| Signal attenuation | $Z_{\text{electrode}} / Z_{\text{in}}$ ratio | Negligible at modern $Z_{\text{in}}$ |
+| Thermal noise | Absolute $Z_{\text{electrode}}$ | Matters above ~200 kΩ |
+| CMRR degradation | Inter-electrode $Z$ mismatch | Keep mismatch < 5-10x |
+| DC drift / stability | Absolute $Z_{\text{electrode}}$ | Lower is better; < 50 kΩ practical target |
+| EMI / triboelectric | Absolute $Z_{\text{electrode}}$ | Matters in noisy environments |
 
 The obsession with getting below 5 kΩ is partly legitimate habit, partly historical inertia, and partly a proxy for "the electrode is properly seated and making good contact", which is a real quality indicator even if the impedance number itself is not the causal variable.
 
