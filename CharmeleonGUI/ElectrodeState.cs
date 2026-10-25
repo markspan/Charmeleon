@@ -24,7 +24,7 @@ namespace Charmeleon
         /// <summary>On-screen centre of the electrode circle.</summary>
         public Point Center { get; set; }
 
-        /// <summary>True while the inline channel-number editor is open over this electrode.</summary>
+        /// <summary>True while the inline channel-number editor is open over this electrode's channel label.</summary>
         internal bool Editing { get; set; }
     }
 }

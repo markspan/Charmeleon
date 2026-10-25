@@ -261,9 +261,8 @@ namespace Charmeleon
                 using (var b = new SolidBrush(fill)) g.FillEllipse(b, circle);
                 g.DrawEllipse(Pens.Black, circle);
 
-                if (el.Editing) continue;   // the inline textbox is showing over this circle
-
                 // Inside the circle: electrode name in channel view, else the impedance value.
+                // Also while the channel editor is open, so that it is clear which electrode it edits.
                 string inner = HeadMapView.ShowChannels
                     ? el.LabelText
                     : (el.Value == 255 ? "Inf" : el.Value.ToString());
@@ -273,6 +272,8 @@ namespace Charmeleon
                     HeadMapView.ShowChannels ? FontStyle.Regular : FontStyle.Bold, cd * 0.9f);
                 using (var b = new SolidBrush(tc))
                     g.DrawString(inner, innerFont, b, circle, fmt);
+
+                if (el.Editing) continue;   // the channel editor's textbox covers the label beneath
 
                 // Beneath the circle: hardware channel in channel view, else the name.
                 // The four AUX markers (Left/Right/Top/Bottom) sit in a spaced-out cluster, so
