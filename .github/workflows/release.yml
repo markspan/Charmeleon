@@ -2,7 +2,9 @@
 #
 # * Actions tab > "Release" > Run workflow: enter the version (e.g. 2.0.3) and, if you like,
 #   what is new in it. The release and its tag v<version> are created on the selected branch
-#   once the build has succeeded, so a failed build leaves no tag behind.
+#   once the build has succeeded, so a failed build leaves no tag behind. A version released
+#   already is refused, unless "replace" is ticked: its tag then moves to the selected branch,
+#   and its installer and notes are replaced (a re-release of the same version).
 # * Push a tag yourself: git tag v2.0.3 && git push origin v2.0.3
 
 name: Release
@@ -20,6 +22,10 @@ on:
         description: "What's new, for the release notes (optional)"
         required: false
         type: string
+      replace:
+        description: "If that version is released already: replace it (move its tag here)"
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -35,12 +41,13 @@ jobs:
         id: ver
         env:
           REQUESTED: ${{ inputs.version }}
+          REPLACE: ${{ inputs.replace }}
         run: |
           if ("$env:GITHUB_EVENT_NAME" -eq "workflow_dispatch") {
             $v = "$env:REQUESTED".Trim() -replace "^v", ""
             git ls-remote --exit-code --tags origin "refs/tags/v$v" > $null
-            if ($LASTEXITCODE -eq 0) {
-              echo "::error::Version $v is released already (tag v$v exists); choose another."
+            if ($LASTEXITCODE -eq 0 -and "$env:REPLACE" -ne "true") {
+              echo "::error::Version $v is released already (tag v$v exists); choose another, or tick ""replace"" to re-release it."
               exit 1
             }
           } else {
@@ -68,6 +75,19 @@ jobs:
             /DMyAppVersion=${{ steps.ver.outputs.VERSION }} `
             installer\Charmeleon.iss
 
+      # A re-release: the version's tag moves to this commit, and its release follows it.
+      # Pushed with the workflow's own token, the tag starts no new run.
+      - name: Move the tag (re-release)
+        if: github.event_name == 'workflow_dispatch' && inputs.replace
+        run: |
+          $tag = "v${{ steps.ver.outputs.VERSION }}"
+          git ls-remote --exit-code --tags origin "refs/tags/$tag" > $null
+          if ($LASTEXITCODE -ne 0) { exit 0 }   # a new version after all: the release creates its tag
+          git tag --force $tag $env:GITHUB_SHA
+          git push --force origin "refs/tags/$tag"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          echo "::notice::Re-releasing $tag from $env:GITHUB_SHA."
+
       # Creates the tag too, when the run was started by hand (the tag does not exist yet).
       - name: Create release
         uses: softprops/action-gh-release@v2
@@ -77,3 +97,4 @@ jobs:
           body: ${{ inputs.notes }}
           files: installer\Output\CharmeleonSetup-${{ steps.ver.outputs.VERSION }}.exe
           generate_release_notes: true
+          overwrite_files: true # a re-release replaces the installer of the same name
