@@ -45,21 +45,7 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\Charmeleon";  Filename: "{app}\Charmeleon.exe"; IconFilename: "{app}\Resources\Charmeleon.ico"; Tasks: desktopicon
 
 [Run]
-; Open the web-view port (8765) through the firewall for inbound connections:
-; 1. Delete this installer's earlier rules, so reinstalling or upgrading leaves
-;    one set of rules instead of piling up duplicates.
-; 2. Delete any rule Windows made for Charmeleon.exe itself. Choosing "Cancel" in
-;    Windows' firewall prompt creates a block rule for the program, and a block
-;    rule beats every allow rule, silently cutting off phones and tablets.
-; 3. Allow the port, and allow the program on that port so Windows does not
-;    prompt (and block) again.
-Filename: "netsh.exe"; Parameters: "advfirewall firewall delete rule name=""Charmeleon Web"""; Flags: runhidden; StatusMsg: "Configuring the firewall..."
-Filename: "netsh.exe"; Parameters: "advfirewall firewall delete rule name=all program=""{app}\Charmeleon.exe"""; Flags: runhidden; StatusMsg: "Configuring the firewall..."
-Filename: "netsh.exe"; Parameters: "advfirewall firewall add rule name=""Charmeleon Web"" dir=in action=allow protocol=TCP localport=8765"; Flags: runhidden; StatusMsg: "Configuring the firewall..."
-Filename: "netsh.exe"; Parameters: "advfirewall firewall add rule name=""Charmeleon Web"" dir=in action=allow protocol=TCP localport=8765 program=""{app}\Charmeleon.exe"""; Flags: runhidden; StatusMsg: "Configuring the firewall..."
+; Open the web-view port (8765) through the firewall for inbound connections
+Filename: "netsh.exe"; Parameters: "advfirewall firewall add rule name=""Charmeleon Web"" dir=in action=allow protocol=TCP localport=8765"; Flags: runhidden; StatusMsg: "Adding firewall rule..."
 
 Filename: "{app}\Charmeleon.exe"; Description: "{cm:LaunchProgram,Charmeleon}"; Flags: nowait postinstall skipifsilent
-
-[UninstallRun]
-; Remove the firewall rules added at install.
-Filename: "netsh.exe"; Parameters: "advfirewall firewall delete rule name=""Charmeleon Web"""; Flags: runhidden; RunOnceId: "RemoveFirewallRules"
