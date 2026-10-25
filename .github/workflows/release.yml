@@ -1,8 +1,25 @@
-﻿name: Release
+﻿# Builds Charmeleon and its installer, and publishes them as a GitHub release. Two ways:
+#
+# * Actions tab > "Release" > Run workflow: enter the version (e.g. 2.0.3) and, if you like,
+#   what is new in it. The release and its tag v<version> are created on the selected branch
+#   once the build has succeeded, so a failed build leaves no tag behind.
+# * Push a tag yourself: git tag v2.0.3 && git push origin v2.0.3
+
+name: Release
 
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release, e.g. 2.0.3 (tagged v2.0.3)"
+        required: true
+        type: string
+      notes:
+        description: "What's new, for the release notes (optional)"
+        required: false
+        type: string
 
 jobs:
   build:
@@ -13,6 +30,29 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      # First, so that a mistyped or used version stops the run before the build.
+      - name: Get version
+        id: ver
+        env:
+          REQUESTED: ${{ inputs.version }}
+        run: |
+          if ("$env:GITHUB_EVENT_NAME" -eq "workflow_dispatch") {
+            $v = "$env:REQUESTED".Trim() -replace "^v", ""
+            git ls-remote --exit-code --tags origin "refs/tags/v$v" > $null
+            if ($LASTEXITCODE -eq 0) {
+              echo "::error::Version $v is released already (tag v$v exists); choose another."
+              exit 1
+            }
+          } else {
+            $v = "$env:GITHUB_REF_NAME" -replace "^v", ""
+          }
+          if ($v -notmatch '^\d+\.\d+\.\d+$') {
+            echo "::error::'$v' is not a version such as 2.0.3."
+            exit 1
+          }
+          echo "VERSION=$v" >> $env:GITHUB_OUTPUT
+          exit 0
+
       - name: Publish Charmeleon (self-contained single-file win-x64)
         run: |
           dotnet publish CharmeleonGUI\Charmeleon.csproj -c Release -r win-x64 `
@@ -22,21 +62,18 @@ jobs:
       - name: Stage EEGO SDK (TMSiSDK.dll is installed in System32 by the TMSi driver)
         run: copy vendor\eego-SDK.dll publish\Charmeleon\
 
-      - name: Get version
-        id: ver
-        run: |
-          $v = "$env:GITHUB_REF_NAME" -replace "^v", ""
-          echo "VERSION=$v" >> $env:GITHUB_OUTPUT
-
       - name: Build installer
         run: |
           & "C:\Program Files (x86)\Inno Setup 6\iscc.exe" `
             /DMyAppVersion=${{ steps.ver.outputs.VERSION }} `
             installer\Charmeleon.iss
 
+      # Creates the tag too, when the run was started by hand (the tag does not exist yet).
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ steps.ver.outputs.VERSION }}
+          target_commitish: ${{ github.sha }}
+          body: ${{ inputs.notes }}
           files: installer\Output\CharmeleonSetup-${{ steps.ver.outputs.VERSION }}.exe
           generate_release_notes: true
-
