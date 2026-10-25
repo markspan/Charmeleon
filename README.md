@@ -1,6 +1,4 @@
-﻿# Charmeleon
-
-<img src="CharmeleonGUI/Resources/Charmeleon.png" height="80" alt="Charmeleon"/>
+﻿# <img src="CharmeleonGUI/Resources/Charmeleon.svg" alt="" width="48" align="top"> Charmeleon
 
 Electrode impedance checker for EEG recording sessions. Connects to an EEGO or
 TMSi amplifier and shows the live impedance of every electrode on a head map, so
