@@ -149,7 +149,11 @@ The scale bar on the right shows the full 0 to 255 kOhm range.
 
 The page connects to a small web server built into Charmeleon (port 8765) and updates the head map once per second. It requests the Screen Wake Lock so the display stays on during cap preparation (the HTTPS connection provides the secure context the Wake Lock needs, so it works on phones and tablets), and reconnects automatically if the connection drops. You can pan and zoom (pinch or scroll) to enlarge any part of the map.
 
-> **First-time certificate warning:** the connection uses HTTPS with a self-signed certificate, so the first time each device connects the browser shows a `not private` or `not trusted` warning. Choose **Advanced** and then **Proceed** (the exact wording varies by browser) to continue. This is expected for a self-signed certificate on a local network and only needs to be accepted once per device.
+> **First-time certificate warning:** the connection uses HTTPS with a self-signed certificate, so the first time each device connects the browser shows a `not private` or `not trusted` warning. Choose **Advanced** and then **Proceed** (the exact wording varies by browser) to continue. This is expected for a self-signed certificate on a local network and only needs to be accepted once per device. Charmeleon renews the certificate by itself when the PC's network address changes, and about once a year; each device then shows the warning one more time.
+
+Typing the address with `http://`, or without any `https://`, works too: Charmeleon redirects the browser to the HTTPS address.
+
+> **If a device cannot connect:** Charmeleon records what happened to every connection attempt in `%LOCALAPPDATA%\Charmeleon\web.log` (paste that path into the Explorer address bar to open it). A line with the device's address that says `TLS handshake failed: ...` or `timed out while ...` names the problem. No line at all for the device means its connection never reached Charmeleon: check that it uses the address shown in the Web View dialog and is on the same network, and that the firewall rule below exists.
 
 > The installer opens the port through the firewall for you. If you run Charmeleon without having run the installer first, open a command prompt as administrator and run:
 > ```

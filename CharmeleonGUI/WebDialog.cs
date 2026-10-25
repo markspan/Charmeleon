@@ -13,7 +13,9 @@ namespace Charmeleon
         {
             InitializeComponent();
 
-            foreach (var ip in WebServer.Addresses())
+            var addresses = LocalNetwork.Addresses();
+            if (addresses.Count == 0) cboAddress.Items.Add("localhost");   // on no network: this PC only
+            foreach (var ip in addresses)
                 cboAddress.Items.Add(ip);
 
             cboAddress.SelectedIndexChanged += (s, e) => ShowSelected();
