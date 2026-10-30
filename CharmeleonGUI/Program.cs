@@ -6,11 +6,16 @@ namespace Charmeleon
     /// </summary>
     internal static class Program
     {
-        /// <summary>Selects a driver (EEGO, then TMSi) or demo mode, then runs the main window.</summary>
+        /// <summary>
+        /// Selects a driver (EEGO, then TMSi) or demo mode, then runs the main window.
+        /// A .json file on the command line is opened as the montage.
+        /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             ErrorHandler.Register();
+
+            string? montage = args.FirstOrDefault(arg => arg.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
 
             ApplicationConfiguration.Initialize();
 
@@ -71,7 +76,7 @@ namespace Charmeleon
                     serious ? MessageBoxIcon.Warning : MessageBoxIcon.Information);
             }
 
-            Application.Run(new MainGUI(driver, demo));
+            Application.Run(new MainGUI(driver, demo, montage));
 
             driver?.Dispose();
             EegoDriver.SdkExit();

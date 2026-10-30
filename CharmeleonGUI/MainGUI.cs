@@ -54,9 +54,10 @@ namespace Charmeleon
 
         /// <summary>
         /// Builds the window for the given amplifier driver, or for demo mode when
-        /// <paramref name="driver"/> is null.
+        /// <paramref name="driver"/> is null, showing the montage in <paramref name="montage"/>
+        /// if given, else the default 10/20 layout.
         /// </summary>
-        public MainGUI(IImpedanceDriver? driver, bool demo)
+        public MainGUI(IImpedanceDriver? driver, bool demo, string? montage = null)
         {
             _driver = driver;
             _demo = demo;
@@ -69,7 +70,8 @@ namespace Charmeleon
             AddAuxiliaryElectrodes();
             DoubleBuffered = true;
             DrawColorMapBox(HeadMapView.ColorMap);
-            LoadConfig("Resources/1020Layout.json");
+            // Next to the executable, not in the working directory, which is wherever Charmeleon was started from
+            LoadConfig(Path.Combine(AppContext.BaseDirectory, "Resources", "1020Layout.json"));
 
             if (_demo)
             {
@@ -82,6 +84,10 @@ namespace Charmeleon
                 HeadMapView.MaxChannel = _driver!.ChannelCount;
                 Text = "Charmeleon";
             }
+
+            // After MaxChannel is known, which decides the electrodes that can be active. When the montage
+            // can not be read, LoadConfig says so and the default layout stays
+            if (montage != null) LoadConfig(montage);
 
             RefreshTimer.Interval = 300;
             RefreshTimer.Tick += Redraw_Callback;

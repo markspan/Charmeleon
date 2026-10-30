@@ -142,6 +142,7 @@ The scale bar on the right shows the full 0 to 255 kOhm range.
 - **View > View Channels** switches the circle display from impedance value to electrode name, with hardware channel numbers shown below.
 - **View > Toggle Theme** switches between light and dark backgrounds.
 - **Setup > Open/Save Montage** loads or saves the electrode-to-channel mapping as a JSON file.
+- **Start with a montage:** `Charmeleon.exe "C:\path\to\montage.json"` opens that montage instead of the default 10/20 layout. The OpenViBE UG acquisition server starts Charmeleon this way with the montage its driver uses.
 
 ### Web view: see impedances on any phone, tablet or second PC
 
