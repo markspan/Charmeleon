@@ -100,7 +100,11 @@ namespace Charmeleon
         double[] _lastValues = Array.Empty<double>();
 
         /// <inheritdoc/>
-        public int ChannelCount => _channelCount;
+        public AmplifierLayout Layout { get; }
+
+        /// <inheritdoc/>
+        /// <remarks>The referential (EEG) channels; the SDK measures no impedance on the bipolar ones.</remarks>
+        public IReadOnlyList<ChannelAddress> ImpedanceChannels { get; }
 
         /// <summary>
         /// Opens the specified amplifier and starts an impedance stream on its reference channels.
@@ -124,6 +128,8 @@ namespace Charmeleon
             var refChannels = allChannels.Take(total).Where(c => c.Type == 0).ToArray();
             if (refChannels.Length == 0)
                 throw new Exception("No reference channels found on amplifier.");
+            int bipolar = allChannels.Take(total).Count(c => c.Type == 1);
+            Layout = new AmplifierLayout("eego", refChannels.Length, bipolar, 0);
 
             _streamId = eemagine_sdk_open_impedance_stream(_ampId, refChannels, refChannels.Length);
             if (_streamId < 0)
@@ -131,6 +137,10 @@ namespace Charmeleon
 
             _channelCount = eemagine_sdk_get_stream_channel_count(_streamId);
             _lastValues = new double[_channelCount];
+            // The stream lists the referential channels first, then its reference and ground measurements
+            ImpedanceChannels = Enumerable.Range(0, _channelCount)
+                .Select(i => i < refChannels.Length ? new ChannelAddress(ChannelKind.Eeg, i + 1) : new ChannelAddress(ChannelKind.Other, i + 1))
+                .ToArray();
         }
 
         /// <summary>

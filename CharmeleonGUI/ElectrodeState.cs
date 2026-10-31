@@ -12,8 +12,24 @@ namespace Charmeleon
         /// <summary>Electrode name shown on the map (for example "Cz").</summary>
         public string LabelText { get; set; } = "";
 
-        /// <summary>Amplifier hardware channel this electrode is wired to (1-based; 0 = unassigned).</summary>
+        /// <summary>
+        /// Number of the amplifier channel this electrode is wired to, among the channels of its
+        /// <see cref="Kind"/> (1-based; 0 = unassigned). For EEG this is the montage's HardwareChannel.
+        /// </summary>
         public int HardwareChannel { get; set; }
+
+        /// <summary>The kind of channel the electrode is wired to: EEG unless set to a BIP or AUX channel.</summary>
+        public ChannelKind Kind { get; set; } = ChannelKind.Eeg;
+
+        /// <summary>The channel the electrode is wired to, as kind and number.</summary>
+        public ChannelAddress Address
+        {
+            get => new(Kind, HardwareChannel);
+            set { Kind = value.Kind; HardwareChannel = value.Number; }
+        }
+
+        /// <summary>False when the amplifier measures no impedance on the electrode's channel.</summary>
+        public bool HasImpedance { get; set; } = true;
 
         /// <summary>Whether this electrode is in use for the current recording.</summary>
         public bool IsActive { get; set; } = true;

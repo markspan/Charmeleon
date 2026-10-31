@@ -23,17 +23,38 @@ namespace Charmeleon
         uint _bufferBytes;
         double[] _lastValues = [];
 
+        // SIGNAL_FORMAT (TMSiSDK.h): one entry per channel, Size bytes each; Elements at offset 4, Type at offset 8.
+        // Size, Elements, Type, SubType, Format, Bytes, UnitGain, UnitOffSet, UnitId, UnitExponent (4 bytes each),
+        // Name (40 WCHAR), Port (4), PortName (40 WCHAR), SerialNumber (4)
+        const int SignalFormatSize = 10 * 4 + 80 + 4 + 80 + 4;
+        const uint ChannelTypeExg = 1, ChannelTypeBip = 2, ChannelTypeAux = 3;
+
         /// <inheritdoc/>
-        public int ChannelCount => _channelCount;
+        public AmplifierLayout Layout { get; } = AmplifierLayout.Demo;
+
+        /// <inheritdoc/>
+        /// <remarks>Every device channel, in device order: TMSi measures the impedance of each input.</remarks>
+        public IReadOnlyList<ChannelAddress> ImpedanceChannels { get; } = [];
+
+        /// <summary>The SDK's connection type for a protocol name as the OpenViBE driver has it; USB for none or an unknown one.</summary>
+        public static int ConnectionType(string? protocol) => protocol?.ToUpperInvariant() switch
+        {
+            "BLUETOOTH" => 2,
+            "WIFI" => 4,
+            "NETWORK" => 5,
+            _ => TMSiConnectionUSB,
+        };
 
         /// <summary>
-        /// Opens the first TMSi device over USB and starts impedance-data mode.
-        /// Throws if TMSiSDK.dll is absent, no device is found, or setup fails.
+        /// Opens a TMSi device and starts impedance-data mode.
+        /// Throws if TMSiSDK.dll is absent, the device is not found, or setup fails.
         /// </summary>
-        public TmsiDriver()
+        /// <param name="connectionType">How to reach it, see <see cref="ConnectionType"/>.</param>
+        /// <param name="device">The device's name as the SDK lists it, as the OpenViBE driver's Device setting has it; null for the first one.</param>
+        public TmsiDriver(int connectionType = TMSiConnectionUSB, string? device = null)
         {
             int err = 0;
-            _handle = LibraryInit(TMSiConnectionUSB, ref err);
+            _handle = LibraryInit(connectionType, ref err);
             if (_handle == IntPtr.Zero)
                 throw new Exception("TMSi library could not be initialised. Is the Refa (blue box) switched on and connected?");
 
@@ -41,8 +62,22 @@ namespace Charmeleon
             if (_deviceList == IntPtr.Zero || _deviceCount == 0)
                 throw new Exception("No TMSi device found.");
 
-            // DeviceList[0] is a char* device locator; pass it straight to Open.
+            // DeviceList is an array of char* device locators; pass the chosen one straight to Open.
             IntPtr locator = Marshal.ReadIntPtr(_deviceList, 0);
+            if (device != null)
+            {
+                var names = new List<string>();
+                locator = IntPtr.Zero;
+                for (int i = 0; i < _deviceCount; i++)
+                {
+                    IntPtr entry = Marshal.ReadIntPtr(_deviceList, i * IntPtr.Size);
+                    string name = Marshal.PtrToStringAnsi(entry) ?? "";
+                    names.Add(name);
+                    if (name == device) locator = entry;
+                }
+                if (locator == IntPtr.Zero)
+                    throw new Exception($"TMSi device {device} not found (found {string.Join(", ", names)}).");
+            }
             if (!Open(_handle, locator))
                 throw new Exception("Could not open the TMSi device.");
 
@@ -52,9 +87,33 @@ namespace Charmeleon
             if (psf == IntPtr.Zero)
                 throw new Exception("Could not read the TMSi signal format.");
             _channelCount = Marshal.ReadInt32(psf, 4);
-            Free(psf);
             if (_channelCount <= 0)
+            {
+                Free(psf);
                 throw new Exception("TMSi reported zero channels.");
+            }
+
+            // Number the EXG, BIP and AUX channels each in device order, as the OpenViBE driver does; a
+            // montage's HardwareChannel n is the n-th EXG channel, wherever the device lists it
+            int stride = Marshal.ReadInt32(psf, 0);
+            if (stride < SignalFormatSize) stride = SignalFormatSize;
+            var channels = new ChannelAddress[_channelCount];
+            int exg = 0, bip = 0, aux = 0, other = 0;
+            for (int i = 0; i < _channelCount; i++)
+            {
+                uint type = (uint)Marshal.ReadInt32(psf, i * stride + 8);
+                channels[i] = type switch
+                {
+                    ChannelTypeExg => new ChannelAddress(ChannelKind.Eeg, ++exg),
+                    ChannelTypeBip => new ChannelAddress(ChannelKind.Bipolar, ++bip),
+                    ChannelTypeAux => new ChannelAddress(ChannelKind.Auxiliary, ++aux),
+                    _ => new ChannelAddress(ChannelKind.Other, ++other),
+                };
+            }
+            Free(psf);
+            ImpedanceChannels = channels;
+            string frontEnd = System.Text.Encoding.ASCII.GetString(frontEndName).Split('\0')[0].Trim();
+            Layout = new AmplifierLayout(frontEnd.Length > 0 ? "TMSi " + frontEnd : "TMSi", exg, bip, aux);
 
             // Impedance mode samples at rate 0; allocate the sample buffer.
             uint sampleRateMilliHz = 0;

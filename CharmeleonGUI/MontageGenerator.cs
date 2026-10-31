@@ -168,6 +168,25 @@ namespace Charmeleon
                 });
         }
 
+        /// <summary>
+        /// The exact spherical position of an electrode of the equidistant layout, from the cap's 3-D
+        /// coordinates (x to the nose, y to the left ear, z up): theta from the vertex and phi from the
+        /// right (90 = front), in degrees. Null for any other name, whose head-map position is the best
+        /// there is.
+        /// </summary>
+        public static (double Theta, double Phi)? ExactSphericalPosition(string name)
+        {
+            foreach (var (n, x, y, z) in _equidistant3D)
+            {
+                if (!string.Equals(n, name, StringComparison.OrdinalIgnoreCase)) continue;
+                double r = Math.Sqrt(x * x + y * y + z * z);
+                double theta = Math.Acos(Math.Clamp(z / r, -1.0, 1.0)) * 180.0 / Math.PI;
+                double phi = Math.Atan2(x, -y) * 180.0 / Math.PI;
+                return (Math.Round(theta, 2), Math.Round(phi, 2));
+            }
+            return null;
+        }
+
         /// <summary>Serialises a layout dict to a JSON file chosen by the user.</summary>
         public static string? SaveToFile(Dictionary<string, ElectrodeControlData> layout)
         {

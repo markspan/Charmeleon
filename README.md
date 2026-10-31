@@ -109,7 +109,7 @@ Connects to a hardware amplifier and displays live electrode impedances on a hea
 | EEGO (eemagine) | Auto-detected; 64 reference channels |
 | [TMSi Refa](docs/tmsi.md) | Auto-detected if no EEGO is found |
 
-If both are present, EEGO is chosen first. If neither is found, Charmeleon opens in demo mode.
+If both are present, EEGO is chosen first, unless Charmeleon is told which one to open (`--amplifier`, see [Command line](#command-line)); the OpenViBE UG acquisition server always tells it. If neither is found, Charmeleon opens in demo mode.
 
 <details>
 <summary><strong>Why is the EEGO SDK bundled with Charmeleon, but not the TMSi one?</strong></summary>
@@ -130,6 +130,8 @@ Each circle represents one electrode in a cap. The colour gives a quick visual i
 | Yellow/orange | Medium (20-100 kOhm) |
 | Red | High (poor contact, >100 kOhm) |
 | Grey | Electrode marked inactive |
+| Hatched | Active, but the amplifier measures no impedance on its channel (e.g. eego's bipolar channels) |
+| Red ring | A problem with the montage: see the status bar |
 
 The scale bar on the right shows the full 0 to 255 kOhm range.
 
@@ -138,11 +140,40 @@ The scale bar on the right shows the full 0 to 255 kOhm range.
 ### Interactions
 
 - **Click an electrode** to toggle it active/inactive (grey = not in use for this recording).
-- **Click the channel number label** (below the circle) to assign a hardware channel (see the TMSi montage section below).
-- **View > View Channels** switches the circle display from impedance value to electrode name, with hardware channel numbers shown below.
+- **Click the channel label** (below the circle, in View Channels) to assign its channel: a number for an EEG channel, or `BIP1`, `AUX2`, ... for a bipolar or auxiliary one (see the TMSi montage section below).
+- **Right-click an electrode** to rename it or change its channel; right-click an other channel to remove it.
+- **Right-click anywhere** (or **Setup > Add Other Channel...**) to add an other channel: EOG, ECG, GSR, ... on a BIP, AUX or EEG channel. Other channels are drawn to the right of the head; drag one to move it.
+- **View > View Channels** switches the circle display from impedance value to electrode name, with the channels shown below.
 - **View > Toggle Theme** switches between light and dark backgrounds.
-- **Setup > Open/Save Montage** loads or saves the electrode-to-channel mapping as a JSON file.
-- **Start with a montage:** `Charmeleon.exe "C:\path\to\montage.json"` opens that montage instead of the default 10/20 layout. The OpenViBE UG acquisition server starts Charmeleon this way with the montage its driver uses.
+- **Setup > Open Montage** (Ctrl+O), **Save Montage** (Ctrl+S, to the montage's own file) and **Save Montage As** (Ctrl+Shift+S). The title bar shows the file, with an asterisk while there are unsaved changes; Charmeleon asks before closing with unsaved changes.
+- **The status bar** lists what would spoil a recording: two active electrodes on one channel, one name for two electrodes, a channel the amplifier does not have, a montage made for another amplifier. The electrodes concerned are ringed in red; click the status bar to see every problem. Saving refuses a montage with two electrodes on one channel.
+
+### Command line
+
+```
+Charmeleon.exe [montage.json] [--amplifier eego|tmsi] [--device name] [--protocol USB|WiFi|Network|Bluetooth]
+               [--save-on-close] [--result file]
+```
+
+| Option | Meaning |
+|---|---|
+| `montage.json` | Open this montage instead of the default 10/20 layout. |
+| `--amplifier eego` / `tmsi` | Open only this kind of amplifier. If it can not be opened, Charmeleon says why and starts in demo mode, rather than open the other kind. |
+| `--device name` | The amplifier to open: a TMSi device name as the SDK lists it, or an eego serial number. Default: the first one. |
+| `--protocol` | How to reach a TMSi amplifier. Default: USB. |
+| `--save-on-close` | Save changes to the montage without asking when the window closes. |
+| `--result file` | On closing, write `{"File": ..., "Saved": ..., "Unsaved": ...}` there: the montage file Charmeleon ended with, whether it saved it, and whether changes were left unsaved. |
+
+The OpenViBE UG acquisition server starts Charmeleon with all of them, so that Charmeleon opens the driver's amplifier with the driver's montage, and the driver takes the edited montage over when Charmeleon closes. See `montages.md` in the OpenViBE UG repository.
+
+### Montage files
+
+A montage is a JSON object of entries keyed by electrode position: `IsActive`, `LabelText`, `HardwareChannel` (the n-th EEG channel), `Angle`/`Radius` (head map) or `X`/`Y` (other channels). Since 2.2 a montage may also have:
+- `Channel`, for a channel other than EEG (`"BIP1"`, `"AUX2"`); `HardwareChannel` is then 0, so that older readers leave the electrode out;
+- `Theta`/`Phi`, the exact position on a spherical head (written for the equidistant layout);
+- an `Amplifier` entry describing the amplifier the montage was saved with.
+
+Charmeleon 2.1 and older can not open a montage that has the `Amplifier` entry.
 
 ### Web view: see impedances on any phone, tablet or second PC
 
@@ -200,7 +231,7 @@ From this point on, the person in the cabin sees every electrode's impedance wit
 
 ## Tutorial: setting up a TMSi Refa montage
 
-This section applies only to the **TMSi Refa** amplifier. If you are using an EEGO amplifier, the channel mapping is fixed by the hardware and no montage setup is needed.
+This section applies only to the **TMSi Refa** amplifier. If you are using an EEGO amplifier, the cap fixes which electrode is on which EEG channel, and only the bipolar channels (EOG, ECG, ...) are yours to name: add them as other channels.
 
 ### Why the Refa needs a montage
 
@@ -218,13 +249,13 @@ Open Charmeleon with the Refa connected. Go to **View > View Channels**. The cir
 
 Look at the head box. For each electrode, note which numbered socket its cable is plugged into.
 
-Click the **channel number label** below the circle for that electrode. A small text box appears: type the channel number and press Enter. Repeat for every electrode in use.
+Click the **channel label** below the circle for that electrode. A small text box appears: type the channel number and press Enter (Escape cancels). Repeat for every electrode in use. For an electrode on a bipolar or auxiliary input, type `BIP1`, `AUX2`, ... instead.
 
 Electrodes that are not connected can be clicked to toggle them **inactive** (they turn grey).
 
 ### Step 3: save the montage
 
-Go to **Setup > Save Montage** and save to a descriptive filename (e.g. `Refa_64ch_LabA.json`). This file stores the complete name-to-channel mapping.
+Go to **Setup > Save Montage As** and save to a descriptive filename (e.g. `Refa_64ch_LabA.json`); afterwards **Save Montage** (Ctrl+S) saves to that file. It stores the complete name-to-channel mapping, and the amplifier it was made with.
 
 At the start of each subsequent session, go to **Setup > Open Montage** and reload it. From that point on, impedances will be shown under the correct electrode names automatically.
 
