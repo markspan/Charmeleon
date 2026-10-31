@@ -136,7 +136,7 @@ namespace Charmeleon
             saveMontageToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
 
             var save = new ToolStripMenuItem("Save Montage", null, (_, _) => SaveMontage(saveAs: false)) { ShortcutKeys = Keys.Control | Keys.S };
-            var addOther = new ToolStripMenuItem("Add Other Channel...", null, (_, _) => AddOtherChannel(PointToClient(Cursor.Position)));
+            var addOther = new ToolStripMenuItem("Add Other Channel...", null, (_, _) => AddOtherChannel(null));
             int at = setupToolStripMenuItem.DropDownItems.IndexOf(saveMontageToolStripMenuItem);
             setupToolStripMenuItem.DropDownItems.Insert(at, save);
             setupToolStripMenuItem.DropDownItems.Add(new ToolStripSeparator());
@@ -553,7 +553,6 @@ namespace Charmeleon
             if (_dragging)
             {
                 _dragging = false;
-                DrawColorMapBox(HeadMapView.ColorMap);
                 MarkDirty();
                 return;
             }
@@ -600,8 +599,11 @@ namespace Charmeleon
             for (int i = 1; i <= _layout.EegChannels; i++) yield return i.ToString();
         }
 
-        /// <summary>Asks for a name and channel and adds an other channel (EOG, ECG, ...) at <paramref name="point"/>.</summary>
-        void AddOtherChannel(Point point)
+        /// <summary>
+        /// Asks for a name and channel and adds an other channel (EOG, ECG, ...) at <paramref name="point"/>, or, when
+        /// there is none (the Setup menu) or it lies on the head, at the next free place in the cluster at the right.
+        /// </summary>
+        void AddOtherChannel(Point? point)
         {
             using var dialog = new PromptDialog("Add Other Channel", "", ChannelChoices(), _layout.BipolarChannels > 0 ? "BIP1" : "");
             ApplyTheme(dialog, _isDark);
@@ -613,14 +615,20 @@ namespace Charmeleon
                 return;
             }
 
-            // Inside the window, away from the head, unless the menu was opened elsewhere on purpose
-            bool onHead = Math.Pow(point.X - _centerX, 2) + Math.Pow(point.Y - _centerY, 2) < Math.Pow(_fullRadius, 2);
-            var (x, y) = onHead || !ClientRectangle.Contains(point) ? FreeAuxSlot() : (point.X / (double)_formWidth, point.Y / (double)_formHeight);
+            // Where the context menu was opened, if that is beside the head and inside the drawing area
+            var (x, y) = point is { } p && IsFreePlace(p) ? (p.X / (double)_formWidth, p.Y / (double)_formHeight) : FreeAuxSlot();
             string key = UniqueKey(dialog.NameText);
             AddAux(key, dialog.NameText, Math.Round(x, 3), Math.Round(y, 3), channel, active: true);
-            DrawColorMapBox(HeadMapView.ColorMap);
             MarkDirty();
             Invalidate();
+        }
+
+        /// <summary>True for a point beside the head, below the menu bar and above the status bar.</summary>
+        bool IsFreePlace(Point point)
+        {
+            bool onHead = Math.Pow(point.X - _centerX, 2) + Math.Pow(point.Y - _centerY, 2) < Math.Pow(_fullRadius + HeadMapView.ElectrodeSize / 2.0, 2);
+            int top = menuStrip1.Bottom;
+            return !onHead && point.X >= 0 && point.X < _formWidth && point.Y > top + HeadMapView.ElectrodeSize / 2 && point.Y < _formHeight;
         }
 
         /// <summary>A free place in the cluster of other channels, to the right of the head.</summary>
@@ -667,7 +675,6 @@ namespace Charmeleon
             _electrodes.Remove(key);
             _auxPositions.Remove(key);
             _auxFractions.Remove(key);
-            DrawColorMapBox(HeadMapView.ColorMap);
             MarkDirty();
             Invalidate();
         }
@@ -811,7 +818,6 @@ namespace Charmeleon
                 _order.AddRange(montage.Electrodes.Select(kv => kv.Key));
                 _dirty = false;
             }
-            DrawColorMapBox(HeadMapView.ColorMap);
             UpdateTitle();
             Invalidate();
         }
@@ -1005,13 +1011,13 @@ namespace Charmeleon
         //  Colour scale and menu handlers
         // ------------------------------------------------------------------ //
 
-        /// <summary>Sizes, positions and paints the vertical colour-scale bar above the cluster of other channels.</summary>
+        /// <summary>
+        /// Sizes, positions and paints the vertical colour-scale bar, at the right above where the other channels
+        /// start out. A fixed place, not the other channels' own: one added or dragged elsewhere would take it along.
+        /// </summary>
         void DrawColorMapBox(Color[] colorMap)
         {
-            // Without other channels, where the markers of Charmeleon before 2.2 were
-            var positions = _auxPositions.Count > 0
-                ? _auxPositions.Values.ToList()
-                : _defaultAux.Select(a => new Point((int)(_formWidth * a.X), (int)(_formHeight * a.Y))).ToList();
+            var positions = _defaultAux.Select(a => new Point((int)(_formWidth * a.X), (int)(_formHeight * a.Y))).ToList();
             int auxX1 = positions.Min(p => p.X);
             int auxX2 = positions.Max(p => p.X);
             int auxCX = Math.Min((auxX1 + auxX2) / 2, Math.Max(0, _formWidth - 60));
